@@ -1,0 +1,9 @@
+why in Drivetrain.getPose all the variables are final?? isn't it supposed to be not-final so the pos could update?
+in several places fyou mentioned Drivetrain as Drivetrain while in others you mentioned it as DriveTrain... how would you like it to be called? (DriveTrain in my opinion)
+here is a list of things I am not sure that is gonna help us :
+- GlobalData class
+- DrivetrainHardware class
+-Drivetrain.reset
+-IntakeHardware class
+-Intake.reset
+-SubsystemManager functions (I can see the use for the class but I am quite sure the function are incorrect)
