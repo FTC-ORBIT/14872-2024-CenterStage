@@ -87,7 +87,7 @@ public class AutonomousTest extends LinearOpMode {
         Drivetrain.init(hardwareMap);
         Intake.init(hardwareMap);
         Claw.init(hardwareMap);
-        Arm.init(hardwareMap);
+//        Arm.init(hardwareMap);
         ServoCenter.init(hardwareMap);
 
         Elevator.floor = 5;

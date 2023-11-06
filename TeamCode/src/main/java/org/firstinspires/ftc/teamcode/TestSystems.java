@@ -28,7 +28,7 @@ public class TestSystems extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Claw.init(hardwareMap);
         Intake.init(hardwareMap);
-        Arm.init(hardwareMap);
+//        Arm.init(hardwareMap);
         Drivetrain.init(hardwareMap);
         Elevator.initAutonomous(hardwareMap);
         OrbitGyro.init(hardwareMap);
