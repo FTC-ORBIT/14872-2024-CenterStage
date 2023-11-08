@@ -8,11 +8,11 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.intake.IntakeState;
 
 public class Conveyor {
     public static DcMotor conveyorMotor;
-    public static float pos;
     public static float power;
 
     public static void init(HardwareMap hardwareMap){
         conveyorMotor = hardwareMap.get(DcMotor.class, "conveyorMotor");
+
         conveyorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public static void operate(ConveyorState state) {
