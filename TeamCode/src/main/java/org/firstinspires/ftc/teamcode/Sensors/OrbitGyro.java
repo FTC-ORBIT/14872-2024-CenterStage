@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 @Config
 public class OrbitGyro {
     public static BNO055IMU imu;
-    public static double  lastAngle = 0;
+    public static double lastAngle = 0;
     static double currentAngle = 0;
     public static double kP = 0;
     public static double kI = 0;
@@ -40,8 +40,6 @@ public class OrbitGyro {
     public static void resetGyroStartTeleop (float angle){
         if (angle < 290 && angle > 250) {
             lastAngle = -angle;
-        } else if (!GlobalData.autonomousSide){
-            lastAngle = -270;
         }
     }
     public static double getAngle() {

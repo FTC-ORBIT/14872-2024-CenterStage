@@ -17,7 +17,7 @@ public class ElevatorConstants {
     public static final float kP = (float) 0.001;
     public static final float kD = (float) 0;
     public static final float depletePower = -0.7f;
-    public static final float wantedDeplete = Elevator.height - 4000;
+//    public static final float wantedDeplete = Elevator.height - 4000;
     //public static final Vector minMetersToTicks = new Vector(0 , 0);
     //public static final Vector maxMetersToTicks = new Vector(0.86f, 33025);
     //dani yalechan

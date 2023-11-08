@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 import org.firstinspires.ftc.teamcode.robotSubSystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
-import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
+//import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 
 @Config
@@ -34,17 +34,17 @@ public class Robot extends LinearOpMode {
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         packet = new TelemetryPacket();
-        coneDistanceSensor = hardwareMap.get(DigitalChannel.class, "clawDistanceSensor");
-        coneDistanceSensor.setMode(DigitalChannel.Mode.INPUT);
+//        coneDistanceSensor = hardwareMap.get(DigitalChannel.class, "clawDistanceSensor");
+//        coneDistanceSensor.setMode(DigitalChannel.Mode.INPUT);
 
         ElapsedTime robotTime = new ElapsedTime();
         robotTime.reset();
 
         Drivetrain.init(hardwareMap);
         OrbitGyro.init(hardwareMap);
-        Elevator.initAutonomous(hardwareMap);
-        Claw.init(hardwareMap);
-        Intake.init(hardwareMap);
+//        Elevator.initAutonomous(hardwareMap);
+//        Claw.init(hardwareMap);
+//        Intake.init(hardwareMap);
 //        OrbitLED.init(hardwareMap);
 
 
@@ -71,16 +71,16 @@ public class Robot extends LinearOpMode {
           Vector leftStick = new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y);
           float omega = gamepad1.right_trigger - gamepad1.left_trigger;
           Drivetrain.operate(leftStick,  omega);
-          SubSystemManager.setState(gamepad1, gamepad2, telemetry);
+//          SubSystemManager.setState(gamepad1, gamepad2, telemetry);
 //          OrbitLED.operate();
 
            GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
 
 
-           GlobalData.lastTime = GlobalData.currentTime;
+            GlobalData.lastTime = GlobalData.currentTime;
             Drivetrain.testMotors(gamepad1, telemetry);
             telemetry.update();
-            SubSystemManager.printStates(telemetry);
+//            SubSystemManager.printStates(telemetry);
             telemetry.addData("hasGamePiece", GlobalData.hasGamePiece);
         }
     }
