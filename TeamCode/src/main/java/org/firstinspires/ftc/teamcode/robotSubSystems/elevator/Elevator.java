@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.elevator;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
@@ -8,19 +9,21 @@ import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
 public class Elevator {
     public static DcMotor elevatorMotor;
     public static float pos;
-    private static final PID elevatorPID = new PID(ElevatorConstants.kp,ElevatorConstants.ki,ElevatorConstants.kd,ElevatorConstants.kf,ElevatorConstants.izone);
+    private static final PID elevatorPID = new PID(ElevatorConstants.kp, ElevatorConstants.ki, ElevatorConstants.kd, ElevatorConstants.kf, ElevatorConstants.izone);
+
     public static void init(HardwareMap hardwareMap) {
-        elevatorMotor = hardwareMap.get(DcMotor.class,"elevatorMotor" );
+        elevatorMotor = hardwareMap.get(DcMotor.class, "elevatorMotor");
 
         elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
-    public static void operate(ElevatorStates state, float overrideHeight){
-        switch (state){
+
+    public static void operate(ElevatorStates state, Gamepad gamepad1) {
+        switch (state) {
             case OVERRIDE:
-                default:
-                    pos = overrideHeight;
+                elevatorMotor.setPower(-gamepad1.right_stick_y + ElevatorConstants.kf);
                 break;
             case INTAKE:
+            default:
                 pos = ElevatorConstants.intakeHeight;
                 break;
             case LOW:
@@ -29,8 +32,11 @@ public class Elevator {
             case MID:
                 pos = ElevatorConstants.midHeight;
                 break;
-            }
-            elevatorPID.setWanted(pos);
+        }
+
+        elevatorPID.setWanted(pos);
+        if (!state.equals(ElevatorStates.OVERRIDE)) {
             elevatorMotor.setPower(elevatorPID.update(elevatorMotor.getCurrentPosition()));
         }
     }
+}
