@@ -52,8 +52,7 @@ public class SubSystemManager {
 
     public static ElevatorStates getElevatorStateFromDriver (Gamepad gamepad1) {
         return gamepad1.a ? ElevatorStates.LOW
-                : gamepad1.b ? ElevatorStates.MID
-                        : gamepad1.x ? ElevatorStates.HIGH : null;
+                : gamepad1.b ? ElevatorStates.MID : null;
     }
 
 

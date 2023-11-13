@@ -4,7 +4,17 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class ElevatorConstants {
-    public static final float groundHeight = -100;
+    public static final float INTAKE = 0;
+    public static final float LOW = 0;
+    public static final float MID = 0;
+    public static final float OVERRIDE = 0;
+    public static final float kp = 0;
+    public static final float ki = 0;
+    public static final float kd = 0;
+    public static final float kf = 0;
+    public static final float izone = 0;
+
+ /*   public static final float groundHeight = -100;
     public static final float intakeHeight = groundHeight;
     public static final float lowHeight = 15200;
     public static final float midHeight = 23885;
@@ -22,7 +32,7 @@ public class ElevatorConstants {
     //public static final Vector maxMetersToTicks = new Vector(0.86f, 33025);
     //dani yalechan
 //6339
-    //2000
+    2000 */
 
 }
 
