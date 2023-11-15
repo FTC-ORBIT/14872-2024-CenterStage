@@ -10,7 +10,6 @@ public class Plane {
     public static void init(HardwareMap hardwareMap) {
         planeServo = hardwareMap.get(Servo.class, "planeServo");
 
-
     }
 
     public static void operate(PlaneState state) {
@@ -21,6 +20,8 @@ public class Plane {
                 break;
             case THROW:
                 pos = PlaneConstants.throwPos;
+                break;
         }
+        planeServo.setPosition(pos);
     }
 }
