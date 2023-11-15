@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.robotSubSystems.claw.ClawState;
+import org.firstinspires.ftc.teamcode.robotSubSystems.deplete.Deplete;
+import org.firstinspires.ftc.teamcode.robotSubSystems.deplete.DepleteState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorConstants;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
@@ -20,6 +22,8 @@ public class SubSystemManager {
     public static RobotState lastState = RobotState.TRAVEL;
     private  static IntakeState intakeState = IntakeState.STOP;
     private  static ElevatorStates elevatorState = ElevatorStates.INTAKE;
+    private static DepleteState depleteState = DepleteState.CLOSED;
+
     private static RobotState getState(Gamepad gamepad) {
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
@@ -29,12 +33,12 @@ public class SubSystemManager {
     private static RobotState getStateFromWantedAndCurrent(RobotState stateFromDriver){
         switch (stateFromDriver){
             case INTAKE:
-                if(GlobalData.hasGamePiece) return RobotState.TRAVEL;
                 break;
-            case DEPLETE:
+            case LOW:
+                break;
+            case MID:
                 break;
             case TRAVEL:
-
                 break;
             case CLIMB:
                 break;
@@ -42,46 +46,59 @@ public class SubSystemManager {
         return stateFromDriver;
     }
 
-    public static void setState(Gamepad gamepad, Gamepad gamepad2, Telemetry telemetry) {
-        final RobotState wanted = getStateFromWantedAndCurrent(getState(gamepad));
-        if (wanted != null) {
-            GlobalData.robotState = wanted;
-        }
-        setSubsystemToState(gamepad, gamepad2, telemetry);
-    }
-
-    public static ElevatorStates getElevatorStateFromDriver (Gamepad gamepad1) {
-        return gamepad1.a ? ElevatorStates.LOW
-                : gamepad1.b ? ElevatorStates.MID : null;
-    }
-
 
     private static void setSubsystemToState(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
+        final RobotState wanted = getStateFromWantedAndCurrent(getState(gamepad1));
 
 
-            switch (GlobalData.robotState) {
+            switch (wanted) {
                 case TRAVEL:
                     intakeState = IntakeState.STOP;
                     elevatorState = ElevatorStates.INTAKE;
+                    depleteState = DepleteState.CLOSED;
                     break;
                 case INTAKE:
                         intakeState = IntakeState.COLLECT;
                         elevatorState = ElevatorStates.INTAKE;
+                        depleteState = DepleteState.CLOSED;
                     break;
-
-                case DEPLETE:
+                case LOW:
                     intakeState = IntakeState.STOP;
-                    elevatorState = ElevatorStates.OVERRIDE;
-
+                    elevatorState = ElevatorStates.LOW;
+                    if (gamepad1.right_bumper){
+                        depleteState = DepleteState.RIGHT_OPEN;
+                    }else if (gamepad1.left_bumper){
+                        depleteState = DepleteState.LEFT_OPEN;
+                    }else if (gamepad1.left_stick_button){
+                        depleteState = DepleteState.OPEN;
+                    }else {
+                        depleteState = DepleteState.CLOSED;
+                    }
+                    break;
+                case MID:
+                    intakeState = IntakeState.STOP;
+                    elevatorState = ElevatorStates.MID;
+                    if (gamepad1.right_bumper){
+                        depleteState = DepleteState.RIGHT_OPEN;
+                    }else if (gamepad1.left_bumper){
+                        depleteState = DepleteState.LEFT_OPEN;
+                    }else if (gamepad1.left_stick_button){
+                        depleteState = DepleteState.OPEN;
+                    }else {
+                        depleteState = DepleteState.CLOSED;
+                    }
                     break;
                 case CLIMB:
                     intakeState = IntakeState.STOP;
-                    elevatorState = ElevatorStates.OVERRIDE;
+                    elevatorState = ElevatorStates.INTAKE;
+                    depleteState = DepleteState.CLOSED;
                     break;
             }
 
         Intake.operate(intakeState);
-        lastState = GlobalData.robotState;
+            Deplete.operate(depleteState);
+
+        lastState = wanted;
         if (gamepad1.dpad_down) OrbitGyro.resetGyro();
     }
 
