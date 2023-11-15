@@ -17,10 +17,13 @@ public class Elevator {
         elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
+    // the y axis in the gamepad joysticks are inverted, so we use -gamepad to use a positive y
+    // the y axis varies between 1 and -1.
     public static void operate(ElevatorStates state, Gamepad gamepad1) {
         switch (state) {
             case OVERRIDE:
-                elevatorMotor.setPower(-gamepad1.right_stick_y + ElevatorConstants.kf);
+               // elevatorMotor.setPower(-gamepad1.right_stick_y + ElevatorConstants.kf);
+                pos += -gamepad1.right_stick_y * ElevatorConstants.overrideFactor;
                 break;
             case INTAKE:
             default:
