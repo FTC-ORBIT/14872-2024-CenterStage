@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
 public class Elevator {
     public static DcMotor elevatorMotor;
     public static float pos;
+    private static float currentPos = 0;
     private static final PID elevatorPID = new PID(ElevatorConstants.kp, ElevatorConstants.ki, ElevatorConstants.kd, ElevatorConstants.kf, ElevatorConstants.izone);
 
     public static void init(HardwareMap hardwareMap) {
@@ -36,10 +37,15 @@ public class Elevator {
                 pos = ElevatorConstants.midHeight;
                 break;
         }
-
+        currentPos = elevatorMotor.getCurrentPosition();
         elevatorPID.setWanted(pos);
         if (!state.equals(ElevatorStates.OVERRIDE)) {
-            elevatorMotor.setPower(elevatorPID.update(elevatorMotor.getCurrentPosition()));
+            elevatorMotor.setPower(elevatorPID.update(currentPos));
         }
+        elevatorMotor.setPower(pos);
+
+    }
+    public static double getPos(){
+        return currentPos;
     }
 }

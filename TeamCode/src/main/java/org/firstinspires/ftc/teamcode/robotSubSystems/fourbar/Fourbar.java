@@ -2,19 +2,17 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.fourbar;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
 
 public class Fourbar {
-    public static DcMotor motor;
+    public static Servo servo;
     public static float pos;
-    public static PID fourbarPID = new PID(FourbarConstants.kp, FourbarConstants.ki, FourbarConstants.kd, FourbarConstants.kf, FourbarConstants.izone);
-
 
     public static void init(HardwareMap hardwareMap){
-        motor = hardwareMap.get(DcMotor.class, "FourbarMotor");
+        servo = hardwareMap.get(Servo.class, "FourbarMotor");
 
-        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public static void operate(FourbarState state) {
         switch (state){
@@ -24,7 +22,8 @@ public class Fourbar {
             case REVERSE:
                 pos = FourbarConstants.reverse;
                 break;
+
         }
-        fourbarPID.setWanted(pos);
+        servo.setPosition(pos);
     }
 }
