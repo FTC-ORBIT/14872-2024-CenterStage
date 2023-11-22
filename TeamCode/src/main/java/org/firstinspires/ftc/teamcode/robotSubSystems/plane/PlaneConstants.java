@@ -6,4 +6,5 @@ import com.acmerobotics.dashboard.config.Config;
 public class PlaneConstants {
     public static final int stopPos = 0;
     public static final int throwPos = 400;
+
 }

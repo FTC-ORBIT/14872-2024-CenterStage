@@ -1,29 +1,32 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems;
 
+import static org.firstinspires.ftc.teamcode.robotData.Constants.minHeightToOpenFourbar;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
-import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
-import org.firstinspires.ftc.teamcode.robotSubSystems.claw.Claw;
-import org.firstinspires.ftc.teamcode.robotSubSystems.claw.ClawState;
-import org.firstinspires.ftc.teamcode.robotSubSystems.deplete.Deplete;
-import org.firstinspires.ftc.teamcode.robotSubSystems.deplete.DepleteState;
+import org.firstinspires.ftc.teamcode.robotSubSystems.climb.Climb;
+import org.firstinspires.ftc.teamcode.robotSubSystems.climb.ClimbState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorConstants;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.FourbarState;
+import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
+import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.IntakeState;
-import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
 
 public class SubSystemManager {
 
     public static RobotState lastState = RobotState.TRAVEL;
     private  static IntakeState intakeState = IntakeState.STOP;
     private  static ElevatorStates elevatorState = ElevatorStates.INTAKE;
-    private static DepleteState depleteState = DepleteState.CLOSED;
-
+    private static OuttakeState outtakeState = OuttakeState.CLOSED;
+    private static FourbarState fourbarState = FourbarState.REVERSE;
+    private static ClimbState climbState = ClimbState.DOWN;
     private static RobotState getState(Gamepad gamepad) {
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
@@ -31,6 +34,7 @@ public class SubSystemManager {
     }
 
     private static RobotState getStateFromWantedAndCurrent(RobotState stateFromDriver){
+
         switch (stateFromDriver){
             case INTAKE:
                 break;
@@ -55,51 +59,60 @@ public class SubSystemManager {
                 case TRAVEL:
                     intakeState = IntakeState.STOP;
                     elevatorState = ElevatorStates.INTAKE;
-                    depleteState = DepleteState.CLOSED;
+                    outtakeState = OuttakeState.CLOSED;
+                    fourbarState = FourbarState.REVERSE;
+                    climbState = ClimbState.DOWN;
                     break;
                 case INTAKE:
                         intakeState = IntakeState.COLLECT;
                         elevatorState = ElevatorStates.INTAKE;
-                        depleteState = DepleteState.CLOSED;
+                        outtakeState = OuttakeState.CLOSED;
+                        fourbarState = FourbarState.REVERSE;
+                        climbState = ClimbState.DOWN;
                     break;
                 case LOW:
                     intakeState = IntakeState.STOP;
                     elevatorState = ElevatorStates.LOW;
-                    if (gamepad1.right_bumper){
-                        depleteState = DepleteState.RIGHT_OPEN;
-                    }else if (gamepad1.left_bumper){
-                        depleteState = DepleteState.LEFT_OPEN;
-                    }else if (gamepad1.left_stick_button){
-                        depleteState = DepleteState.OPEN;
-                    }else {
-                        depleteState = DepleteState.CLOSED;
+                    if (gamepad1.right_bumper) {
+                        outtakeState = OuttakeState.OPEN;
                     }
+                    if (minHeightToOpenFourbar <=Elevator.getPos()) {
+                        fourbarState = FourbarState.MOVE;
+                    }else {
+                        fourbarState = FourbarState.REVERSE;
+                    }
+                    climbState = ClimbState.DOWN;
                     break;
                 case MID:
                     intakeState = IntakeState.STOP;
                     elevatorState = ElevatorStates.MID;
-                    if (gamepad1.right_bumper){
-                        depleteState = DepleteState.RIGHT_OPEN;
-                    }else if (gamepad1.left_bumper){
-                        depleteState = DepleteState.LEFT_OPEN;
-                    }else if (gamepad1.left_stick_button){
-                        depleteState = DepleteState.OPEN;
-                    }else {
-                        depleteState = DepleteState.CLOSED;
+                    if (gamepad1.right_bumper) {
+                        outtakeState = OuttakeState.OPEN;
                     }
+                    if (minHeightToOpenFourbar <=Elevator.getPos()) {
+                        fourbarState = FourbarState.MOVE;
+                    }else {
+                        fourbarState = FourbarState.REVERSE;
+                    }
+                    climbState = ClimbState.DOWN;
                     break;
                 case CLIMB:
                     intakeState = IntakeState.STOP;
                     elevatorState = ElevatorStates.INTAKE;
-                    depleteState = DepleteState.CLOSED;
+                    outtakeState = OuttakeState.CLOSED;
+                    fourbarState = FourbarState.REVERSE;
+                    climbState = ClimbState.UP;
                     break;
+
             }
 
-        Intake.operate(intakeState);
-            Deplete.operate(depleteState);
-
-        lastState = wanted;
-        if (gamepad1.dpad_down) OrbitGyro.resetGyro();
+            Intake.operate(intakeState);
+            Outtake.operate(outtakeState);
+            Elevator.operate(elevatorState, gamepad1);
+            Fourbar.operate(fourbarState);
+            Climb.operate(climbState, gamepad1);
+            lastState = wanted;
+            if (gamepad1.dpad_down) OrbitGyro.resetGyro();
     }
 
     public static void printStates(Telemetry telemetry) {
