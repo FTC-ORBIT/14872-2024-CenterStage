@@ -85,12 +85,12 @@ public class AprilTagAutonomousTest extends LinearOpMode
                     tagToTelemetry(tagOfInterest);
                 }
                 else
-                {
+                    {
                     telemetry.addLine("Don't see tag of interest :(");
 
                     if(tagOfInterest == null)
                     {
-                        telemetry.addLine("(The tag has never been seen)");
+                        telemetry.addLine("(The tag has never been seen1)");
                     }
                     else
                     {
