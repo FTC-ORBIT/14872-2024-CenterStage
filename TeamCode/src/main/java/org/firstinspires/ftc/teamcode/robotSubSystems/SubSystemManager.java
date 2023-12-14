@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.climb.Climb;
 import org.firstinspires.ftc.teamcode.robotSubSystems.climb.ClimbState;
-import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorConstants;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.FourbarState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
@@ -51,7 +50,7 @@ public class SubSystemManager {
     }
 
 
-    private static void setSubsystemToState(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
+    public static void setSubsystemToState(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         final RobotState wanted = getStateFromWantedAndCurrent(getState(gamepad1));
 
 
@@ -86,6 +85,18 @@ public class SubSystemManager {
                 case MID:
                     intakeState = IntakeState.STOP;
                     elevatorState = ElevatorStates.MID;
+                    if (gamepad1.right_bumper) {
+                        outtakeState = OuttakeState.OPEN;
+                    }
+                    if (minHeightToOpenFourbar <=Elevator.getPos()) {
+                        fourbarState = FourbarState.MOVE;
+                    }else {
+                        fourbarState = FourbarState.REVERSE;
+                    }
+                    climbState = ClimbState.DOWN;
+                case HIGH:
+                    intakeState = IntakeState.STOP;
+                    elevatorState = ElevatorStates.HIGH;
                     if (gamepad1.right_bumper) {
                         outtakeState = OuttakeState.OPEN;
                     }

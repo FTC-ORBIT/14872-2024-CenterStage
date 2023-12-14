@@ -36,6 +36,9 @@ public class Elevator {
             case MID:
                 pos = ElevatorConstants.midHeight;
                 break;
+            case HIGH:
+                pos = ElevatorConstants.highHeight;
+                break;
         }
         currentPos = elevatorMotor.getCurrentPosition();
         elevatorPID.setWanted(pos);

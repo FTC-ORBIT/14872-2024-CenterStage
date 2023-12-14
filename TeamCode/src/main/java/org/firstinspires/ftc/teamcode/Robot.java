@@ -12,13 +12,16 @@ import org.firstinspires.ftc.teamcode.OrbitUtils.Vector;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.positionTracker.PoseStorage;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
-import org.firstinspires.ftc.teamcode.robotSubSystems.OrbitLED;
 import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
-import org.firstinspires.ftc.teamcode.robotSubSystems.claw.Claw;
+import org.firstinspires.ftc.teamcode.robotSubSystems.climb.Climb;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 //import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
+import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
+import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
 
 @Config
 @TeleOp(name = "main")
@@ -42,11 +45,12 @@ public class Robot extends LinearOpMode {
 
         Drivetrain.init(hardwareMap);
         OrbitGyro.init(hardwareMap);
-//        Elevator.initAutonomous(hardwareMap);
-//        Claw.init(hardwareMap);
-//        Intake.init(hardwareMap);
-//        OrbitLED.init(hardwareMap);
-
+        Elevator.init(hardwareMap);
+        Outtake.init(hardwareMap);
+        Intake.init(hardwareMap);
+        Fourbar.init(hardwareMap);
+        Climb.init(hardwareMap);
+        Plane.init(hardwareMap);
 
         OrbitGyro.resetGyroStartTeleop((float) Math.toDegrees(PoseStorage.currentPose.getHeading()));
         telemetry.update();
@@ -71,7 +75,7 @@ public class Robot extends LinearOpMode {
           Vector leftStick = new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y);
           float omega = gamepad1.right_trigger - gamepad1.left_trigger;
           Drivetrain.operate(leftStick,  omega);
-//          SubSystemManager.setState(gamepad1, gamepad2, telemetry);
+          SubSystemManager.setSubsystemToState(gamepad1 , gamepad2 , telemetry);
 //          OrbitLED.operate();
 
            GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
