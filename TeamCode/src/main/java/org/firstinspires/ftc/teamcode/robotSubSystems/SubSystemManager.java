@@ -41,6 +41,8 @@ public class SubSystemManager {
                 break;
             case MID:
                 break;
+            case HIGH:
+                break;
             case TRAVEL:
                 break;
             case CLIMB:
@@ -65,7 +67,7 @@ public class SubSystemManager {
                 case INTAKE:
                         intakeState = IntakeState.COLLECT;
                         elevatorState = ElevatorStates.INTAKE;
-                        outtakeState = OuttakeState.CLOSED;
+                        outtakeState = OuttakeState.OPEN;
                         fourbarState = FourbarState.REVERSE;
                         climbState = ClimbState.DOWN;
                     break;
