@@ -7,7 +7,7 @@ public class ElevatorConstants {
     public static final float lowHeight = 0;
     public static final float intakeHeight = 0;
     public static final float midHeight = 0;
-
+    public static final float climbHeight = 0;
     public static final float highHeight = 0;
     public static final float overrideFactor = 10;
 
