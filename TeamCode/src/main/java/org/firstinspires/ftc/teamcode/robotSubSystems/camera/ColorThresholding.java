@@ -40,7 +40,6 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
             // OR...  Do Not Activate the Camera Monitor View
             //webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
-
             /*
              * Specify the image processing pipeline we wish to invoke upon receipt
              * of a frame from the camera. Note that switching pipelines on-the-fly
@@ -79,8 +78,8 @@ import org.openftc.easyopencv.OpenCvWebcam;
                      * For a rear facing camera or a webcam, rotation is defined assuming the camera is facing
                      * away from the user.
                      */
-                    //   webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-                    webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+                       webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                 //   webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
                 }
 
                 @Override
@@ -152,16 +151,18 @@ import org.openftc.easyopencv.OpenCvWebcam;
         }
         public class rectangle_thresholder_pipeline extends OpenCvPipeline {
             private String location = "nothing"; // output
-            public Scalar lower = new Scalar(0, 0, 210); // HSV threshold bounds
+        //    public Scalar lower = new Scalar(200, 15, 20); // HSV threshold bounds
+        //    public Scalar upper = new Scalar(240, 100, 60);
+        public Scalar lower = new Scalar(0, 0, 210); // HSV threshold bounds
             public Scalar upper = new Scalar(255, 100, 255);
 
             private Mat hsvMat = new Mat(); // converted image
-            private Mat binaryMat = new Mat(); // imamge analyzed after thresholding
+            private Mat binaryMat = new Mat(); // image analyzed after thresholding
             private Mat maskedInputMat = new Mat();
 
             // Rectangle regions to be scanned
-            private Point topLeft1 = new Point(0, 0), bottomRight1 = new Point(479, 319);
-            private Point topLeft2 = new Point(0, 320), bottomRight2 = new Point(479, 639);
+            private Point topLeft1 = new Point(0, 0), bottomRight1 = new Point(239, 159);
+            private Point topLeft2 = new Point(0, 160), bottomRight2 = new Point(239, 319);
 
             public rectangle_thresholder_pipeline() {
 
@@ -177,33 +178,33 @@ import org.openftc.easyopencv.OpenCvWebcam;
                 // Scan both rectangle regions, keeping track of how many
                 // pixels meet the threshold value, indicated by the color white
                 // in the binary image
-                double w1 = 0, w2 = 0;
+                double b1 = 0, b2 = 0;
                 // process the pixel value for each rectangle  (255 = W, 0 = B)
                 for (int i = (int) topLeft1.x; i <= bottomRight1.x; i++) {
                     for (int j = (int) topLeft1.y; j <= bottomRight1.y; j++) {
-                        if (binaryMat.get(i, j)[0] == 255) {
-                            w1++;
+                        if (binaryMat.get(i, j)[0] >= 180) {
+                            b1++;
                         }
                     }
                 }
 
                 for (int i = (int) topLeft2.x; i <= bottomRight2.x; i++) {
                     for (int j = (int) topLeft2.y; j <= bottomRight2.y; j++) {
-                        if (binaryMat.get(i, j)[0] == 255) {
-                            w2++;
+                        if (binaryMat.get(i, j)[0] >=180) {
+                            b2++;
                         }
                     }
                 }
                 // Determine object location
-                telemetry.addData("White pixels on the left", w1);
-                telemetry.addData("White pixels on the right", w2);
-                if (w1 > w2) {
+                telemetry.addData("Blue pixels on the left", b1);
+                telemetry.addData("Blue pixels on the right", b2);
+                if (b1 > b2) {
                     location = "1";
-                    telemetry.addLine("the white object is on:     LEFT");
+                    telemetry.addLine("The blue object is on:     LEFT");
 
-                } else if (w1 < w2) {
+                } else if (b1 < b2) {
                     location = "2";
-                    telemetry.addLine("the white object is on:     RIGHT");
+                    telemetry.addLine("The blue object is on:     RIGHT");
                 }
                 telemetry.update();
                 return binaryMat;

@@ -176,7 +176,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
                     for (int i = (int) topLeft1.x; i <= bottomRight1.x; i++) {
                         for (int j = (int) topLeft1.y; j <= bottomRight1.y; j++) {
                             h = hsvMat.get(i,j)[0];
-                            binaryMat.put(i,j,Scalar(h,h,h));
+                //            binaryMat.put(i,j,Scalar(h,h,h));
                         }
                     }
                     return binaryMat;
