@@ -48,7 +48,6 @@ public class Robot extends LinearOpMode {
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Fourbar.init(hardwareMap);
-        Climb.init(hardwareMap);
         Plane.init(hardwareMap);
 
         OrbitGyro.resetGyroStartTeleop((float) Math.toDegrees(PoseStorage.currentPose.getHeading()));
