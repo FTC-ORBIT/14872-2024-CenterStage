@@ -17,6 +17,8 @@ public class RedPropThreshold implements VisionProcessor {
     Mat lowMat = new Mat();
     Mat finalMat = new Mat();
     double redThreshold = 0.5;
+    double leftBox = 1;
+    double rightBox = 1;
     String outStr = "default"; //Set a default value in case vision does not work
 
     static final Rect LEFT_RECTANGLE = new Rect(
@@ -42,7 +44,7 @@ public class RedPropThreshold implements VisionProcessor {
         Scalar lowHSVRedLower = new Scalar(0, 100, 20);  //Beginning of Color Wheel
         Scalar lowHSVRedUpper = new Scalar(10, 255, 255);
 
-       Scalar redHSVRedLower = new Scalar(160, 100, 20); //Wraps around Color Wheel
+        Scalar redHSVRedLower = new Scalar(160, 100, 20); //Wraps around Color Wheel
         Scalar highHSVRedUpper = new Scalar(180, 255, 255);
 
       //  Scalar lowHSVRedLower = new Scalar(0, 80, 0);  //Beginning of Color Wheel
@@ -94,7 +96,13 @@ public class RedPropThreshold implements VisionProcessor {
 
     }
 
-    public String getPropPosition(){  //Returns postion of the prop in a String
+    public String getPropPosition(){  //Returns position of the prop in a String
         return outStr;
+    }
+    public Double leftBoxValue(){
+       return leftBox;
+    }
+    public Double rightBoxValue(){
+        return rightBox;
     }
 }
