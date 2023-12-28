@@ -11,7 +11,7 @@ public class Fourbar {
     public static float pos;
 
     public static void init(HardwareMap hardwareMap){
-        servo = hardwareMap.get(Servo.class, "FourbarMotor");
+        servo = hardwareMap.get(Servo.class, "fourbarServo");
 
     }
     public static void operate(FourbarState state) {
