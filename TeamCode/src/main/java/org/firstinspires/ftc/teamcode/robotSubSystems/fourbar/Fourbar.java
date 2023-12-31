@@ -24,6 +24,6 @@ public class Fourbar {
                 break;
 
         }
-        servo.setPosition(pos);
+          servo.setPosition(pos);
     }
 }

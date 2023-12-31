@@ -161,7 +161,7 @@ public class RobotHardware {
      */
     public void setHandPositions(double offset) {
         offset = Range.clip(offset, -0.5, 0.5);
-        leftHand.setPosition(MID_SERVO + offset);
-        rightHand.setPosition(MID_SERVO - offset);
+        //leftHand.setPosition(MID_SERVO + offset);
+        //rightHand.setPosition(MID_SERVO - offset);
     }
 }

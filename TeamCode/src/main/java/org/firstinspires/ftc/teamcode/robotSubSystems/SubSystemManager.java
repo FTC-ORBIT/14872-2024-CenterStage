@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems;
 
 import static org.firstinspires.ftc.teamcode.robotData.Constants.minHeightToOpenFourbar;
+import static org.firstinspires.ftc.teamcode.robotData.Constants.robotRadius;
 
+import com.qualcomm.hardware.ams.AMSColorSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -17,7 +19,8 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.IntakeState;
-
+import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
+import org.firstinspires.ftc.teamcode.robotSubSystems.plane.PlaneState;
 public class SubSystemManager {
 
     public static RobotState lastState = RobotState.TRAVEL;
@@ -47,6 +50,7 @@ public class SubSystemManager {
                 break;
             case CLIMB:
                 break;
+
         }
         return stateFromDriver;
     }
@@ -58,23 +62,23 @@ public class SubSystemManager {
 
             switch (wanted) {
                 case TRAVEL:
+                    outtakeState = OuttakeState.CLOSED;
                     intakeState = IntakeState.STOP;
                     elevatorState = ElevatorStates.INTAKE;
-                    outtakeState = OuttakeState.CLOSED;
                     fourbarState = FourbarState.REVERSE;
                     climbState = ClimbState.DOWN;
                     break;
                 case INTAKE:
-                        intakeState = IntakeState.COLLECT;
-                        elevatorState = ElevatorStates.INTAKE;
-                        outtakeState = OuttakeState.OPEN;
-                        fourbarState = FourbarState.REVERSE;
-                        climbState = ClimbState.DOWN;
+                    intakeState = IntakeState.COLLECT;
+                    elevatorState = ElevatorStates.INTAKE;
+                    outtakeState = OuttakeState.OPEN;
+                    fourbarState = FourbarState.REVERSE;
+                    climbState = ClimbState.DOWN;
                     break;
                 case LOW:
                     intakeState = IntakeState.STOP;
                     elevatorState = ElevatorStates.LOW;
-                    if (gamepad1.right_bumper) {
+                    if (gamepad1.dpad_down) {
                         outtakeState = OuttakeState.OPEN;
                     }
                     if (minHeightToOpenFourbar <=Elevator.getPos()) {
@@ -87,7 +91,7 @@ public class SubSystemManager {
                 case MID:
                     intakeState = IntakeState.STOP;
                     elevatorState = ElevatorStates.MID;
-                    if (gamepad1.right_bumper) {
+                    if (gamepad1.dpad_down) {
                         outtakeState = OuttakeState.OPEN;
                     }
                     if (minHeightToOpenFourbar <=Elevator.getPos()) {
@@ -99,7 +103,7 @@ public class SubSystemManager {
                 case HIGH:
                     intakeState = IntakeState.STOP;
                     elevatorState = ElevatorStates.HIGH;
-                    if (gamepad1.right_bumper) {
+                    if (gamepad1.dpad_down) {
                         outtakeState = OuttakeState.OPEN;
                     }
                     if (minHeightToOpenFourbar <=Elevator.getPos()) {
@@ -120,12 +124,13 @@ public class SubSystemManager {
             }
 
             Intake.operate(intakeState);
-             Outtake.operate(outtakeState);
+            Outtake.operate(outtakeState);
 //            Elevator.operate(elevatorState, gamepad1);
 //            Fourbar.operate(fourbarState);
 //            Climb.operate(climbState, gamepad1);
             lastState = wanted;
             if (gamepad1.dpad_down) OrbitGyro.resetGyro();
+        if (gamepad1.y) Plane.operate(PlaneState.THROW);
     }
 
     public static void printStates(Telemetry telemetry) {
