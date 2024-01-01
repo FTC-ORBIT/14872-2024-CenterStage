@@ -30,5 +30,6 @@ public class Plane {
     public static void test(Gamepad gamepad1 , Gamepad gamepad2 ){
         if (gamepad1.left_bumper) planeServo.setPosition(0.05);
         if (gamepad1.right_bumper) planeServo.setPosition(0);
+
     }
 }

@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
 
 public class Elevator {
@@ -20,7 +21,7 @@ public class Elevator {
 
     // the y axis in the gamepad joysticks are inverted, so we use -gamepad to use a positive y
     // the y axis varies between 1 and -1.
-    public static void operate(ElevatorStates state, Gamepad gamepad1) {
+    public static void operate(ElevatorStates state, Gamepad gamepad1, Telemetry telemetry) {
         switch (state) {
             case OVERRIDE:
                // elevatorMotor.setPower(-gamepad1.right_stick_y + ElevatorConstants.kf);
@@ -44,9 +45,11 @@ public class Elevator {
         elevatorPID.setWanted(pos);
         if (!state.equals(ElevatorStates.OVERRIDE)) {
             elevatorMotor.setPower(elevatorPID.update(currentPos));
+        }else{
+            elevatorMotor.setPower(elevatorPID.update(currentPos));
         }
-        elevatorMotor.setPower(pos);
 
+    telemetry.addData("pos", currentPos);
     }
     public static double getPos(){
         return currentPos;
