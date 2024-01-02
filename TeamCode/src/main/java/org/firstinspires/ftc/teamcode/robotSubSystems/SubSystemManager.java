@@ -30,7 +30,8 @@ public class SubSystemManager {
     private static OuttakeState outtakeState = OuttakeState.CLOSED;
     private static FourbarState fourbarState = FourbarState.REVERSE;
     private static ClimbState climbState = ClimbState.DOWN;
-    private static Delay delayElevator = new Delay(1f);
+    private static Delay delayElevator = new Delay(1.5f);
+    private static Delay delayIntake = new Delay(0.5f);
     private static RobotState getState(Gamepad gamepad) {
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
@@ -57,17 +58,21 @@ public class SubSystemManager {
         return stateFromDriver;
     }
 
-
     public static void setSubsystemToState(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         final RobotState wanted = getStateFromWantedAndCurrent(getState(gamepad1));
 
             if ((wanted.equals(RobotState.TRAVEL)|| wanted.equals(RobotState.INTAKE)) && (lastState.equals(RobotState.LOW) || lastState.equals(RobotState.MID) || lastState.equals(RobotState.HIGH))){
                 delayElevator.startAction(GlobalData.currentTime);
             }
+            if (wanted.equals(RobotState.TRAVEL)){
+                delayIntake.startAction(GlobalData.currentTime);
+            }
             switch (wanted) {
                 case TRAVEL:
                     outtakeState = OuttakeState.CLOSED;
+                    if (delayIntake.isDelayPassed()) {
                     intakeState = IntakeState.STOP;
+                    }
                     if (delayElevator.isDelayPassed()) {
                         elevatorState = ElevatorStates.INTAKE;
                     }
@@ -99,7 +104,7 @@ public class SubSystemManager {
                 case MID:
                     intakeState = IntakeState.STOP;
                     elevatorState = ElevatorStates.MID;
-                    if (gamepad1.dpad_down) {
+                    if (gamepad1.left_bumper){
                         outtakeState = OuttakeState.OPEN;
                     }
                     if (minHeightToOpenFourbar <=Elevator.getPos()) {
@@ -111,7 +116,7 @@ public class SubSystemManager {
                 case HIGH:
                     intakeState = IntakeState.STOP;
                     elevatorState = ElevatorStates.HIGH;
-                    if (gamepad1.dpad_down) {
+                    if (gamepad1.left_bumper) {
                         outtakeState = OuttakeState.OPEN;
                     }
                     if (minHeightToOpenFourbar <=Elevator.getPos()) {
@@ -128,7 +133,6 @@ public class SubSystemManager {
                     fourbarState = FourbarState.REVERSE;
                     climbState = ClimbState.UP;
                     break;
-
             }
             Intake.operate(intakeState);
             Outtake.operate(outtakeState);
@@ -137,7 +141,7 @@ public class SubSystemManager {
 //            Climb.operate(climbState, gamepad1);
             lastState = wanted;
             if (gamepad1.dpad_down) OrbitGyro.resetGyro();
-        if (gamepad1.left_bumper) Plane.operate(PlaneState.THROW);
+        if (gamepad1.options) Plane.operate(PlaneState.THROW);
     }
 
     public static void printStates(Telemetry telemetry) {
