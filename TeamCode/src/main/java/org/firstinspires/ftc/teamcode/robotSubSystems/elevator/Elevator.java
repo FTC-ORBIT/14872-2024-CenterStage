@@ -46,7 +46,7 @@ public class Elevator {
         if (!state.equals(ElevatorStates.OVERRIDE)) {
             elevatorMotor.setPower(elevatorPID.update(currentPos));
         }else{
-            elevatorMotor.setPower(elevatorPID.update(currentPos));
+            elevatorMotor.setPower(pos);
         }
 
     telemetry.addData("pos", currentPos);

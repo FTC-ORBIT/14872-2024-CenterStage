@@ -14,15 +14,14 @@ public class Fourbar {
 
     public static void init(HardwareMap hardwareMap){
         servo = hardwareMap.get(Servo.class, "fourbarServo");
-
     }
     public static void operate(FourbarState state, Gamepad gamepad, Telemetry telemetry) {
         switch (state){
             case MOVE:
-                pos = FourbarConstants.move;
+                //pos = FourbarConstants.move;
                 break;
             case REVERSE:
-                pos = FourbarConstants.reverse;
+                //pos = FourbarConstants.reverse;
                 break;
 
         }
