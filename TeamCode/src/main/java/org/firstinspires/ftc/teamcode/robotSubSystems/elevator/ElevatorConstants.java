@@ -4,9 +4,9 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class ElevatorConstants {
-    public static final float lowHeight = 1500;
-    public static final float intakeHeight = 0;
-    public static final float midHeight = 2250;
+    public static final float lowHeight = 123;
+    public static final float intakeHeight = -1817;
+    public static final float midHeight = 1109;
     public static final float highHeight = 3000;
     public static final float overrideFactor = 10;
 

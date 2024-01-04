@@ -113,19 +113,20 @@ public class SubSystemManager {
                         fourbarState = FourbarState.REVERSE;
                     }
                     climbState = ClimbState.DOWN;
-                case HIGH:
-                    intakeState = IntakeState.STOP;
-                    elevatorState = ElevatorStates.HIGH;
-                    if (gamepad1.left_bumper) {
-                        outtakeState = OuttakeState.OPEN;
-                    }
-                    if (minHeightToOpenFourbar <=Elevator.getPos()) {
-                        fourbarState = FourbarState.MOVE;
-                    }else {
-                        fourbarState = FourbarState.REVERSE;
-                    }
-                    climbState = ClimbState.DOWN;
                     break;
+//                case HIGH:
+//                    intakeState = IntakeState.STOP;
+//                    elevatorState = ElevatorStates.HIGH;
+//                    if (gamepad1.left_bumper) {
+//                        outtakeState = OuttakeState.OPEN;
+//                    }
+//                    if (minHeightToOpenFourbar <=Elevator.getPos()) {
+//                        fourbarState = FourbarState.MOVE;
+//                    }else {
+//                        fourbarState = FourbarState.REVERSE;
+//                    }
+//                    climbState = ClimbState.DOWN;
+//                    break;
                 case CLIMB:
                     intakeState = IntakeState.STOP;
                     elevatorState = ElevatorStates.INTAKE;

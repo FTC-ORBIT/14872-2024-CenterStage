@@ -25,7 +25,7 @@ public class Elevator {
         switch (state) {
             case OVERRIDE:
                // elevatorMotor.setPower(-gamepad1.right_stick_y + ElevatorConstants.kf);
-                pos += -gamepad1.right_stick_y * ElevatorConstants.overrideFactor;
+                //pos += -gamepad1.right_stick_y * ElevatorConstants.overrideFactor;
                 break;
             case INTAKE:
             default:

@@ -14,9 +14,11 @@ import org.firstinspires.ftc.teamcode.positionTracker.PoseStorage;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.OrbitLED;
 import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
+//import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 import org.firstinspires.ftc.teamcode.robotSubSystems.climb.Climb;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
+//import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
@@ -46,7 +48,7 @@ public class Robot extends LinearOpMode {
 
         Drivetrain.init(hardwareMap);
         OrbitGyro.init(hardwareMap);
-        Elevator.init(hardwareMap);
+         Elevator.init(hardwareMap);
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Fourbar.init(hardwareMap);
@@ -82,9 +84,9 @@ public class Robot extends LinearOpMode {
 
 
             GlobalData.lastTime = GlobalData.currentTime;
-            Drivetrain.testMotors(gamepad1, telemetry);
+//            Drivetrain.testMotors(gamepad1, telemetry);
             telemetry.update();
-//            SubSystemManager.printStates(telemetry);
+            SubSystemManager.printStates(telemetry);
             telemetry.addData("hasGamePiece", GlobalData.hasGamePiece);
         }
     }

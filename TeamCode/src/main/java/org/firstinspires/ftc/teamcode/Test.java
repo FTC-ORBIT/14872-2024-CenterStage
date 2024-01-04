@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.positionTracker.PoseStorage;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
-import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 import org.firstinspires.ftc.teamcode.robotSubSystems.climb.Climb;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
@@ -28,12 +27,17 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.plane.PlaneState;
 public class Test extends LinearOpMode {
   @Override
   public void runOpMode() throws InterruptedException {
-      Plane.init(hardwareMap);
+      Elevator.init(hardwareMap);
 
       waitForStart();
 
       while (!isStopRequested()){
-          Plane.test(gamepad1 , gamepad2);
+          telemetry.addData("pos", Elevator.elevatorMotor.getCurrentPosition());
+          telemetry.update();
       }
   }
-  }
+}
+// intake: -1817
+// low: 123
+// mid: 1109
+// high: ?
