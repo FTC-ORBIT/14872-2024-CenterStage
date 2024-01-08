@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems;
 
 import static org.firstinspires.ftc.teamcode.robotData.Constants.minHeightToOpenFourbar;
-import static org.firstinspires.ftc.teamcode.robotData.Constants.robotRadius;
 
-import com.qualcomm.hardware.ams.AMSColorSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
-import org.firstinspires.ftc.teamcode.robotSubSystems.climb.Climb;
 import org.firstinspires.ftc.teamcode.robotSubSystems.climb.ClimbState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.FourbarState;
@@ -31,7 +28,8 @@ public class SubSystemManager {
     private static FourbarState fourbarState = FourbarState.REVERSE;
     private static ClimbState climbState = ClimbState.DOWN;
     private static Delay delayElevator = new Delay(1.5f);
-    private static Delay delayIntake = new Delay(0.5f);
+    private static Delay intakeDelay = new Delay(1f);
+    private static boolean toggleButton = true;
     private static RobotState getState(Gamepad gamepad) {
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
@@ -64,14 +62,14 @@ public class SubSystemManager {
             if ((wanted.equals(RobotState.TRAVEL)|| wanted.equals(RobotState.INTAKE)) && (lastState.equals(RobotState.LOW) || lastState.equals(RobotState.MID) || lastState.equals(RobotState.HIGH))){
                 delayElevator.startAction(GlobalData.currentTime);
             }
-            if (wanted.equals(RobotState.TRAVEL)){
-                delayIntake.startAction(GlobalData.currentTime);
+            if (wanted.equals(RobotState.INTAKE) && lastState.equals(RobotState.TRAVEL)){
+                intakeDelay.startAction(GlobalData.currentTime);
             }
             switch (wanted) {
                 case TRAVEL:
                     outtakeState = OuttakeState.CLOSED;
-                    if (delayIntake.isDelayPassed()) {
-                    intakeState = IntakeState.STOP;
+                    if (intakeDelay.isDelayPassed()) {
+                        intakeState = IntakeState.STOP;
                     }
                     if (delayElevator.isDelayPassed()) {
                         elevatorState = ElevatorStates.INTAKE;
@@ -135,6 +133,19 @@ public class SubSystemManager {
                     climbState = ClimbState.UP;
                     break;
             }
+        if (gamepad1.dpad_left) Intake.operate(IntakeState.DEPLETE);
+        if (gamepad1.dpad_right) Intake.operate(IntakeState.STOP);
+        if (gamepad1.dpad_up){
+            if  (toggleButton == true){
+             outtakeState.equals(OuttakeState.OPEN);
+             Outtake.operate(outtakeState);
+             toggleButton = !toggleButton;
+            }else if (toggleButton == false){
+                outtakeState.equals(OuttakeState.CLOSED);
+                Outtake.operate(outtakeState);
+                toggleButton = !toggleButton;
+            }
+        }
             Intake.operate(intakeState);
             Outtake.operate(outtakeState);
             Elevator.operate(elevatorState, gamepad1, telemetry );

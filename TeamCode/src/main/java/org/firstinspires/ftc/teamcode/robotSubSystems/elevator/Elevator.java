@@ -54,4 +54,8 @@ public class Elevator {
     public static double getPos(){
         return currentPos;
     }
+
+    public static void test(Gamepad gamepad , Telemetry telemetry){
+        elevatorMotor.setPower(-gamepad.right_stick_y * 10 );
+    }
 }

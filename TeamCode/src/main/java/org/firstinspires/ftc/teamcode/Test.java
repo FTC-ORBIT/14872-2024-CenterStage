@@ -30,14 +30,14 @@ public class Test extends LinearOpMode {
       Elevator.init(hardwareMap);
 
       waitForStart();
-
       while (!isStopRequested()){
+          Elevator.test(gamepad1 , telemetry);
           telemetry.addData("pos", Elevator.elevatorMotor.getCurrentPosition());
           telemetry.update();
       }
   }
 }
-// intake: -1817
-// low: 123
-// mid: 1109
+// intake: -3
+// low: 1894
+// mid: 3270
 // high: ?
