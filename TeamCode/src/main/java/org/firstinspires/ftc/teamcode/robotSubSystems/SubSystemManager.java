@@ -33,7 +33,7 @@ public class SubSystemManager {
     private static RobotState getState(Gamepad gamepad) {
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
-                        : gamepad.dpad_left ? RobotState.CLIMB :gamepad.x ? RobotState.LOW:gamepad.y ? RobotState.MID: gamepad.right_bumper ? RobotState.HIGH: lastState;
+                        : gamepad.dpad_left ? RobotState.CLIMB :gamepad.x ? RobotState.LOW:gamepad.y ? RobotState.MID:  gamepad.right_bumper  ? RobotState.DEPLETE: lastState;
     }
 
     private static RobotState getStateFromWantedAndCurrent(RobotState stateFromDriver){
@@ -50,6 +50,8 @@ public class SubSystemManager {
             case TRAVEL:
                 break;
             case CLIMB:
+                break;
+            case DEPLETE:
                 break;
 
         }
@@ -71,10 +73,10 @@ public class SubSystemManager {
                     if (intakeDelay.isDelayPassed()) {
                         intakeState = IntakeState.STOP;
                     }
+                    fourbarState = FourbarState.REVERSE;
                     if (delayElevator.isDelayPassed()) {
                         elevatorState = ElevatorStates.INTAKE;
                     }
-                    fourbarState = FourbarState.REVERSE;
                     climbState = ClimbState.DOWN;
                     break;
                 case INTAKE:
@@ -132,20 +134,24 @@ public class SubSystemManager {
                     fourbarState = FourbarState.REVERSE;
                     climbState = ClimbState.UP;
                     break;
+                case DEPLETE:
+                    fourbarState = FourbarState.REVERSE;
+                    intakeState = IntakeState.DEPLETE;
+                    elevatorState = ElevatorStates.INTAKE;
+                    outtakeState = OuttakeState.CLOSED;
+                    climbState = ClimbState.DOWN;
             }
-        if (gamepad1.dpad_left) Intake.operate(IntakeState.DEPLETE);
         if (gamepad1.dpad_right) Intake.operate(IntakeState.STOP);
         if (gamepad1.dpad_up){
             if  (toggleButton == true){
              outtakeState.equals(OuttakeState.OPEN);
-             Outtake.operate(outtakeState);
-             toggleButton = !toggleButton;
-            }else if (toggleButton == false){
+            }else {
                 outtakeState.equals(OuttakeState.CLOSED);
-                Outtake.operate(outtakeState);
-                toggleButton = !toggleButton;
             }
+            Outtake.operate(outtakeState);
+            toggleButton = !toggleButton;
         }
+
             Intake.operate(intakeState);
             Outtake.operate(outtakeState);
             Elevator.operate(elevatorState, gamepad1, telemetry );
