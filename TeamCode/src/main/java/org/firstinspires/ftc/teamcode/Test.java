@@ -27,12 +27,12 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.plane.PlaneState;
 public class Test extends LinearOpMode {
   @Override
   public void runOpMode() throws InterruptedException {
-      Elevator.init(hardwareMap);
+      Fourbar.init(hardwareMap);
 
       waitForStart();
       while (!isStopRequested()){
-          Elevator.test(gamepad1 , telemetry);
-          telemetry.addData("pos", Elevator.elevatorMotor.getCurrentPosition());
+          Fourbar.test(gamepad1 , telemetry);
+          telemetry.addData("pos", Fourbar.servo.getPosition());
           telemetry.update();
       }
   }

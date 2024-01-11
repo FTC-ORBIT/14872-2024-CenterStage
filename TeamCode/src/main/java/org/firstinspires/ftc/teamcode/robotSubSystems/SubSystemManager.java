@@ -27,10 +27,14 @@ public class SubSystemManager {
     private static OuttakeState outtakeState = OuttakeState.CLOSED;
     private static FourbarState fourbarState = FourbarState.REVERSE;
     private static ClimbState climbState = ClimbState.DOWN;
-    private static Delay delayElevator = new Delay(1.5f);
+    private static Delay delayElevator = new Delay(1.3f);
     private static Delay intakeDelay = new Delay(1f);
     private static boolean toggleButton = true;
+    private static boolean ElevatorToggleButton = false;
     private static RobotState getState(Gamepad gamepad) {
+        if (gamepad.b || gamepad.a || gamepad.dpad_left || gamepad.x || gamepad.y || gamepad.right_bumper){
+            ElevatorToggleButton = false;
+        }
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
                         : gamepad.dpad_left ? RobotState.CLIMB :gamepad.x ? RobotState.LOW:gamepad.y ? RobotState.MID:  gamepad.right_bumper  ? RobotState.DEPLETE: lastState;
@@ -74,14 +78,14 @@ public class SubSystemManager {
                         intakeState = IntakeState.STOP;
                     }
                     fourbarState = FourbarState.REVERSE;
-                    if (delayElevator.isDelayPassed()) {
+                    if (delayElevator.isDelayPassed() && !ElevatorToggleButton) {
                         elevatorState = ElevatorStates.INTAKE;
                     }
                     climbState = ClimbState.DOWN;
                     break;
                 case INTAKE:
                     intakeState = IntakeState.COLLECT;
-                    if (delayElevator.isDelayPassed()) {
+                    if (delayElevator.isDelayPassed() && !ElevatorToggleButton) {
                         elevatorState = ElevatorStates.INTAKE;
                     }
                     outtakeState = OuttakeState.OPEN;
@@ -90,7 +94,7 @@ public class SubSystemManager {
                     break;
                 case LOW:
                     intakeState = IntakeState.STOP;
-                    elevatorState = ElevatorStates.LOW;
+                    if (!ElevatorToggleButton) elevatorState = ElevatorStates.LOW;
                     if (gamepad1.left_bumper) {
                         outtakeState = OuttakeState.OPEN;
                     }
@@ -103,7 +107,7 @@ public class SubSystemManager {
                     break;
                 case MID:
                     intakeState = IntakeState.STOP;
-                    elevatorState = ElevatorStates.MID;
+                    if (!ElevatorToggleButton) elevatorState = ElevatorStates.MID;
                     if (gamepad1.left_bumper){
                         outtakeState = OuttakeState.OPEN;
                     }
@@ -137,13 +141,13 @@ public class SubSystemManager {
                 case DEPLETE:
                     fourbarState = FourbarState.REVERSE;
                     intakeState = IntakeState.DEPLETE;
-                    elevatorState = ElevatorStates.INTAKE;
+                    if (!ElevatorToggleButton)  elevatorState = ElevatorStates.INTAKE;
                     outtakeState = OuttakeState.CLOSED;
                     climbState = ClimbState.DOWN;
             }
         if (gamepad1.dpad_right) Intake.operate(IntakeState.STOP);
         if (gamepad1.dpad_up){
-            if  (toggleButton == true){
+            if  (toggleButton){
              outtakeState.equals(OuttakeState.OPEN);
             }else {
                 outtakeState.equals(OuttakeState.CLOSED);
@@ -151,6 +155,11 @@ public class SubSystemManager {
             Outtake.operate(outtakeState);
             toggleButton = !toggleButton;
         }
+        if (gamepad1.right_stick_y != 0 ){
+            elevatorState = ElevatorStates.OVERRIDE;
+            ElevatorToggleButton = true;
+        }
+
 
             Intake.operate(intakeState);
             Outtake.operate(outtakeState);

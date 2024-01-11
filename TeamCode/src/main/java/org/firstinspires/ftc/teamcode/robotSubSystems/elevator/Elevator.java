@@ -24,8 +24,8 @@ public class Elevator {
     public static void operate(ElevatorStates state, Gamepad gamepad1, Telemetry telemetry) {
         switch (state) {
             case OVERRIDE:
-               // elevatorMotor.setPower(-gamepad1.right_stick_y + ElevatorConstants.kf);
-                //pos += -gamepad1.right_stick_y * ElevatorConstants.overrideFactor;
+                elevatorMotor.setPower(-gamepad1.right_stick_y * ElevatorConstants.overrideFactor);
+           //     pos += -gamepad1.right_stick_y * ElevatorConstants.overrideFactor;
                 break;
             case INTAKE:
             default:
@@ -45,8 +45,6 @@ public class Elevator {
         elevatorPID.setWanted(pos);
         if (!state.equals(ElevatorStates.OVERRIDE)) {
             elevatorMotor.setPower(elevatorPID.update(currentPos));
-        }else{
-            elevatorMotor.setPower(pos);
         }
 
     telemetry.addData("pos", currentPos);
