@@ -109,7 +109,7 @@ public class SubSystemManager {
             Intake.operate(intakeState);
             Outtake.operate(outtakeState);
             Elevator.operate(elevatorState, gamepad1);
-            Fourbar.operate(fourbarState);
+            //Fourbar.operate(fourbarState);
             Climb.operate(climbState, gamepad1);
             lastState = wanted;
             if (gamepad1.dpad_down) OrbitGyro.resetGyro();

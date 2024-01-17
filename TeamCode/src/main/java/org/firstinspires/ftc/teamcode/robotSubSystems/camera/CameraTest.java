@@ -4,7 +4,6 @@ import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -15,7 +14,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 public class CameraTest extends LinearOpMode {
 
     private VisionPortal portal;
-    private RedPropThreshold redPropThreshold = new RedPropThreshold();
+    private BluePropThreshold bluePropThreshold = new BluePropThreshold();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -23,13 +22,13 @@ public class CameraTest extends LinearOpMode {
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .setCameraResolution(new Size(320, 240))
-                .setCamera(BuiltinCameraDirection.BACK)
+                .setCamera(BuiltinCameraDirection.FRONT)
                 .build();
 
 
         waitForStart();
         while (!isStopRequested()) {
-            telemetry.addData("Prop Position", redPropThreshold.getPropPosition());
+            telemetry.addData("Prop Position", bluePropThreshold.getPropPosition());
             telemetry.update();                        //Will output prop position on Driver Station Console
         }
 
