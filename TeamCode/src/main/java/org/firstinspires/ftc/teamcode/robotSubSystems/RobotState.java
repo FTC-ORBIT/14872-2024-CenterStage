@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems;
 
 public enum RobotState {
-    TRAVEL, INTAKE, CLIMB, LOW, MID
+    TRAVEL, INTAKE, CLIMB, LOW, MID , HIGH , DEPLETE
 }

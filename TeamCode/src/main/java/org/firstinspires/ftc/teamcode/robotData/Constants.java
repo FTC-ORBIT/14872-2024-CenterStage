@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.robotData;
 
 import org.firstinspires.ftc.teamcode.OrbitUtils.Angle;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Vector;
-import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
+//import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 
 public  class Constants {
     public static  final float teleopCycleTime = 0.02f; //TODO tune
@@ -19,7 +19,7 @@ public  class Constants {
     private static final float autoDriveEndLinearAcc = 0.6f * maxAcc;
     public static final float maxAutoDriveVel = 0.85f * maxVelocity;
     public static final float maxAccOmega = 1f; //TODO tune all maxes
-    public static final float minHeightToOpenFourbar =0;
+    public static final float minHeightToOpenFourbar =500;
     private static final float autoDriveStartDOmega = 0.7f * maxAccOmega;
     private static final float autoDriveEndDOmega = 0.1f * maxAccOmega;
     public static final Vector autoDriveLinearAccMaxPoint = new Vector(1, autoDriveStartLinearAcc);
