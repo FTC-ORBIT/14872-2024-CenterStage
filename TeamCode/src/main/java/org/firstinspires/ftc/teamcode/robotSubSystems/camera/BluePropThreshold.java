@@ -13,9 +13,9 @@ import org.opencv.imgproc.Imgproc;
 
 public class BluePropThreshold implements VisionProcessor {
     Mat testMat = new Mat();
-//    Mat highMat = new Mat();
+    //    Mat highMat = new Mat();
     Mat lowMat = new Mat();
-//    Mat finalMat = new Mat();
+    //    Mat finalMat = new Mat();
     double blueThreshold = 0.01;
     String outStr = "default"; //Set a default value in case vision does not work
 
@@ -39,20 +39,20 @@ public class BluePropThreshold implements VisionProcessor {
         Imgproc.cvtColor(frame, testMat, Imgproc.COLOR_RGB2HSV);
 
 
-        Scalar lowHSVBlueLower = new Scalar(112, 89 , 139);  //Beginning of Color Wheel
+        Scalar lowHSVBlueLower = new Scalar(85, 89 , 139);  //Beginning of Color Wheel
         Scalar lowHSVBlueUpper = new Scalar(160, 155, 210);
 
-    //   Scalar redHSVRedLower = new Scalar(160, 100, 20); //Wraps around Color Wheel
-    //    Scalar highHSVRedUpper = new Scalar(180, 255, 255);
+        //   Scalar redHSVRedLower = new Scalar(160, 100, 20); //Wraps around Color Wheel
+        //    Scalar highHSVRedUpper = new Scalar(180, 255, 255);
 
-      //  Scalar lowHSVBlueLower = new Scalar(0, 80, 0);  //Beginning of Color Wheel
-      //  Scalar lowHSVRedUpper = new Scalar(30, 255, 255);
+        //  Scalar lowHSVBlueLower = new Scalar(0, 80, 0);  //Beginning of Color Wheel
+        //  Scalar lowHSVRedUpper = new Scalar(30, 255, 255);
 
-      //  Scalar redHSVRedLower = new Scalar(180, 120, 40); //Wraps around Color Wheel
-      //  Scalar highHSVRedUpper = new Scalar(200, 255, 255);
+        //  Scalar redHSVRedLower = new Scalar(180, 120, 40); //Wraps around Color Wheel
+        //  Scalar highHSVRedUpper = new Scalar(200, 255, 255);
 
 //        Core.inRange(testMat, lowHSVBlueLower, lowMat);
-    //    Core.inRange(testMat, redHSVRedLower, highHSVRedUpper, highMat);
+        //    Core.inRange(testMat, redHSVRedLower, highHSVRedUpper, highMat);
         Core.inRange(testMat, lowHSVBlueLower, lowHSVBlueUpper,lowMat);
 
         testMat.release();
@@ -60,7 +60,7 @@ public class BluePropThreshold implements VisionProcessor {
 //        Core.bitwise_or(lowMat, finalMat);
 
         lowMat.release();
-    //    highMat.release();
+        //    highMat.release();
 
         double leftBox = Core.sumElems(lowMat.submat(LEFT_RECTANGLE)).val[0];
         double rightBox = Core.sumElems(lowMat.submat(RIGHT_RECTANGLE)).val[0];
@@ -79,7 +79,7 @@ public class BluePropThreshold implements VisionProcessor {
             outStr = "right";
         }
 
-      lowMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline
+        lowMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline
 //                                  on the driver station stream, do not use this permanently in your code as
 //                                  you use the "frame" mat for all of your pipelines, such as April Tags*/
         return null;            //You do not return the original mat anymore, instead return null
