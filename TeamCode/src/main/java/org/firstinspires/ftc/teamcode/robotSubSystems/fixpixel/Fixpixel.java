@@ -1,46 +1,44 @@
-package org.firstinspires.ftc.teamcode.robotSubSystems.fourbar;
+package org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
 
-public class Fourbar {
+public class Fixpixel {
     public static Servo servo;
+    public static Servo servo2;
     public static float pos;
     public static boolean lastLeft = false;
     public static boolean lastRight = false;
     public static boolean lastRT = false;
     public static boolean lastlT = false;
     public static void init(HardwareMap hardwareMap){
-        servo = hardwareMap.get(Servo.class, "fourbarServo");
-        pos = 0.76f;
+        servo = hardwareMap.get(Servo.class, "fixPixelServo");
+        pos = FixpixelConstants.close;
     }
-    public static void operate(FourbarState state, Gamepad gamepad, Telemetry telemetry) {
+    public static void operate(FixpixelState state , Gamepad gamepad , Telemetry telemetry){
         switch (state){
-            case MOVE:
-                pos = FourbarConstants.move;
+            case CLOSE:
+                pos = FixpixelConstants.close;
                 break;
-            case REVERSE:
-               pos = FourbarConstants.reverse;
+            case OPEN:
+                pos = FixpixelConstants.open;
                 break;
-
         }
-
-          servo.setPosition(pos);
+        servo.setPosition(pos);
+        servo2.setPosition(pos);
     }
-    public static void test(Gamepad gamepad, Telemetry telemetry){
+    public static void test(Gamepad gamepad , Telemetry telemetry){
 
         if (gamepad.left_bumper &&  !lastLeft){
-            pos += 0.001;
+            pos += 0.05;
             if (pos > 1){
                 pos = 1;
             }
         }else if (gamepad.right_bumper && !lastRight){
-            pos -= 0.001;
+            pos -= 0.05;
             if (pos < 0){
                 pos = 0;
             }
@@ -64,4 +62,5 @@ public class Fourbar {
         telemetry.addData("pos" , pos);
         telemetry.update();
     }
+
 }
