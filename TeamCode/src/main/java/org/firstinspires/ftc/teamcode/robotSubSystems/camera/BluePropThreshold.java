@@ -18,7 +18,8 @@ public class BluePropThreshold implements VisionProcessor {
     //    Mat finalMat = new Mat();
     double blueThreshold = 0.01;
     String outStr = "default"; //Set a default value in case vision does not work
-
+    public double leftBox =5;
+    public double rightBox;
     static final Rect LEFT_RECTANGLE = new Rect(
             new Point(0, 0),
             new Point(239, 159)
@@ -35,7 +36,8 @@ public class BluePropThreshold implements VisionProcessor {
     }
 
     @Override
-    public Object processFrame(Mat frame, long captureTimeNanos) {
+    public Mat processFrame(Mat frame, long captureTimeNanos) {
+        frame = new Mat();
         Imgproc.cvtColor(frame, testMat, Imgproc.COLOR_RGB2HSV);
 
 
@@ -55,15 +57,16 @@ public class BluePropThreshold implements VisionProcessor {
         //    Core.inRange(testMat, redHSVRedLower, highHSVRedUpper, highMat);
         Core.inRange(testMat, lowHSVBlueLower, lowHSVBlueUpper,lowMat);
 
-        testMat.release();
+        //testMat.release();
 
 //        Core.bitwise_or(lowMat, finalMat);
 
-        lowMat.release();
+        // lowMat.release();
         //    highMat.release();
 
-        double leftBox = Core.sumElems(lowMat.submat(LEFT_RECTANGLE)).val[0];
-        double rightBox = Core.sumElems(lowMat.submat(RIGHT_RECTANGLE)).val[0];
+//         leftBox = Core.sumElems(lowMat.submat(LEFT_RECTANGLE)).val[0];
+         rightBox = Core.sumElems(lowMat.submat(RIGHT_RECTANGLE)).val[0];
+        leftBox = 10;
 
         double averagedLeftBox = leftBox / LEFT_RECTANGLE.area() / 255;
         double averagedRightBox = rightBox / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
@@ -82,7 +85,7 @@ public class BluePropThreshold implements VisionProcessor {
         lowMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline
 //                                  on the driver station stream, do not use this permanently in your code as
 //                                  you use the "frame" mat for all of your pipelines, such as April Tags*/
-        return null;            //You do not return the original mat anymore, instead return null
+        return frame;            //You do not return the original mat anymore, instead return null
 
 
 
@@ -95,7 +98,7 @@ public class BluePropThreshold implements VisionProcessor {
 
     }
 
-    public String getPropPosition(){  //Returns postion of the prop in a String
+    public String getPropPosition(){
         return outStr;
     }
 }
