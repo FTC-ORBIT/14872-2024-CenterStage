@@ -60,5 +60,6 @@ public class Elevator {
 
     public static void test(Gamepad gamepad , Telemetry telemetry){
         elevatorMotor.setPower(-gamepad.right_stick_y * 10 );
+        elevatorMotor2.setPower(-gamepad.right_stick_y * 10);
     }
 }
