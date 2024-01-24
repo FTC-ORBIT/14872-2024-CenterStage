@@ -93,6 +93,13 @@ public class Drivetrain {
         motors[3].setPower(DrivetrainConstants.power * (rbPower / highestPower));
     }
 
+    public void driveToDirection(double distInCM, double angle, double speed) {
+
+        for (DcMotor motor : motors
+        ) {
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+    }
     public static void testMotors(Gamepad gamepad, Telemetry telemetry){
         if (gamepad.dpad_down){motors[0].setPower(0.2);}
         else if (gamepad.dpad_left){motors[1].setPower(0.2);}
