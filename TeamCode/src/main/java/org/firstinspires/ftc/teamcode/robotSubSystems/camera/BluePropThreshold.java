@@ -36,8 +36,7 @@ public class BluePropThreshold implements VisionProcessor {
     }
 
     @Override
-    public Mat processFrame(Mat frame, long captureTimeNanos) {
-        frame = new Mat();
+    public Object processFrame(Mat frame, long captureTimeNanos) {
         Imgproc.cvtColor(frame, testMat, Imgproc.COLOR_RGB2HSV);
 
 
@@ -57,16 +56,16 @@ public class BluePropThreshold implements VisionProcessor {
         //    Core.inRange(testMat, redHSVRedLower, highHSVRedUpper, highMat);
         Core.inRange(testMat, lowHSVBlueLower, lowHSVBlueUpper,lowMat);
 
-        //testMat.release();
+        testMat.release();
 
 //        Core.bitwise_or(lowMat, finalMat);
 
-        // lowMat.release();
+         lowMat.release();
         //    highMat.release();
 
-//         leftBox = Core.sumElems(lowMat.submat(LEFT_RECTANGLE)).val[0];
+        leftBox = Core.sumElems(lowMat.submat(LEFT_RECTANGLE)).val[0];
          rightBox = Core.sumElems(lowMat.submat(RIGHT_RECTANGLE)).val[0];
-        leftBox = 10;
+
 
         double averagedLeftBox = leftBox / LEFT_RECTANGLE.area() / 255;
         double averagedRightBox = rightBox / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
@@ -85,7 +84,7 @@ public class BluePropThreshold implements VisionProcessor {
         lowMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline
 //                                  on the driver station stream, do not use this permanently in your code as
 //                                  you use the "frame" mat for all of your pipelines, such as April Tags*/
-        return frame;            //You do not return the original mat anymore, instead return null
+        return null;            //You do not return the original mat anymore, instead return null
 
 
 

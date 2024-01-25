@@ -215,12 +215,12 @@ public class camera extends LinearOpMode
                   Imgproc.rectangle(
                           input,
                           new Point(
-                                  input.cols()/4,
-                                  input.rows()/4),
+                                  input.cols() >> 2,
+                                  input.rows() >> 5),
                           new Point(
-                                  input.cols()*(3f/4f),
-                                  input.rows()*(3f/4f)),
-                          new Scalar(255, 0, 255), 24);
+                                  input.cols()*(2f/3f),
+                                  input.rows()),
+                          new Scalar(255, 0, 255), 2);
 
                   /**
                    * NOTE: to see how to get data from your pipeline to your OpMode as well as how

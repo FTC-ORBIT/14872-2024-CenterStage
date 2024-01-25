@@ -24,11 +24,11 @@ public class CameraTest extends LinearOpMode {
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(320, 240))
                 .setCamera(BuiltinCameraDirection.BACK)
+                .addProcessor(bluePropThreshold)
                 .build();
 
 
         while (!isStopRequested()) {
-            bluePropThreshold.processFrame(frame , captureTimeNanos);
             telemetry.addData("Prop Position: ", bluePropThreshold.getPropPosition());
             telemetry.addData("left box: " , bluePropThreshold.leftBox);
             telemetry.addData("right box: " , bluePropThreshold.rightBox);
