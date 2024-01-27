@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.intake;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -33,9 +33,13 @@ public class Intake {
         motor.setPower(power);
     }
 
-    public static void testMotors(Telemetry telemetry){
-                motor.setPower(0.5);
-                telemetry.addData("motor", motor.getCurrentPosition());
+    public static void test(Gamepad gamepad, Telemetry telemetry){
+        if (gamepad.a){
+            motor.setPower(1);
+        }else if (gamepad.b){
+            motor.setPower(-1);
+        }
+                telemetry.addData("pos", motor.getCurrentPosition());
 
     }
 }
