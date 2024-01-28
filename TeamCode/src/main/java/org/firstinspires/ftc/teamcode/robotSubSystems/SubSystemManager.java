@@ -179,8 +179,8 @@ public class SubSystemManager {
     public static void printStates(Telemetry telemetry) {
         telemetry.addData("GlobalData.robotState", GlobalData.robotState);
         telemetry.addData("intakeState", intakeState);
-        telemetry.addData("delay" , delayElevator.isDelayPassed());
-        telemetry.addData("intakeDelay" , intakeDelay.isDelayPassed());
+//        telemetry.addData("delay" , delayElevator.isDelayPassed());
+//        telemetry.addData("intakeDelay" , intakeDelay.isDelayPassed());
         telemetry.addData("elevator" , Elevator.elevatorMotor.getCurrentPosition());
         telemetry.addData("fourBar" , Fourbar.servo.getPosition());
         telemetry.addData("fixPixel-Servo_1" , Fixpixel.servo.getPosition());
