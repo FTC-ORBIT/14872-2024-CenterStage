@@ -50,7 +50,7 @@ public class Elevator {
         elevatorPID.setWanted(pos);
         if (!state.equals(ElevatorStates.OVERRIDE)) {
             elevatorMotor.setPower(elevatorPID.update(currentPos));
-            elevatorMotor2.setPower(elevatorPID.update(currentPos2));
+            elevatorMotor2.setPower(elevatorPID.update(-currentPos2));
         }
 
     telemetry.addData("pos", currentPos);
@@ -61,5 +61,6 @@ public class Elevator {
 
     public static void test(Gamepad gamepad , Telemetry telemetry){
         elevatorMotor.setPower(-gamepad.right_stick_y * 10 );
+        elevatorMotor2.setPower(gamepad.right_stick_y * 10);
     }
 }

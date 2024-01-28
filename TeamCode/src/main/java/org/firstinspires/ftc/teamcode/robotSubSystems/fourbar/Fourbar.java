@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.fourbar;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
 
 public class Fourbar {
     public static Servo servo;
@@ -17,7 +15,6 @@ public class Fourbar {
     public static boolean lastlT = false;
     public static void init(HardwareMap hardwareMap){
         servo = hardwareMap.get(Servo.class, "fourbarServo");
-        pos = 0.76f;
     }
     public static void operate(FourbarState state, Gamepad gamepad, Telemetry telemetry) {
         switch (state){

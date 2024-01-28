@@ -40,8 +40,6 @@ public class OrbitLED {
                     pattern = RevBlinkinLedDriver.BlinkinPattern.AQUA;
                 case HIGH:
                     pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;
-                case CLIMB:
-                    pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
             }
         }
 
