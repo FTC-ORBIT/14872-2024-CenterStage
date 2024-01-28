@@ -119,19 +119,18 @@ public class SubSystemManager {
                     }
                     fixpixelState = FixpixelState.CLOSE;
                     break;
-//                case HIGH:
-//                    intakeState = IntakeState.STOP;
-//                    elevatorState = ElevatorStates.HIGH;
-//                    if (gamepad1.left_bumper) {
-//                        outtakeState = OuttakeState.OPEN;
-//                    }
-//                    if (minHeightToOpenFourbar <=Elevator.getPos()) {
-//                        fourbarState = FourbarState.MOVE;
-//                    }else {
-//                        fourbarState = FourbarState.REVERSE;
-//                    }
-//                    climbState = ClimbState.DOWN;
-//                    break;
+                case HIGH:
+                    intakeState = IntakeState.STOP;
+                    elevatorState = ElevatorStates.HIGH;
+                    if (gamepad1.left_bumper) {
+                        outtakeState = OuttakeState.OPEN;
+                    }
+                    if (minHeightToOpenFourbar <=Elevator.getPos()) {
+                        fourbarState = FourbarState.MOVE;
+                    }else {
+                        fourbarState = FourbarState.REVERSE;
+                    }
+                    break;
                 case DEPLETE:
                     fourbarState = FourbarState.REVERSE;
                     intakeState = IntakeState.DEPLETE;
@@ -183,9 +182,9 @@ public class SubSystemManager {
         telemetry.addData("delay" , delayElevator.isDelayPassed());
         telemetry.addData("intakeDelay" , intakeDelay.isDelayPassed());
         telemetry.addData("elevator" , Elevator.elevatorMotor.getCurrentPosition());
-        telemetry.addData("fourbar" , Fourbar.servo.getPosition());
-        telemetry.addData("fixPixle-Servo_1" , Fixpixel.servo.getPosition());
-        telemetry.addData("fixPixle-Servo_2" , Fixpixel.servo2.getPosition());
+        telemetry.addData("fourBar" , Fourbar.servo.getPosition());
+        telemetry.addData("fixPixel-Servo_1" , Fixpixel.servo.getPosition());
+        telemetry.addData("fixPixel-Servo_2" , Fixpixel.servo2.getPosition());
         telemetry.addData("outtake" , Outtake.servo.getPosition());
         telemetry.addData("plane" , Plane.planeServo.getPosition());
     }
