@@ -35,12 +35,12 @@ public class Fourbar {
     public static void test(Gamepad gamepad, Telemetry telemetry){
 
         if (gamepad.left_bumper &&  !lastLeft){
-            pos += 0.001;
+            pos += 0.05;
             if (pos > 1){
                 pos = 1;
             }
         }else if (gamepad.right_bumper && !lastRight){
-            pos -= 0.001;
+            pos -= 0.05;
             if (pos < 0){
                 pos = 0;
             }
