@@ -8,7 +8,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
-import org.firstinspires.ftc.teamcode.robotSubSystems.climb.ClimbState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel.Fixpixel;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel.FixpixelState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
@@ -29,7 +28,6 @@ public class SubSystemManager {
     private static OuttakeState outtakeState = OuttakeState.CLOSED;
     private static FourbarState fourbarState = FourbarState.REVERSE;
     private static FixpixelState fixpixelState = FixpixelState.CLOSE;
-    private static ClimbState climbState = ClimbState.DOWN;
     private static Delay delayElevator = new Delay(1.3f);
     private static Delay intakeDelay = new Delay(1f);
     private static boolean toggleButton = true;
@@ -40,7 +38,7 @@ public class SubSystemManager {
         }
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
-                        : gamepad.dpad_left ? RobotState.CLIMB :gamepad.x ? RobotState.LOW:gamepad.y ? RobotState.MID: gamepad.back ? RobotState.FIXPIXEL: gamepad.right_bumper  ? RobotState.DEPLETE: lastState;
+                        :gamepad.x ? RobotState.LOW:gamepad.y ? RobotState.MID: gamepad.back ? RobotState.FIXPIXEL: gamepad.right_bumper  ? RobotState.DEPLETE: lastState;
     }
 
     private static RobotState getStateFromWantedAndCurrent(RobotState stateFromDriver){
@@ -55,8 +53,6 @@ public class SubSystemManager {
             case HIGH:
                 break;
             case TRAVEL:
-                break;
-            case CLIMB:
                 break;
             case DEPLETE:
                 break;
@@ -86,7 +82,6 @@ public class SubSystemManager {
                     if (delayElevator.isDelayPassed() && !ElevatorToggleButton) {
                         elevatorState = ElevatorStates.INTAKE;
                     }
-                    climbState = ClimbState.DOWN;
                     fixpixelState = FixpixelState.CLOSE;
                     break;
                 case INTAKE:
@@ -96,7 +91,6 @@ public class SubSystemManager {
                     }
                     outtakeState = OuttakeState.OPEN;
                     fourbarState = FourbarState.REVERSE;
-                    climbState = ClimbState.DOWN;
                     fixpixelState = FixpixelState.CLOSE;
                     break;
                 case LOW:
@@ -110,7 +104,6 @@ public class SubSystemManager {
                     }else {
                         fourbarState = FourbarState.REVERSE;
                     }
-                    climbState = ClimbState.DOWN;
                     fixpixelState = FixpixelState.CLOSE;
                     break;
                 case MID:
@@ -124,7 +117,6 @@ public class SubSystemManager {
                     }else {
                         fourbarState = FourbarState.REVERSE;
                     }
-                    climbState = ClimbState.DOWN;
                     fixpixelState = FixpixelState.CLOSE;
                     break;
 //                case HIGH:
@@ -140,20 +132,11 @@ public class SubSystemManager {
 //                    }
 //                    climbState = ClimbState.DOWN;
 //                    break;
-                case CLIMB:
-                    intakeState = IntakeState.STOP;
-                    elevatorState = ElevatorStates.INTAKE;
-                    outtakeState = OuttakeState.CLOSED;
-                    fourbarState = FourbarState.REVERSE;
-                    climbState = ClimbState.UP;
-                    fixpixelState = FixpixelState.CLOSE;
-                    break;
                 case DEPLETE:
                     fourbarState = FourbarState.REVERSE;
                     intakeState = IntakeState.DEPLETE;
                     if (!ElevatorToggleButton)  elevatorState = ElevatorStates.INTAKE;
                     outtakeState = OuttakeState.CLOSED;
-                    climbState = ClimbState.DOWN;
                     fixpixelState = FixpixelState.CLOSE;
                     break;
                 case FIXPIXEL:
@@ -165,7 +148,6 @@ public class SubSystemManager {
                     if (delayElevator.isDelayPassed() && !ElevatorToggleButton) {
                         elevatorState = ElevatorStates.INTAKE;
                     }
-                    climbState = ClimbState.DOWN;
                     fixpixelState = FixpixelState.OPEN;
                     break;
             }
@@ -189,7 +171,6 @@ public class SubSystemManager {
             Outtake.operate(outtakeState);
             Elevator.operate(elevatorState, gamepad1, telemetry );
             Fourbar.operate(fourbarState,gamepad1,telemetry);
-//            Climb.operate(climbState, gamepad1);
             Fixpixel.operate(fixpixelState , gamepad1 , telemetry);
             lastState = wanted;
             if (gamepad1.dpad_down) OrbitGyro.resetGyro();
