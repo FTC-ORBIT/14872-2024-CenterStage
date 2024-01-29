@@ -4,24 +4,28 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
+import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
+import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
 
 @Config
 @TeleOp(name = "test")
 public class Test extends LinearOpMode {
   @Override
   public void runOpMode() throws InterruptedException {
-      Fourbar.init(hardwareMap);
+      Intake.init(hardwareMap);
+      Outtake.init(hardwareMap);
 
       waitForStart();
       while (!isStopRequested()){
-          Fourbar.test(gamepad1 , telemetry);
-          telemetry.addData("pos", Fourbar.servo.getPosition());
+          Outtake.test(gamepad1, telemetry);
+          Intake.test(gamepad1 , telemetry);
+          telemetry.addData("pos", Intake.motor.getCurrentPosition());
+          telemetry.addData("outtake" , Outtake.servo.getPosition());
           telemetry.update();
       }
   }
 }
-// intake: 0 , 0
-// low: 3000 , -3000
-// mid: 3000 , -3000
+// intake: -3
+// low: 1894
+// mid: 3270
 // high: ?

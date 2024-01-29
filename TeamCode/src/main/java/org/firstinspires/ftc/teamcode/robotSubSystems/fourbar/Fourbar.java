@@ -35,6 +35,7 @@ public class Fourbar {
             pos += 0.05;
             if (pos > 1){
                 pos = 1;
+
             }
         }else if (gamepad.right_bumper && !lastRight){
             pos -= 0.05;

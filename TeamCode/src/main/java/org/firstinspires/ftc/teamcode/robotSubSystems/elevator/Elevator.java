@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.elevator;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -18,6 +19,7 @@ public class Elevator {
     public static void init(HardwareMap hardwareMap) {
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevatorMotor");
         elevatorMotor2 = hardwareMap.get(DcMotor.class, "elevatorMotor2");
+        elevatorMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
         elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         elevatorMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
@@ -27,9 +29,9 @@ public class Elevator {
     public static void operate(ElevatorStates state, Gamepad gamepad1, Telemetry telemetry) {
         switch (state) {
             case OVERRIDE:
-                elevatorMotor.setPower(-gamepad1.right_stick_y * ElevatorConstants.overrideFactor);
-                elevatorMotor2.setPower(-gamepad1.right_stick_y * ElevatorConstants.overrideFactor);
-           //     pos += -gamepad1.right_stick_y * ElevatorConstants.overrideFactor;
+//                elevatorMotor.setPower(-gamepad1.right_stick_y * ElevatorConstants.overrideFactor);
+//                elevatorMotor2.setPower(-gamepad1.right_stick_y * ElevatorConstants.overrideFactor);
+//           //     pos += -gamepad1.right_stick_y * ElevatorConstants.overrideFactor;
                 break;
             case INTAKE:
             default:
@@ -48,12 +50,13 @@ public class Elevator {
         currentPos = elevatorMotor.getCurrentPosition();
         currentPos2 = elevatorMotor2.getCurrentPosition();
         elevatorPID.setWanted(pos);
-        if (!state.equals(ElevatorStates.OVERRIDE)) {
             elevatorMotor.setPower(elevatorPID.update(currentPos));
             elevatorMotor2.setPower(elevatorPID.update(-currentPos2));
-        }
+//        elevatorMotor.setPower(-gamepad1.right_stick_y);
+//        elevatorMotor2.setPower(-gamepad1.right_stick_y);
 
     telemetry.addData("pos", currentPos);
+        telemetry.addData("pos2", currentPos2);
     }
     public static double getPos(){
         return currentPos;

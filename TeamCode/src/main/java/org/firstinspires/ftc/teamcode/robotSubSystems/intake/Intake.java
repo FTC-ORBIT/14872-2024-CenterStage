@@ -35,9 +35,11 @@ public class Intake {
 
     public static void test(Gamepad gamepad, Telemetry telemetry){
         if (gamepad.a){
-            motor.setPower(1);
-        }else if (gamepad.b){
             motor.setPower(-1);
+        }else if (gamepad.b){
+            motor.setPower(0);
+        }else if (gamepad.y){
+            motor.setPower(1);
         }
                 telemetry.addData("pos", motor.getCurrentPosition());
 
