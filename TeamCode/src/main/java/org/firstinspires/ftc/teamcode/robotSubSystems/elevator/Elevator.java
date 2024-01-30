@@ -15,7 +15,7 @@ public class Elevator {
     private static float currentPos = 0;
     private static float currentPos2 = 0;
     private static final PID elevatorPID = new PID(ElevatorConstants.kp, ElevatorConstants.ki, ElevatorConstants.kd, ElevatorConstants.kf, ElevatorConstants.izone);
-
+    private static final float power = 0.7f;
     public static void init(HardwareMap hardwareMap) {
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevatorMotor");
         elevatorMotor2 = hardwareMap.get(DcMotor.class, "elevatorMotor2");
@@ -50,8 +50,13 @@ public class Elevator {
         currentPos = elevatorMotor.getCurrentPosition();
         currentPos2 = elevatorMotor2.getCurrentPosition();
         elevatorPID.setWanted(pos);
+        if (power > elevatorPID.update(currentPos)){
+            elevatorMotor.setPower(power);
+            elevatorMotor2.setPower(-power);
+        }else {
             elevatorMotor.setPower(elevatorPID.update(currentPos));
             elevatorMotor2.setPower(elevatorPID.update(-currentPos2));
+        }
 //        elevatorMotor.setPower(-gamepad1.right_stick_y);
 //        elevatorMotor2.setPower(-gamepad1.right_stick_y);
 
@@ -64,6 +69,6 @@ public class Elevator {
 
     public static void test(Gamepad gamepad , Telemetry telemetry){
         elevatorMotor.setPower(-gamepad.right_stick_y * 10 );
-        elevatorMotor2.setPower(gamepad.right_stick_y * 10);
+        elevatorMotor2.setPower(-gamepad.right_stick_y * 10);
     }
 }
