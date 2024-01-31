@@ -15,13 +15,15 @@ public class Test extends LinearOpMode {
             waitForStart();
       while (!isStopRequested()){
           Elevator.test(gamepad1 , telemetry);
-          telemetry.addData("elevator pos" , Elevator.elevatorMotor.getCurrentPosition());
-          telemetry.addData("elevator2 pos" , Elevator.elevatorMotor2.getCurrentPosition());
+          telemetry.addData("pos" , Elevator.elevatorMotor.getCurrentPosition());
+          telemetry.addData("pos2" , Elevator.elevatorMotor2.getCurrentPosition());
+          telemetry.addData("pid pos2" , Elevator.elevatorPID.update(Elevator.currentPos2, telemetry));
+          telemetry.addData("pid pos" , Elevator.elevatorPID.update(Elevator.currentPos, telemetry));
           telemetry.update();
       }
   }
 }
 // intake: 0
-// low: 2635 , 2468
-// mid: 3047 , 2910
+// low: 2679 , 2749
+// mid:
 // high: ?

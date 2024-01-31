@@ -4,15 +4,12 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 public class Plane {
     public static Servo planeServo;
     private static float pos = 0;
 
     public static void init(HardwareMap hardwareMap) {
         planeServo = hardwareMap.get(Servo.class, "planeServo");
-
     }
 
     public static void operate(PlaneState state) {

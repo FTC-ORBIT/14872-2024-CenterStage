@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.OrbitUtils;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class PID {
     private static final ElapsedTime timer = new ElapsedTime();
     public double kP = 0;
@@ -29,7 +31,9 @@ public class PID {
         this.wanted = wanted;
     }
 
-    public double update(final double current) {
+    public double update(final double current, final Telemetry telemetry) {
+        telemetry.addData("wanted", wanted);
+        telemetry.addData("current", current);
         final double currentError = wanted - current;
         final double currentTime = timer.milliseconds();
         final double deltaTime = currentTime - prevTime;

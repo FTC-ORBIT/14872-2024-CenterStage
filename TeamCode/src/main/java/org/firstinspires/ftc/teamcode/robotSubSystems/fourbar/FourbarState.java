@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.fourbar;
 
 public enum FourbarState {
-    REVERSE, MOVE
+    REVERSE, MOVE, MOVETOMID
 }

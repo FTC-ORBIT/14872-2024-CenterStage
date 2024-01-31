@@ -24,6 +24,8 @@ public class Fourbar {
             case REVERSE:
                pos = FourbarConstants.reverse;
                 break;
+            case MOVETOMID:
+                pos = FourbarConstants.midMove;
 
         }
 
@@ -31,6 +33,8 @@ public class Fourbar {
     }
     public static void test(Gamepad gamepad, Telemetry telemetry){
 
+//        if (gamepad.right_bumper) pos = FourbarConstants.move;
+//        if (gamepad.left_bumper) pos = FourbarConstants.reverse;
         if (gamepad.left_bumper &&  !lastLeft){
             pos += 0.05;
             if (pos > 1){
@@ -59,7 +63,5 @@ public class Fourbar {
         lastRight = gamepad.right_bumper;
         lastlT = gamepad.dpad_left;
         lastRT = gamepad.dpad_right;
-        telemetry.addData("pos" , pos);
-        telemetry.update();
     }
 }

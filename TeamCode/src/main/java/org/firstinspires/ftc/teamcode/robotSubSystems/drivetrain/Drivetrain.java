@@ -87,8 +87,8 @@ public class Drivetrain {
                 Math.max(Math.abs(lbPower), Math.max(Math.abs(rfPower), Math.abs(rbPower))));
         if (max > 1)
             highestPower = max;
-        motors[0].setPower(DrivetrainConstants.power * (lfPower / highestPower));
-        motors[1].setPower(DrivetrainConstants.power * (rfPower / highestPower));
+        motors[0].setPower(DrivetrainConstants.power * (-1 * lfPower / highestPower));
+        motors[1].setPower(DrivetrainConstants.power * (-1 * rfPower / highestPower));
         motors[2].setPower(DrivetrainConstants.power * (lbPower / highestPower));
         motors[3].setPower(DrivetrainConstants.power * (rbPower / highestPower));
     }
