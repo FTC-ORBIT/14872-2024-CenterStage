@@ -20,7 +20,7 @@ public class RedPropThreshold implements VisionProcessor {
     public double leftBox = 5;
     public double middleBox;
 
-    String outStr = "default"; //Set a default value in case vision does not work
+    public static String outStr = "left"; //Set a default value in case vision does not work
 
     static final org.opencv.core.Rect LEFT_RECTANGLE = new org.opencv.core.Rect(
             new Point(0, 0),
@@ -74,7 +74,7 @@ public class RedPropThreshold implements VisionProcessor {
             outStr = "right";
         }
 
-        finalMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline
+         /*This line should only be added in when you want to see your custom pipeline
                                   on the driver station stream, do not use this permanently in your code as
                                   you use the "frame" mat for all of your pipelines, such as April Tags*/
         return null;            //You do not return the original mat anymore, instead return null
@@ -91,6 +91,24 @@ public class RedPropThreshold implements VisionProcessor {
 
     }
 
+
+        public static void place(AutonomousPropPlace placement) {
+            switch (placement) {
+                case LEFTLINE:
+                default:
+                    outStr = "left";
+                    //autonomous code for putting the purple pixel on the left line
+                    break;
+                case CENTERLINE:
+                    outStr = "center";
+                    //autonomous code for putting the purple pixel on the middle line
+                    break;
+                case RIGHTLINE:
+                    outStr = "right";
+                    //autonomous code for putting the purple pixel on the right line
+                    break;
+            }
+        }
     public String getPropPosition(){  //Returns postion of the prop in a String
         return outStr;
     }

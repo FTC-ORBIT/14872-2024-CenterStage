@@ -12,7 +12,7 @@ public class Fourbar {
     public static boolean lastLeft = false;
     public static boolean lastRight = false;
     public static boolean lastRT = false;
-    public static boolean lastlT = false;
+    public static boolean lastLT = false;
     public static void init(HardwareMap hardwareMap){
         servo = hardwareMap.get(Servo.class, "fourbarServo");
     }
@@ -47,7 +47,7 @@ public class Fourbar {
                 pos = 0;
             }
         }
-        if (gamepad.dpad_left && !lastlT){
+        if (gamepad.dpad_left && !lastLT){
             pos += 0.001;
             if (pos > 1){
                 pos = 1;
@@ -61,7 +61,7 @@ public class Fourbar {
         servo.setPosition(pos);
         lastLeft = gamepad.left_bumper;
         lastRight = gamepad.right_bumper;
-        lastlT = gamepad.dpad_left;
+        lastLT = gamepad.dpad_left;
         lastRT = gamepad.dpad_right;
     }
 }

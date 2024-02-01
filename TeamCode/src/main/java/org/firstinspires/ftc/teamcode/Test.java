@@ -17,8 +17,8 @@ public class Test extends LinearOpMode {
           Elevator.test(gamepad1 , telemetry);
           telemetry.addData("pos" , Elevator.elevatorMotor.getCurrentPosition());
           telemetry.addData("pos2" , Elevator.elevatorMotor2.getCurrentPosition());
-          telemetry.addData("pid pos2" , Elevator.elevatorPID.update(Elevator.currentPos2, telemetry));
           telemetry.addData("pid pos" , Elevator.elevatorPID.update(Elevator.currentPos, telemetry));
+          telemetry.addData("pid pos2" , Elevator.elevatorPID.update(Elevator.currentPos2, telemetry));
           telemetry.update();
       }
   }

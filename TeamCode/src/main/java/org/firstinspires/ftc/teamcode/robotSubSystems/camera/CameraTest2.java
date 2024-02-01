@@ -14,8 +14,10 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
         private VisionPortal portal;
         RedPropThreshold redPropThreshold = new RedPropThreshold();
+    private static AutonomousPropPlace PropPlace = AutonomousPropPlace.LEFTLINE;
 
-        @Override
+
+    @Override
         public void runOpMode() throws InterruptedException {
 
             portal = new VisionPortal.Builder()
@@ -24,6 +26,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
                     .setCamera(BuiltinCameraDirection.BACK)
                     .addProcessor(redPropThreshold)
                     .build();
+            RedPropThreshold.place(PropPlace);
             while (!isStopRequested()) {
                 telemetry.addData("Prop Position", redPropThreshold.getPropPosition());
                 telemetry.addData("left box: ", redPropThreshold.leftBox);
