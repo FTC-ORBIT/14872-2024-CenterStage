@@ -70,13 +70,13 @@ public class Elevator {
     }
 
     public static void test(Gamepad gamepad , Telemetry telemetry){
-        elevatorPID.setWanted(1100);
-        encoderPID.setWanted(0);
-        currentPos = elevatorMotor.getCurrentPosition();
-        currentPos2 = elevatorMotor2.getCurrentPosition();
-        elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
-        elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
-//        elevatorMotor.setPower(-gamepad.right_stick_y * 10 );
-//        elevatorMotor2.setPower(-gamepad.right_stick_y * 10);
+//        elevatorPID.setWanted(1100);
+//        encoderPID.setWanted(0);
+//        currentPos = elevatorMotor.getCurrentPosition();
+//        currentPos2 = elevatorMotor2.getCurrentPosition();
+//        elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
+//        elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
+        elevatorMotor.setPower(-gamepad.right_stick_y * 10 );
+        elevatorMotor2.setPower(-gamepad.right_stick_y * 10);
     }
 }
