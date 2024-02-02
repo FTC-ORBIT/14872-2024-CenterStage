@@ -4,17 +4,22 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class ElevatorConstants {
-    public static final float lowHeight = 2679;
     public static final float intakeHeight = 0;
-    public static final float midHeight =  3122;
-    public static final float highHeight = 1800;
+    public static final float lowHeight = 2137;
+    public static final float midHeight =  3229;
     public static final float overrideFactor = 10;
 
-    public static final float kp = 0.0004f;
-    public static final float ki = 0f;
-    public static final float kd = 0.0001f;
-    public static final float kf = 0f;
-    public static final float izone = 0f;
+    public static final float elevatorKp = 0.006f;
+    public static final float elevatorKi = 0f;
+    public static final float elevatorKd = 0f;
+    public static final float elevatorKf = 0f;
+    public static final float elevatorIzone = 0f;
+
+    public static final float encoderKp = 0f;
+    public static final float encoderKi = 0f;
+    public static final float encoderKd = 0f;
+    public static final float encoderKf = 0f;
+    public static final float encoderIzone = 0f;
 
 
 

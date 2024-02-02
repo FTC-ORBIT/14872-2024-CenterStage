@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel.FixpixelState;
-import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.FourbarState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.IntakeState;
@@ -167,7 +166,7 @@ public class SubSystemManager {
 
           Intake.operate(intakeState);
          Outtake.operate(outtakeState);
-         //   Elevator.operate(elevatorState, gamepad1, telemetry );
+            Elevator.operate(elevatorState, gamepad1, telemetry );
 //            Fourbar.operate(fourbarState,gamepad1,telemetry);
      //       Fixpixel.operate(fixpixelState , gamepad1 , telemetry);
             lastState = wanted;
@@ -180,9 +179,9 @@ public class SubSystemManager {
         telemetry.addData("intakeState", intakeState);
 //        telemetry.addData("delay" , delayElevator.isDelayPassed());
 //        telemetry.addData("intakeDelay" , intakeDelay.isDelayPassed());
-        telemetry.addData("elevator" , Elevator.elevatorMotor.getCurrentPosition());
-        telemetry.addData("elevator2" , Elevator.elevatorMotor2.getCurrentPosition());
-        telemetry.addData("fourBar" , Fourbar.servo.getPosition());
+//        telemetry.addData("elevator" , Elevator.elevatorMotor.getCurrentPosition());
+//        telemetry.addData("elevator2" , Elevator.elevatorMotor2.getCurrentPosition());
+//        telemetry.addData("fourBar" , Fourbar.servo.getPosition());
 //        telemetry.addData("fixPixel-Servo_1" , Fixpixel.servo.getPosition());
 //        telemetry.addData("fixPixel-Servo_2" , Fixpixel.servo2.getPosition());
         telemetry.addData("outtake" , Outtake.servo.getPosition());
