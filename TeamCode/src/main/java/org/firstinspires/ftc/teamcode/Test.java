@@ -16,19 +16,9 @@ public class Test extends LinearOpMode {
       Elevator.init(hardwareMap);
             waitForStart();
       while (!isStopRequested()){
-        Elevator.operate(state, gamepad1, telemetry);
-//          Elevator.test(gamepad1, telemetry);
-          if (gamepad1.a){
-              state = ElevatorStates.INTAKE;
-          } else if (gamepad1.b){
-              state = ElevatorStates.LOW;
-          } else if (gamepad1.y){
-              state= ElevatorStates.MID;
-          }
+          Elevator.test(gamepad1 , telemetry);
           telemetry.addData("pos" , Elevator.elevatorMotor.getCurrentPosition());
-          telemetry.addData("pos2" , Elevator.elevatorMotor2.getCurrentPosition());
-          telemetry.addData("pid pos" , Elevator.elevatorPID.update(Elevator.currentPos, telemetry));
-          telemetry.addData("pid pos2" , Elevator.elevatorPID.update(Elevator.currentPos2, telemetry));
+          telemetry.addData("pos2", Elevator.elevatorMotor2.getCurrentPosition());
           telemetry.update();
       }
   }

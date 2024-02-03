@@ -24,11 +24,12 @@ public class Outtake {
             case CLOSED:
             default:
                 pos = OuttakeConstants.closedPos;
-
                 break;
             case OPEN:
                 pos = OuttakeConstants.openPos;
-
+                break;
+            case OUT:
+                pos = OuttakeConstants.outPos;
                 break;
         }
         servo.setPosition(pos);

@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.elevator;
 
 public enum ElevatorStates {
-    INTAKE, LOW, MID, OVERRIDE
+    INTAKE, LOW, MID, OVERRIDE , CLIMB
 }

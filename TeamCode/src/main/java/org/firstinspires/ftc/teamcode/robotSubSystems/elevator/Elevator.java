@@ -16,7 +16,6 @@ public class Elevator {
     public static float currentPos2 = 0;
     public static final PID elevatorPID = new PID(ElevatorConstants.elevatorKp, ElevatorConstants.elevatorKi, ElevatorConstants.elevatorKd, ElevatorConstants.elevatorKf, ElevatorConstants.elevatorIzone);
     public static final PID encoderPID = new PID(ElevatorConstants.encoderKp, ElevatorConstants.encoderKi, ElevatorConstants.encoderKd, ElevatorConstants.encoderKf, ElevatorConstants.encoderIzone);
-    private static final float power = 0.5f;
     public static void init(HardwareMap hardwareMap) {
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevatorMotor");
         elevatorMotor2 = hardwareMap.get(DcMotor.class, "elevatorMotor2");
@@ -30,9 +29,9 @@ public class Elevator {
     public static void operate(ElevatorStates state, Gamepad gamepad1, Telemetry telemetry) {
         switch (state) {
             case OVERRIDE:
-                elevatorMotor.setPower(-gamepad1.right_stick_y);
-                elevatorMotor2.setPower(-gamepad1.right_stick_y);
-//           //     pos += -gamepad1.right_stick_y * ElevatorConstants.overrideFactor;
+//                elevatorMotor.setPower(-gamepad1.right_stick_y * ElevatorConstants.overrideFactor);
+//                elevatorMotor2.setPower(-gamepad1.right_stick_y * ElevatorConstants.overrideFactor);
+                pos += -gamepad1.right_stick_y * ElevatorConstants.overrideFactor;
                 break;
             case LOW:
                 pos = ElevatorConstants.lowHeight;
@@ -44,16 +43,20 @@ public class Elevator {
             default:
                 pos = ElevatorConstants.intakeHeight;
                 break;
+            case CLIMB:
+                pos = ElevatorConstants.climbHeight;
+                break;
         }
         currentPos = elevatorMotor.getCurrentPosition();
         currentPos2 = elevatorMotor2.getCurrentPosition();
         elevatorPID.setWanted(pos);
+        encoderPID.setWanted(0);
 //        if (power < elevatorPID.update(currentPos2, telemetry)){
 //            elevatorMotor.setPower(power);
 //            elevatorMotor2.setPower(-power);
 //        }else {
-            elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry));
-            elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry));
+            elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2 , telemetry));
+            elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos , telemetry));
 //        }
         //TODO - elevator max = 3254 , 3244
 //        elevatorMotor.setPower(-gamepad1.right_stick_y);

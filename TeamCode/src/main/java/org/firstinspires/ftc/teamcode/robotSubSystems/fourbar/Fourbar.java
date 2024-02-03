@@ -26,6 +26,7 @@ public class Fourbar {
                 break;
             case MOVETOMID:
                 pos = FourbarConstants.midMove;
+                break;
 
         }
 
