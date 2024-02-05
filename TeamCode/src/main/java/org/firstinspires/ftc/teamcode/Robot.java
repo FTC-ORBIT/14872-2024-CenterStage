@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.OrbitUtils.Vector;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.positionTracker.PoseStorage;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
+import org.firstinspires.ftc.teamcode.robotSubSystems.OrbitLED;
 import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
@@ -48,6 +49,7 @@ public class Robot extends LinearOpMode {
         Intake.init(hardwareMap);
          Fourbar.init(hardwareMap);
         Plane.init(hardwareMap);
+         OrbitLED.init(hardwareMap);
 
         OrbitGyro.resetGyroStartTeleop((float) Math.toDegrees(PoseStorage.currentPose.getHeading()));
         telemetry.update();
@@ -73,7 +75,7 @@ public class Robot extends LinearOpMode {
           float omega = gamepad1.right_trigger - gamepad1.left_trigger;
           Drivetrain.operate(leftStick,  omega);
           SubSystemManager.setSubsystemToState(gamepad1 , gamepad2 , telemetry);
-//          OrbitLED.operate();
+            OrbitLED.operate();
            GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
 
 

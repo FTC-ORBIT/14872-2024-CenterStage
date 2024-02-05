@@ -38,8 +38,7 @@ public class OrbitLED {
                     break;
                 case MID:
                     pattern = RevBlinkinLedDriver.BlinkinPattern.AQUA;
-                case HIGH:
-                    pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;
+                    break;
             }
         }
 

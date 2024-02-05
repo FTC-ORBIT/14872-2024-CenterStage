@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.robotSubSystems.OrbitLED;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 
@@ -13,10 +14,10 @@ public class Test extends LinearOpMode {
     ElevatorStates state = ElevatorStates.INTAKE;
   @Override
   public void runOpMode() throws InterruptedException {
-      Elevator.init(hardwareMap);
+      OrbitLED.init(hardwareMap);
             waitForStart();
       while (!isStopRequested()){
-          Elevator.test(gamepad1 , telemetry);
+          OrbitLED.operate();
           telemetry.addData("pos" , Elevator.elevatorMotor.getCurrentPosition());
           telemetry.addData("pos2", Elevator.elevatorMotor2.getCurrentPosition());
           telemetry.update();

@@ -92,23 +92,7 @@ public class RedPropThreshold implements VisionProcessor {
     }
 
 
-        public static void place(AutonomousPropPlace placement) {
-            switch (placement) {
-                case LEFTLINE:
-                default:
-                    outStr = "left";
-                    //autonomous code for putting the purple pixel on the left line
-                    break;
-                case CENTERLINE:
-                    outStr = "center";
-                    //autonomous code for putting the purple pixel on the middle line
-                    break;
-                case RIGHTLINE:
-                    outStr = "right";
-                    //autonomous code for putting the purple pixel on the right line
-                    break;
-            }
-        }
+
     public String getPropPosition(){  //Returns postion of the prop in a String
         return outStr;
     }
