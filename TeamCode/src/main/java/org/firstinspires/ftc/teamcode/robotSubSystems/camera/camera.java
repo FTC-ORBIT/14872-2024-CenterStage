@@ -98,7 +98,8 @@ public class camera extends LinearOpMode
                          * away from the user.
                          */
                      //   webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-                        webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+                        webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+//                        webcam.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
                   }
 
                   @Override

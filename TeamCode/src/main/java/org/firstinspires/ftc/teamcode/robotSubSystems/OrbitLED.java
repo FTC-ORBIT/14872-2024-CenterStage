@@ -30,18 +30,15 @@ public class OrbitLED {
                 case TRAVEL:
                     pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE;
                     break;
-                case INTAKE:
+                case LOW:
                     pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
                     break;
-                case LOW:
+                case  MID:
                     pattern = RevBlinkinLedDriver.BlinkinPattern.HOT_PINK;
-                    break;
-                case MID:
-                    pattern = RevBlinkinLedDriver.BlinkinPattern.AQUA;
                     break;
             }
         }
 
         blinkin.setPattern(pattern);
-        }
     }
+}

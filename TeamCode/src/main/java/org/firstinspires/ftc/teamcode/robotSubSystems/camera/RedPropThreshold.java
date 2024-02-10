@@ -16,20 +16,25 @@ public class RedPropThreshold implements VisionProcessor {
     Mat highMat = new Mat();
     Mat lowMat = new Mat();
     Mat finalMat = new Mat();
+    Mat qrtrMat = new Mat();
     double redThreshold = 0.5;
-    public double leftBox = 5;
+    public double leftBox;
     public double middleBox;
+    public double averagedLeftBox;
+    public double averagedMiddleBox;
 
     public static String outStr = "left"; //Set a default value in case vision does not work
 
     static final org.opencv.core.Rect LEFT_RECTANGLE = new org.opencv.core.Rect(
             new Point(0, 0),
             new Point(200, 479)
+//            new Point(200, 359)
     );
 
     static final org.opencv.core.Rect MIDDLE_RECTANGLE = new Rect(
             new Point(220, 0),
             new Point(420, 479)
+//            new Point(420, 359)
     );
 
     @Override
@@ -38,6 +43,7 @@ public class RedPropThreshold implements VisionProcessor {
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
+//        Imgproc.resize(frame, qrtrMat, Size() , 0.5, 0.5, );
         Imgproc.cvtColor(frame, testMat, Imgproc.COLOR_RGB2HSV);
 
 
@@ -60,16 +66,16 @@ public class RedPropThreshold implements VisionProcessor {
          leftBox = Core.sumElems(finalMat.submat(LEFT_RECTANGLE)).val[0];
          middleBox = Core.sumElems(finalMat.submat(MIDDLE_RECTANGLE)).val[0];
 
-        double averagedLeftBox = leftBox / LEFT_RECTANGLE.area() / 255;
-        double averagedMiddleBox = middleBox / MIDDLE_RECTANGLE.area() / 255; //Makes value [0,1]
+        averagedLeftBox = leftBox / LEFT_RECTANGLE.area() / 255;
+        averagedMiddleBox = middleBox / MIDDLE_RECTANGLE.area() / 255; //Makes value [0,1]
 
 
 
 
-        if(averagedLeftBox > redThreshold){        //Must Tune Red Threshold
+        if(averagedLeftBox > redThreshold && averagedLeftBox > averagedMiddleBox){        //Must Tune Red Threshold
             outStr = "left";
-        }else if(averagedMiddleBox> redThreshold){
-            outStr = "center";
+        }else if(averagedMiddleBox > redThreshold && averagedMiddleBox > averagedLeftBox){
+            outStr = "middle";
         }else{
             outStr = "right";
         }

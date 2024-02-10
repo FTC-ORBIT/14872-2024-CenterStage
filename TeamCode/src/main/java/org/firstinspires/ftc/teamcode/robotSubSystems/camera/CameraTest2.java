@@ -5,7 +5,6 @@ import android.util.Size;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 
@@ -22,13 +21,16 @@ import org.firstinspires.ftc.vision.VisionPortal;
             portal = new VisionPortal.Builder()
                     .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                     .setCameraResolution(new Size(640, 480))
-                    .setCamera(BuiltinCameraDirection.BACK)
+//                    .setCameraResolution(new Size(640, 360))
+//                    .setCamera(BuiltinCameraDirection.BACK)
                     .addProcessor(redPropThreshold)
                     .build();
             while (!isStopRequested()) {
                 telemetry.addData("Prop Position", redPropThreshold.getPropPosition());
-                telemetry.addData("left box: ", redPropThreshold.leftBox);
-                telemetry.addData("right box: ", redPropThreshold.middleBox);
+                telemetry.addData("Left Box: ", redPropThreshold.leftBox);
+                telemetry.addData("Right Box: ", redPropThreshold.middleBox);
+                telemetry.addData("Averaged Left Box:", redPropThreshold.averagedLeftBox);
+                telemetry.addData("Averaged Right Box:", redPropThreshold.averagedMiddleBox);
                 telemetry.update();
 
             }
