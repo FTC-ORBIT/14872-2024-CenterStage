@@ -46,6 +46,9 @@ public class Elevator {
             case CLIMB:
                 pos = ElevatorConstants.climbHeight;
                 break;
+            case MIN:
+                pos = ElevatorConstants.minHeight;
+                break;
         }
         currentPos = elevatorMotor.getCurrentPosition();
         currentPos2 = elevatorMotor2.getCurrentPosition();
@@ -70,15 +73,12 @@ public class Elevator {
     }
 
     public static void test(Gamepad gamepad, Telemetry telemetry){
-        elevatorPID.setWanted(2137);
-        encoderPID.setWanted(0);
-        currentPos = elevatorMotor.getCurrentPosition();
-        currentPos2 = elevatorMotor2.getCurrentPosition();
-        if (gamepad.a){
-            elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
-            elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
-//        elevatorMotor.setPower(-gamepad.right_stick_y * 10 );
-//        elevatorMotor2.setPower(-gamepad.right_stick_y * 10);
-     }
+
+
+//            elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
+//            elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
+        elevatorMotor.setPower(-gamepad.right_stick_y * 10 );
+        elevatorMotor2.setPower(-gamepad.right_stick_y * 10);
+
     }
 }

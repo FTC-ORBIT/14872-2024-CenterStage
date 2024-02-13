@@ -72,7 +72,7 @@ public class Robot extends LinearOpMode {
           GlobalData.currentTime = (float) robotTime.seconds();
           Vector leftStick = new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y);
           float omega = gamepad1.right_trigger - gamepad1.left_trigger;
-          Drivetrain.operate(leftStick,  omega);
+          Drivetrain.operate(leftStick,  omega , telemetry);
           SubSystemManager.setSubsystemToState(gamepad1 , gamepad2 , telemetry);
 //            OrbitLED.operate();
            GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;

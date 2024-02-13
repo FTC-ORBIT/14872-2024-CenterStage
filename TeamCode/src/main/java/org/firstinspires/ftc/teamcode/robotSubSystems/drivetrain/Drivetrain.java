@@ -39,11 +39,16 @@ public class Drivetrain {
 
     }
 
-    public static void operate(final Vector velocity_W, float omega) {
+    public static void operate(final Vector velocity_W, float omega , Telemetry telemetry) {
         final float robotAngle = (float) Math.toRadians(OrbitGyro.getAngle());
         final Vector velocity_RobotCS_W = velocity_W.rotate(-robotAngle);
         if(velocity_RobotCS_W.norm() <= Math.sqrt(0.005) && Math.abs(omega) == 0) stop();
         else drive(velocity_RobotCS_W, omega);
+
+        telemetry.addData("lf power" , motors[0].getPower());
+        telemetry.addData("rf power" , motors[1].getPower());
+        telemetry.addData("lb power" , motors[2].getPower());
+        telemetry.addData("rb power" , motors[3].getPower());
     }
     // did field centric
 
@@ -75,6 +80,7 @@ public class Drivetrain {
         for (DcMotor motor : motors) {
             motor.setPower(0);
         }
+
     }
 
     public static void drive(Vector drive, double r) {
@@ -85,12 +91,12 @@ public class Drivetrain {
         double highestPower = 1;
         final double max = Math.max(Math.abs(lfPower),
                 Math.max(Math.abs(lbPower), Math.max(Math.abs(rfPower), Math.abs(rbPower))));
-        if (max > 1)
-            highestPower = max;
+        if (max > 1)  highestPower = max;
         motors[0].setPower(DrivetrainConstants.power * (-1 * lfPower / highestPower));
         motors[1].setPower(DrivetrainConstants.power * (-1 * rfPower / highestPower));
         motors[2].setPower(DrivetrainConstants.power * (lbPower / highestPower));
         motors[3].setPower(DrivetrainConstants.power * (rbPower / highestPower));
+
     }
 
     public static void testMotors(Gamepad gamepad, Telemetry telemetry){

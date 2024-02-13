@@ -32,12 +32,12 @@ public class SubSystemManager {
     private static boolean toggleButton = true;
     private static boolean ElevatorToggleButton = false;
     private static RobotState getState(Gamepad gamepad) {
-        if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back){
+        if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back || gamepad.dpad_down){
             ElevatorToggleButton = false;
         }
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
-                        :gamepad.x ? RobotState.LOW:gamepad.y ? RobotState.MID: gamepad.back ? RobotState.FIXPIXEL: gamepad.right_bumper  ? RobotState.DEPLETE: lastState;
+                        :gamepad.x ? RobotState.LOW:gamepad.y ? RobotState.MID: gamepad.back ? RobotState.FIXPIXEL:gamepad.dpad_down ? RobotState.MIN: gamepad.right_bumper  ? RobotState.DEPLETE: lastState;
     }
 
     private static RobotState getStateFromWantedAndCurrent(RobotState stateFromDriver){
@@ -57,6 +57,8 @@ public class SubSystemManager {
                 break;
             case FIXPIXEL:
                 break;
+            case MIN:
+                break;
 
         }
         return stateFromDriver;
@@ -65,7 +67,7 @@ public class SubSystemManager {
     public static void setSubsystemToState(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         final RobotState wanted = getStateFromWantedAndCurrent(getState(gamepad1));
 
-            if ((wanted.equals(RobotState.TRAVEL)|| wanted.equals(RobotState.INTAKE)) && (lastState.equals(RobotState.LOW) || lastState.equals(RobotState.MID) || lastState.equals(RobotState.HIGH))){
+            if ((wanted.equals(RobotState.TRAVEL)|| wanted.equals(RobotState.INTAKE)) && (lastState.equals(RobotState.LOW) || lastState.equals(RobotState.MID) || lastState.equals(RobotState.MIN))){
                 delayElevator.startAction(GlobalData.currentTime);
             }
             if (wanted.equals(RobotState.INTAKE) && lastState.equals(RobotState.TRAVEL)){
@@ -132,8 +134,19 @@ public class SubSystemManager {
                     }
                     fixpixelState = FixpixelState.OPEN;
                     break;
+                case MIN:
+                    intakeState = IntakeState.STOP;
+                    if (!ElevatorToggleButton) elevatorState = ElevatorStates.MIN;
+                    if (gamepad1.left_bumper){
+                        outtakeState = OuttakeState.OUT;
+                    }
+                    if (minHeightToOpenFourbar <=Elevator.getPos()) {
+                        fourbarState = FourbarState.MOVE;
+                    }
+                    fixpixelState = FixpixelState.CLOSE;
+                    break;
             }
-            if (gamepad1.dpad_right) {
+            if (gamepad1.dpad_right) { 
                 fourbarState = FourbarState.REVERSE;
                 elevatorState = ElevatorStates.CLIMB;
             }
@@ -141,15 +154,7 @@ public class SubSystemManager {
                 fourbarState = FourbarState.REVERSE;
                 elevatorState = ElevatorStates.INTAKE;
             }
-        if (gamepad1.dpad_up){
-            if  (toggleButton){
-             outtakeState.equals(OuttakeState.OPEN);
-            }else {
-                outtakeState.equals(OuttakeState.CLOSED);
-            }
-            Outtake.operate(outtakeState);
-            toggleButton = !toggleButton;
-        }
+
 //        if (gamepad1.right_stick_y != 0 ){
 //            elevatorState = ElevatorStates.OVERRIDE;
 //            ElevatorToggleButton = true;
@@ -162,7 +167,7 @@ public class SubSystemManager {
             Fourbar.operate(fourbarState,gamepad1,telemetry);
      //       Fixpixel.operate(fixpixelState , gamepad1 , telemetry);
             lastState = wanted;
-            if (gamepad1.dpad_down) OrbitGyro.resetGyro();
+            if (gamepad1.dpad_up) OrbitGyro.resetGyro();
         if (gamepad1.options) Plane.operate(PlaneState.THROW);
     }
 
@@ -178,5 +183,6 @@ public class SubSystemManager {
 //        telemetry.addData("fixPixel-Servo_2" , Fixpixel.servo2.getPosition());
         telemetry.addData("outtake" , Outtake.servo.getPosition());
         telemetry.addData("plane" , Plane.planeServo.getPosition());
+
     }
 }
