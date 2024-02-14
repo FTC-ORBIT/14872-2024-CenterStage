@@ -155,10 +155,10 @@ public class SubSystemManager {
                 elevatorState = ElevatorStates.INTAKE;
             }
 
-//        if (gamepad1.right_stick_y != 0 ){
-//            elevatorState = ElevatorStates.OVERRIDE;
-//            ElevatorToggleButton = true;
-//        }
+        if (gamepad1.right_stick_y != 0 ){
+            elevatorState = ElevatorStates.OVERRIDE;
+            ElevatorToggleButton = true;
+        }
 
 
           Intake.operate(intakeState);
