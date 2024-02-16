@@ -17,23 +17,23 @@ public class RedPropThreshold implements VisionProcessor {
     Mat lowMat = new Mat();
     Mat finalMat = new Mat();
     Mat qrtrMat = new Mat();
-    double redThreshold = 0.5;
+    double redThreshold = 0.015;
     public double leftBox;
     public double middleBox;
     public double averagedLeftBox;
     public double averagedMiddleBox;
 
-    public static String outStr = "left"; //Set a default value in case vision does not work
+    public static String outStr = "none"; //Set a default value in case vision does not work
 
     static final org.opencv.core.Rect LEFT_RECTANGLE = new org.opencv.core.Rect(
             new Point(0, 0),
-            new Point(200, 479)
+            new Point(232, 479)
 //            new Point(200, 359)
     );
 
     static final org.opencv.core.Rect MIDDLE_RECTANGLE = new Rect(
-            new Point(220, 0),
-            new Point(420, 479)
+            new Point(232, 0),
+            new Point(510 , 479)
 //            new Point(420, 359)
     );
 
@@ -80,16 +80,32 @@ public class RedPropThreshold implements VisionProcessor {
             outStr = "right";
         }
 
-         /*This line should only be added in when you want to see your custom pipeline
-                                  on the driver station stream, do not use this permanently in your code as
-                                  you use the "frame" mat for all of your pipelines, such as April Tags*/
-        return null;            //You do not return the original mat anymore, instead return null
+        Imgproc.rectangle(
+                frame,
+                new Point(232, 0),
+                new Point(510, 479),
+                new Scalar(255, 0, 0), 10);
 
+//        new Point(220, 0),
+//                new Point(420, 479)
 
+        /**
+         * NOTE: to see how to get data from your pipeline to your OpMode as well as how
+         * to change which stage of the pipeline is rendered to the viewport when it is
+         * tapped, please see {@link PipelineStageSwitchingExample}
+         */
 
-
-
+        return frame;
     }
+         /*This line should only be added in when you want to see your custom pipeline
+                                          on the driver station stream, do not use this permanently in your code as
+                                  you use the "frame" mat for all of your pipelines, such as April Tags*/     //You do not return the original mat anymore, instead return null
+
+
+
+
+
+
 
 
     @Override

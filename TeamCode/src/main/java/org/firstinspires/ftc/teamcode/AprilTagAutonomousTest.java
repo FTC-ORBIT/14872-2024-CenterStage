@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.ImgProcessing.AprilTagPipeline;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
@@ -20,8 +19,9 @@ import java.util.ArrayList;
 public class AprilTagAutonomousTest extends LinearOpMode
 {
     OpenCvCamera camera;
+//    ExposureControl exposureControl;
     AprilTagPipeline aprilTagDetectionPipeline;
-
+//    private VisionPortal visionPortal = null;
     static final double FEET_PER_METER = 3.28084;
 
 
@@ -34,21 +34,28 @@ public class AprilTagAutonomousTest extends LinearOpMode
 
 
     AprilTagDetection tagOfInterest = null;
-
     @Override
     public void runOpMode()
     {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam 1"), cameraMonitorViewId);
-        aprilTagDetectionPipeline = new AprilTagPipeline(tagsize, fx, fy, cx, cy);
 
+
+//        visionPortal = new VisionPortal.Builder()
+//                .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
+//                .setCameraResolution(new Size(1920,1080))
+//                .build();
+
+        aprilTagDetectionPipeline = new AprilTagPipeline(tagsize, fx, fy, cx, cy);
+//        ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+////        exposureControl.setMode(ExposureControl.Mode.Manual);
         camera.setPipeline(aprilTagDetectionPipeline);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
             public void onOpened()
             {
-                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+             camera.startStreaming(1920,1080);
             }
 
             @Override
@@ -57,21 +64,24 @@ public class AprilTagAutonomousTest extends LinearOpMode
 
             }
         });
-
+//        exposureControl.setExposure(30, TimeUnit.MILLISECONDS);
         telemetry.setMsTransmissionInterval(50);
-
 
         while (!isStarted() && !isStopRequested())
         {
-            ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
+            telemetry.addData("FPS", String.format("%.2f", camera.getFps()));
+            telemetry.addData("Theoretical max FPS", camera.getCurrentPipelineMaxFps());
+            //  telemetry.update();
+            ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
             if(currentDetections.size() != 0)
             {
                 boolean tagFound = false;
 
                 for(AprilTagDetection tag : currentDetections)
                 {
-                    if(tag.id == 0 || tag.id == 1 || tag.id == 2)
+           //         if(tag.id == 1 || tag.id == 2 || tag.id == 3)
+                    if(tag.id == 3)
                     {
                         tagOfInterest = tag;
                         tagFound = true;
@@ -79,6 +89,7 @@ public class AprilTagAutonomousTest extends LinearOpMode
                     }
                 }
 
+//                telemetry.addData("ExposureTime:", exposureControl.getExposure(TimeUnit.MILLISECONDS));
                 if(tagFound)
                 {
                     telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
@@ -90,7 +101,7 @@ public class AprilTagAutonomousTest extends LinearOpMode
 
                     if(tagOfInterest == null)
                     {
-                        telemetry.addLine("(The tag has never been seen1)");
+                        telemetry.addLine("(The tag has never been seen)");
                     }
                     else
                     {

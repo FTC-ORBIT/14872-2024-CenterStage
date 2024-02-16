@@ -37,7 +37,7 @@ public class SubSystemManager {
         }
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
-                        :gamepad.x ? RobotState.LOW:gamepad.y ? RobotState.MID: gamepad.back ? RobotState.FIXPIXEL:gamepad.dpad_down ? RobotState.MIN: gamepad.right_bumper  ? RobotState.DEPLETE: lastState;
+                        :gamepad.x ? RobotState.MIN:gamepad.y ? RobotState.LOW: gamepad.back ? RobotState.FIXPIXEL:gamepad.dpad_down ? RobotState.MID: gamepad.right_bumper  ? RobotState.DEPLETE: lastState;
     }
 
     private static RobotState getStateFromWantedAndCurrent(RobotState stateFromDriver){
