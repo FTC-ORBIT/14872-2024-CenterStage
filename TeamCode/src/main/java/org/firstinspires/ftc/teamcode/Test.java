@@ -4,6 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
+import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
 
 @Config
@@ -13,11 +15,12 @@ public class Test extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Plane.init(hardwareMap);
+      Drivetrain.init(hardwareMap);
+      Intake.init(hardwareMap);
             waitForStart();
         while (!isStopRequested()) {
-          Plane.test(gamepad1 , gamepad2 );
-          telemetry.addData("pos" , Plane.planeServo.getPosition());
+          Drivetrain.testEncoder(telemetry);
+          Intake.test(telemetry);
             telemetry.update();
         }
 

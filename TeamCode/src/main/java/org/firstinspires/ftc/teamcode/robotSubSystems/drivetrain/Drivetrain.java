@@ -26,7 +26,8 @@ public class Drivetrain {
         motors[2] = hardwareMap.get(DcMotor.class, "lb");
         motors[3] = hardwareMap.get(DcMotor.class, "rb");
 
-        motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
+        motors[0].setDirection(DcMotorSimple.Direction.FORWARD);
+        motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
         motors[2].setDirection(DcMotorSimple.Direction.REVERSE);
 
         // TODO if your initial robot position is not 0,0,0 make sure to fix the
@@ -92,11 +93,18 @@ public class Drivetrain {
         final double max = Math.max(Math.abs(lfPower),
                 Math.max(Math.abs(lbPower), Math.max(Math.abs(rfPower), Math.abs(rbPower))));
         if (max > 1)  highestPower = max;
-        motors[0].setPower(DrivetrainConstants.power * (-1 * lfPower / highestPower));
-        motors[1].setPower(DrivetrainConstants.power * (-1 * rfPower / highestPower));
+        motors[0].setPower(DrivetrainConstants.power * (lfPower / highestPower));
+        motors[1].setPower(DrivetrainConstants.power * (rfPower / highestPower));
         motors[2].setPower(DrivetrainConstants.power * (lbPower / highestPower));
         motors[3].setPower(DrivetrainConstants.power * (rbPower / highestPower));
 
+    }
+
+    public static void testEncoder(Telemetry telemetry){
+        telemetry.addData("lb", motors[2].getCurrentPosition());
+        telemetry.addData("lf", motors[0].getCurrentPosition());
+        telemetry.addData("rb-2", motors[3].getCurrentPosition());
+        telemetry.addData("rf-3", motors[1].getCurrentPosition());
     }
 
     public static void testMotors(Gamepad gamepad, Telemetry telemetry){

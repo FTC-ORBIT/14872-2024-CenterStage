@@ -31,6 +31,7 @@ public class SubSystemManager {
     private static Delay intakeDelay = new Delay(1f);
     private static boolean toggleButton = true;
     private static boolean ElevatorToggleButton = false;
+    public static RobotState wanted = RobotState.TRAVEL;
     private static RobotState getState(Gamepad gamepad) {
         if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back || gamepad.dpad_down){
             ElevatorToggleButton = false;
