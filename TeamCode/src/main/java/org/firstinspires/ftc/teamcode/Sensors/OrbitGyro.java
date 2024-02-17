@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
-import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
 @Config
 public class OrbitGyro {

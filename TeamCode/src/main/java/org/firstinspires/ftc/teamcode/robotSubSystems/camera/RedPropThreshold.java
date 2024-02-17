@@ -25,13 +25,13 @@ public class RedPropThreshold implements VisionProcessor {
 
     public static String outStr = "none"; //Set a default value in case vision does not work
 
-    static final org.opencv.core.Rect LEFT_RECTANGLE = new org.opencv.core.Rect(
+    static final Rect LEFT_RECTANGLE = new Rect(
             new Point(0, 0),
             new Point(232, 479)
 //            new Point(200, 359)
     );
 
-    static final org.opencv.core.Rect MIDDLE_RECTANGLE = new Rect(
+    static final Rect MIDDLE_RECTANGLE = new Rect(
             new Point(232, 0),
             new Point(510 , 479)
 //            new Point(420, 359)

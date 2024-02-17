@@ -45,7 +45,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
              * of a frame from the camera. Note that switching pipelines on-the-fly
              * (while a streaming session is in flight) *IS* supported.
              */
-            webcam.setPipeline(new ColorThresholding.rectangle_thresholder_pipeline());
+            webcam.setPipeline(new rectangle_thresholder_pipeline());
 
             /*
              * Open the connection to the camera device. New in v1.4.0 is the ability
