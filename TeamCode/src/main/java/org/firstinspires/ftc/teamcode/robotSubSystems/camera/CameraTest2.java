@@ -27,10 +27,10 @@ import org.firstinspires.ftc.vision.VisionPortal;
                     .build();
             while (!isStopRequested()) {
                 telemetry.addData("Prop Position", redPropThreshold.getPropPosition());
-                telemetry.addData("Left Box: ", redPropThreshold.leftBox);
-                telemetry.addData("Right Box: ", redPropThreshold.middleBox);
-                telemetry.addData("Averaged Left Box:", redPropThreshold.averagedLeftBox);
-                telemetry.addData("Averaged Right Box:", redPropThreshold.averagedMiddleBox);
+                telemetry.addData("Left Box: ", redPropThreshold.redLeftBox);
+                telemetry.addData("Right Box: ", redPropThreshold.redMiddleBox);
+                telemetry.addData("Averaged Left Box:", redPropThreshold.averagedRedLeftBox);
+                telemetry.addData("Averaged Right Box:", redPropThreshold.averagedRedMiddleBox);
                 telemetry.update();
 
             }
