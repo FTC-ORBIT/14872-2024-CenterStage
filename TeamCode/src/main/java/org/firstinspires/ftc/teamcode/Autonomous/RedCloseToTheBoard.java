@@ -1,12 +1,9 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.util.Size;
-import android.widget.Switch;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -16,21 +13,21 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThreshold;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-@Autonomous(name = "BlueCloseToTheBoard")
+@Autonomous(name = "RedCloseToTheBoard")
 @Config
-public class BlueCloseToTheBoard extends LinearOpMode {
+public class RedCloseToTheBoard extends LinearOpMode {
     public static double driveToConeX = 29.5;
-    public static double goToParkingY = -38;
+    public static double goToParkingY = 38;
 
     public static double leftAngle = 0;
     public static double rightConeX = 22.5;
 
-    public static double rightConeY = -8;
+    public static double rightConeY = 8;
 
     public static double leftDriveX = 13;
     public static double leftConeX = 22.5;
 
-    public static double leftConeY = 11;
+    public static double leftConeY = -11;
     private VisionPortal portal;
     private BluePropThreshold bluePropThreshold = new BluePropThreshold();
     @Override

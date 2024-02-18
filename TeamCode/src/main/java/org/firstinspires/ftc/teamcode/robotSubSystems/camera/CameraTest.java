@@ -24,7 +24,6 @@ public class CameraTest extends LinearOpMode {
 
 
         while (!isStopRequested()) {
-            telemetry.addData("Prop Position:", bluePropThreshold.blueGetPropPosition());
             telemetry.addData("left box:" , bluePropThreshold.blueLeftBox);
             telemetry.addData("middle box:" , bluePropThreshold.blueCenterBox);
             telemetry.addData("right box:", bluePropThreshold.blueRightBox);
