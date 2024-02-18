@@ -18,8 +18,8 @@ public class BluePropThreshold implements VisionProcessor {
         Mat finalMat = new Mat();
     double blueThreshold = 0.015;
 
-    public static String blueOutStr = "none";
-    //Set a default value in case vision does not work
+    public static String blueOutStr = "none"; //Set a default value in case vision does not work
+    public PropPosEnum bluePropPos = PropPosEnum.NONE;
     public double blueLeftBox;
     public double blueMiddleBox;
 
@@ -93,10 +93,13 @@ public class BluePropThreshold implements VisionProcessor {
 
         if(averagedBlueLeftBox > blueThreshold){        //Must Tune Red Threshold
             blueOutStr = "blueLeft";
+            bluePropPos = PropPosEnum.LEFT;
         }else if(averagedBlueMiddleBox > blueThreshold){
             blueOutStr = "blueCenter";
+            bluePropPos = PropPosEnum.MIDDLE;
         }else if(averagedBlueRightBox > blueThreshold){
             blueOutStr = "blueRight";
+            bluePropPos = PropPosEnum.RIGHT;
         }
 
         Imgproc.rectangle(
@@ -122,7 +125,11 @@ public class BluePropThreshold implements VisionProcessor {
 
     }
 
-    public String getPropPosition(){
+    public String blueGetPropPosition(){
         return blueOutStr;
+    }
+
+    public PropPosEnum blueEnumGetPropPos(){
+        return bluePropPos;
     }
 }

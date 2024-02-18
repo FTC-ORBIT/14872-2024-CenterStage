@@ -23,8 +23,8 @@ public class RedPropThreshold implements VisionProcessor {
     public double averagedRedLeftBox;
     public double averagedRedMiddleBox;
 
-    public static String outStr = "none"; //Set a default value in case vision does not work
-
+    public static String redOutStr = "none"; //Set a default value in case vision does not work
+    public PropPosEnum redPropPos = PropPosEnum.NONE;
     static final Rect LEFT_RECTANGLE = new Rect(
             new Point(0, 0),
             new Point(232, 479)
@@ -73,11 +73,14 @@ public class RedPropThreshold implements VisionProcessor {
 
 
         if(averagedRedLeftBox > redThreshold && averagedRedLeftBox > averagedRedMiddleBox){        //Must Tune Red Threshold
-            outStr = "redLeft";
+            redOutStr = "redLeft";
+            redPropPos = PropPosEnum.LEFT;
         }else if(averagedRedMiddleBox > redThreshold && averagedRedMiddleBox > averagedRedLeftBox){
-            outStr = "redMiddle";
+            redOutStr = "redMiddle";
+            redPropPos = PropPosEnum.MIDDLE;
         }else{
-            outStr = "redRight";
+            redOutStr = "redRight";
+            redPropPos = PropPosEnum.RIGHT;
         }
 
         Imgproc.rectangle(
@@ -115,7 +118,10 @@ public class RedPropThreshold implements VisionProcessor {
 
 
 
-    public String getPropPosition(){  //Returns postion of the prop in a String
-        return outStr;
+    public String redGetPropPosition(){  //Returns postion of the prop in a String
+        return redOutStr;
+    }
+    public PropPosEnum redEnumGetPropPos(){
+        return redPropPos;
     }
 }

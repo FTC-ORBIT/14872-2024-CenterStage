@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
 
-public enum EnumState {
- LEFT,CENTER,RIGHT
+public enum PropPosEnum {
+ NONE,LEFT,MIDDLE,RIGHT
 }

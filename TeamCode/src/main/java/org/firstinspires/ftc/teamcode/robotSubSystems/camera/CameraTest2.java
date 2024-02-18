@@ -26,7 +26,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
                     .addProcessor(redPropThreshold)
                     .build();
             while (!isStopRequested()) {
-                telemetry.addData("Prop Position", redPropThreshold.getPropPosition());
+                telemetry.addData("Prop Position", redPropThreshold.redGetPropPosition());
                 telemetry.addData("Left Box: ", redPropThreshold.redLeftBox);
                 telemetry.addData("Right Box: ", redPropThreshold.redMiddleBox);
                 telemetry.addData("Averaged Left Box:", redPropThreshold.averagedRedLeftBox);
