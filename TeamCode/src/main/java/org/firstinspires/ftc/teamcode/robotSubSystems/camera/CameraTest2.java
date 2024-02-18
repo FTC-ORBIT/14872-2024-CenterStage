@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-@Autonomous(name="Vision Test2")
+@Autonomous(name="Vision Test Red")
     public class CameraTest2 extends LinearOpMode {
 
         private VisionPortal portal;

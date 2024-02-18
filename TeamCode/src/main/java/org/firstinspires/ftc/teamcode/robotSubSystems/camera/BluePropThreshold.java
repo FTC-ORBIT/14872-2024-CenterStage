@@ -17,19 +17,29 @@ public class BluePropThreshold implements VisionProcessor {
     Mat lowMat = new Mat();
         Mat finalMat = new Mat();
     double blueThreshold = 0.015;
-    String blueOutStr = "none"; //Set a default value in case vision does not work
+
+    public static String blueOutStr = "none";
+    //Set a default value in case vision does not work
     public double blueLeftBox;
     public double blueMiddleBox;
+
+    public double blueRightBox;
     public double averagedBlueLeftBox;
-    public double averagedRedMiddleBox;
+    public double averagedBlueMiddleBox;
+
+    public double averagedBlueRightBox;
     static final Rect LEFT_RECTANGLE = new Rect(
-            new Point(0, 0),
-            new Point(232, 479)
+            new Point(0, 190),
+            new Point(240, 479)
     );
 
     static final Rect MIDDLE_RECTANGLE = new Rect(
-            new Point(232, 0),
-            new Point(510 , 479)
+            new Point(241, 190),
+            new Point(440 , 479)
+    );
+    static final Rect RIGHT_RECTANGLE = new Rect(
+            new Point(441, 190),
+            new Point(639, 479)
     );
 
     @Override
@@ -70,28 +80,31 @@ public class BluePropThreshold implements VisionProcessor {
          lowMat.release();
          highMat.release();
 
-        blueLeftBox = Core.sumElems(lowMat.submat(LEFT_RECTANGLE)).val[0];
-         blueMiddleBox = Core.sumElems(lowMat.submat(MIDDLE_RECTANGLE)).val[0];
+         blueLeftBox = Core.sumElems(finalMat.submat(LEFT_RECTANGLE)).val[0];
+         blueMiddleBox = Core.sumElems(finalMat.submat(MIDDLE_RECTANGLE)).val[0];
+         blueRightBox = Core.sumElems(finalMat.submat(RIGHT_RECTANGLE)).val[0];
 
 
         averagedBlueLeftBox = blueLeftBox / LEFT_RECTANGLE.area() / 255;
-        averagedRedMiddleBox = blueMiddleBox / MIDDLE_RECTANGLE.area() / 255; //Makes value [0,1]
-
+        averagedBlueMiddleBox = blueMiddleBox / MIDDLE_RECTANGLE.area() / 255; //Makes value [0,1]
+        averagedBlueRightBox = blueRightBox / RIGHT_RECTANGLE.area() / 255;
 
 
 
         if(averagedBlueLeftBox > blueThreshold){        //Must Tune Red Threshold
             blueOutStr = "blueLeft";
-        }else if(averagedRedMiddleBox > blueThreshold){
+        }else if(averagedBlueMiddleBox > blueThreshold){
             blueOutStr = "blueCenter";
-        }else{
+        }else if(averagedBlueRightBox > blueThreshold){
             blueOutStr = "blueRight";
         }
 
         Imgproc.rectangle(
                 frame,
-                new Point(232, 0),
-                new Point(510, 479),
+//                new Point(90,160),
+//                new Point(270, 479),
+                new Point(240, 190),
+                new Point(440, 479),
                 new Scalar(255, 0, 0), 10);
    //     lowMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline
 //                                  on the driver station stream, do not use this permanently in your code as

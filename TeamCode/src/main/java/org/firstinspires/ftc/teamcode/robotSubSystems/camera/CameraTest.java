@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-@Autonomous(name="Vision Test")
+@Autonomous(name="Vision Test Blue")
 public class CameraTest extends LinearOpMode {
     private VisionPortal portal;
     private BluePropThreshold bluePropThreshold = new BluePropThreshold();
@@ -27,9 +27,11 @@ public class CameraTest extends LinearOpMode {
         while (!isStopRequested()) {
             telemetry.addData("Prop Position:", bluePropThreshold.getPropPosition());
             telemetry.addData("left box:" , bluePropThreshold.blueLeftBox);
-            telemetry.addData("right box:" , bluePropThreshold.blueMiddleBox);
+            telemetry.addData("middle box:" , bluePropThreshold.blueMiddleBox);
+            telemetry.addData("right box:", bluePropThreshold.blueRightBox);
             telemetry.addData("Averaged Left Box:", bluePropThreshold.averagedBlueLeftBox);
-            telemetry.addData("Averaged Right Box:", bluePropThreshold.averagedRedMiddleBox);
+            telemetry.addData("Averaged Middle Box:", bluePropThreshold.averagedBlueMiddleBox);
+            telemetry.addData("Averaged Right Box:", bluePropThreshold.averagedBlueRightBox);
             telemetry.update();
         }//Will output prop position on Driver Station Console
 
