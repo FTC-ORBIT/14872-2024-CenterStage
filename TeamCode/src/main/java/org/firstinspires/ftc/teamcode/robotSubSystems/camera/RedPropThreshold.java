@@ -16,12 +16,12 @@ public class RedPropThreshold implements VisionProcessor {
     Mat highMat = new Mat();
     Mat lowMat = new Mat();
     Mat finalMat = new Mat();
-    Mat qrtrMat = new Mat();
+//    Mat qrtrMat = new Mat();
     double redThreshold = 0.015;
-    public double leftBox;
-    public double middleBox;
-    public double averagedLeftBox;
-    public double averagedMiddleBox;
+    public double redLeftBox;
+    public double redMiddleBox;
+    public double averagedRedLeftBox;
+    public double averagedRedMiddleBox;
 
     public static String outStr = "none"; //Set a default value in case vision does not work
 
@@ -63,21 +63,21 @@ public class RedPropThreshold implements VisionProcessor {
         lowMat.release();
         highMat.release();
 
-         leftBox = Core.sumElems(finalMat.submat(LEFT_RECTANGLE)).val[0];
-         middleBox = Core.sumElems(finalMat.submat(MIDDLE_RECTANGLE)).val[0];
+         redLeftBox = Core.sumElems(finalMat.submat(LEFT_RECTANGLE)).val[0];
+         redMiddleBox = Core.sumElems(finalMat.submat(MIDDLE_RECTANGLE)).val[0];
 
-        averagedLeftBox = leftBox / LEFT_RECTANGLE.area() / 255;
-        averagedMiddleBox = middleBox / MIDDLE_RECTANGLE.area() / 255; //Makes value [0,1]
-
-
+        averagedRedLeftBox = redLeftBox / LEFT_RECTANGLE.area() / 255;
+        averagedRedMiddleBox = redMiddleBox / MIDDLE_RECTANGLE.area() / 255; //Makes value [0,1]
 
 
-        if(averagedLeftBox > redThreshold && averagedLeftBox > averagedMiddleBox){        //Must Tune Red Threshold
-            outStr = "left";
-        }else if(averagedMiddleBox > redThreshold && averagedMiddleBox > averagedLeftBox){
-            outStr = "middle";
+
+
+        if(averagedRedLeftBox > redThreshold && averagedRedLeftBox > averagedRedMiddleBox){        //Must Tune Red Threshold
+            outStr = "redLeft";
+        }else if(averagedRedMiddleBox > redThreshold && averagedRedMiddleBox > averagedRedLeftBox){
+            outStr = "redMiddle";
         }else{
-            outStr = "right";
+            outStr = "redRight";
         }
 
         Imgproc.rectangle(
