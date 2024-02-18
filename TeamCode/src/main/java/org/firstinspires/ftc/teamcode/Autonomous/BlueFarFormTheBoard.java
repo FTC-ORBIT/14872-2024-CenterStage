@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class BlueFarFormTheBoard extends  LinearOpMode{
     public static double centerConeX = 29.5;
 
-    public static double parkingY = -76;
+    public static double parkingY = -88;
 
     public static double rightConeX = 22.5;
 
@@ -24,7 +24,7 @@ public class BlueFarFormTheBoard extends  LinearOpMode{
 
     public static double leftConeX = 22.5;
 
-    public static double leftConeY = 11;
+    public static double leftConeY = 7;
     @Override
     public void runOpMode() throws InterruptedException{
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -47,13 +47,14 @@ public class BlueFarFormTheBoard extends  LinearOpMode{
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(leftConeX, leftConeY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() ,startPose.getHeading() ))
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
                 .build();
 
         waitForStart();
 
         if (!isStopRequested()) {
-            drive.followTrajectorySequence(centerCone);
+            drive.followTrajectorySequence(leftCone);
         }
     }
 }

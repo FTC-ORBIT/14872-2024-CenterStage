@@ -16,11 +16,12 @@ public class BlueCloseToTheBoard extends LinearOpMode {
     public static double driveToConeX = 29.5;
     public static double goToParkingY = -38;
 
+    public static double leftAngle = 0;
     public static double rightConeX = 22.5;
 
     public static double rightConeY = -8;
 
-
+    public static double leftDriveX = 13;
     public static double leftConeX = 22.5;
 
     public static double leftConeY = 11;
@@ -44,7 +45,8 @@ public class BlueCloseToTheBoard extends LinearOpMode {
                 .build();
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(leftConeX, leftConeY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(leftDriveX  , startPose.getY() , startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(leftConeX,leftConeY,leftAngle))
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, goToParkingY, startPose.getHeading()))
                 .build();
 

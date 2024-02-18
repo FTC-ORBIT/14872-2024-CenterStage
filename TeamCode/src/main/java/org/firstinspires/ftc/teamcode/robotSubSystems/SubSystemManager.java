@@ -33,12 +33,12 @@ public class SubSystemManager {
     private static boolean ElevatorToggleButton = false;
     public static RobotState wanted = RobotState.TRAVEL;
     private static RobotState getState(Gamepad gamepad) {
-        if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back || gamepad.dpad_down){
+        if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back || gamepad.dpad_up){
             ElevatorToggleButton = false;
         }
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
-                        :gamepad.x ? RobotState.MIN:gamepad.y ? RobotState.LOW: gamepad.back ? RobotState.FIXPIXEL:gamepad.dpad_down ? RobotState.MID: gamepad.right_bumper  ? RobotState.DEPLETE: lastState;
+                        :gamepad.x ? RobotState.MIN:gamepad.y ? RobotState.LOW: gamepad.back ? RobotState.FIXPIXEL:gamepad.dpad_up ? RobotState.MID: gamepad.right_bumper  ? RobotState.DEPLETE: lastState;
     }
 
     private static RobotState getStateFromWantedAndCurrent(RobotState stateFromDriver){
@@ -168,7 +168,7 @@ public class SubSystemManager {
             Fourbar.operate(fourbarState,gamepad1,telemetry);
      //       Fixpixel.operate(fixpixelState , gamepad1 , telemetry);
             lastState = wanted;
-            if (gamepad1.dpad_up) OrbitGyro.resetGyro();
+            if (gamepad1.dpad_down) OrbitGyro.resetGyro();
         if (gamepad1.options) Plane.operate(PlaneState.THROW);
     }
 
