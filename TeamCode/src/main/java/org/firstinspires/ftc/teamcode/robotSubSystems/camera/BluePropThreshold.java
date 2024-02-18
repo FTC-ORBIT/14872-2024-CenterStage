@@ -19,13 +19,13 @@ public class BluePropThreshold implements VisionProcessor {
     double blueThreshold = 0.015;
 
     public static String blueOutStr = "none"; //Set a default value in case vision does not work
-    public PropPosEnum bluePropPos = PropPosEnum.NONE;
+    public static PropPosEnum bluePropPos = PropPosEnum.NONE;
     public double blueLeftBox;
-    public double blueMiddleBox;
+    public double blueCenterBox;
 
     public double blueRightBox;
     public double averagedBlueLeftBox;
-    public double averagedBlueMiddleBox;
+    public double averagedBlueCenterBox;
 
     public double averagedBlueRightBox;
     static final Rect LEFT_RECTANGLE = new Rect(
@@ -33,7 +33,7 @@ public class BluePropThreshold implements VisionProcessor {
             new Point(240, 479)
     );
 
-    static final Rect MIDDLE_RECTANGLE = new Rect(
+    static final Rect CENTER_RECTANGLE = new Rect(
             new Point(241, 190),
             new Point(440 , 479)
     );
@@ -81,12 +81,12 @@ public class BluePropThreshold implements VisionProcessor {
          highMat.release();
 
          blueLeftBox = Core.sumElems(finalMat.submat(LEFT_RECTANGLE)).val[0];
-         blueMiddleBox = Core.sumElems(finalMat.submat(MIDDLE_RECTANGLE)).val[0];
+         blueCenterBox = Core.sumElems(finalMat.submat(CENTER_RECTANGLE)).val[0];
          blueRightBox = Core.sumElems(finalMat.submat(RIGHT_RECTANGLE)).val[0];
 
 
         averagedBlueLeftBox = blueLeftBox / LEFT_RECTANGLE.area() / 255;
-        averagedBlueMiddleBox = blueMiddleBox / MIDDLE_RECTANGLE.area() / 255; //Makes value [0,1]
+        averagedBlueCenterBox = blueCenterBox / CENTER_RECTANGLE.area() / 255; //Makes value [0,1]
         averagedBlueRightBox = blueRightBox / RIGHT_RECTANGLE.area() / 255;
 
 
@@ -94,9 +94,9 @@ public class BluePropThreshold implements VisionProcessor {
         if(averagedBlueLeftBox > blueThreshold){        //Must Tune Red Threshold
             blueOutStr = "blueLeft";
             bluePropPos = PropPosEnum.LEFT;
-        }else if(averagedBlueMiddleBox > blueThreshold){
+        }else if(averagedBlueCenterBox > blueThreshold){
             blueOutStr = "blueCenter";
-            bluePropPos = PropPosEnum.MIDDLE;
+            bluePropPos = PropPosEnum.CENTER;
         }else if(averagedBlueRightBox > blueThreshold){
             blueOutStr = "blueRight";
             bluePropPos = PropPosEnum.RIGHT;

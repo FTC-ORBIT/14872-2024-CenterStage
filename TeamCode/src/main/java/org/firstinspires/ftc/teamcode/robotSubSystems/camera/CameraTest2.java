@@ -12,7 +12,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
     public class CameraTest2 extends LinearOpMode {
 
         private VisionPortal portal;
-        RedPropThreshold redPropThreshold = new RedPropThreshold();
+        private RedPropThreshold redPropThreshold = new RedPropThreshold();
 
 
     @Override

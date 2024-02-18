@@ -77,7 +77,7 @@ public class RedPropThreshold implements VisionProcessor {
             redPropPos = PropPosEnum.LEFT;
         }else if(averagedRedMiddleBox > redThreshold && averagedRedMiddleBox > averagedRedLeftBox){
             redOutStr = "redMiddle";
-            redPropPos = PropPosEnum.MIDDLE;
+            redPropPos = PropPosEnum.CENTER;
         }else{
             redOutStr = "redRight";
             redPropPos = PropPosEnum.RIGHT;
