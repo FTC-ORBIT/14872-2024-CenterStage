@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThresholdClose;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.RedPropThresholdClose;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 
@@ -28,7 +28,7 @@ public class RedCloseToTheBoard extends LinearOpMode {
     public static double leftConeX = 26.5;
     public static double leftConeY = -3.2;
     private VisionPortal portal;
-    private BluePropThresholdClose bluePropThresholdClose = new BluePropThresholdClose();
+    private RedPropThresholdClose redPropThresholdClose = new RedPropThresholdClose();
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -37,10 +37,12 @@ public class RedCloseToTheBoard extends LinearOpMode {
 
         drive.setPoseEstimate(startPose);
 
+        redPropThresholdClose.initProp();
+
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
-                .addProcessor(bluePropThresholdClose)
+                .addProcessor(redPropThresholdClose)
                 .build();
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
@@ -65,7 +67,7 @@ public class RedCloseToTheBoard extends LinearOpMode {
 
         if (!isStopRequested()) {
             sleep((long) delay);
-            switch (bluePropThresholdClose.blueEnumGetPropPos()) {
+            switch (redPropThresholdClose.EnumGetPropPos()) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
                     telemetry.addLine("left");

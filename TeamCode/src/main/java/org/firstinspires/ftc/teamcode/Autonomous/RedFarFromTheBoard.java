@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThresholdClose;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.RedPropThresholdFar;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 
@@ -29,15 +29,17 @@ public class RedFarFromTheBoard extends  LinearOpMode{
 
     public static double leftConeY = -7;
     private VisionPortal portal;
-    private BluePropThresholdClose bluePropThresholdClose = new BluePropThresholdClose();
+    private RedPropThresholdFar redPropThresholdFar = new RedPropThresholdFar();
 
     @Override
     public void runOpMode() throws InterruptedException{
 
+        redPropThresholdFar.initProp();
+
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
-                .addProcessor(bluePropThresholdClose)
+                .addProcessor(redPropThresholdFar)
                 .build();
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -45,7 +47,6 @@ public class RedFarFromTheBoard extends  LinearOpMode{
         Pose2d startPose = new Pose2d(0, 0, 0);
 
         drive.setPoseEstimate(startPose);
-
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(centerConeX, startPose.getY(), startPose.getHeading()))
@@ -71,7 +72,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
 
         if (!isStopRequested()) {
             sleep((long) delay);
-            switch (bluePropThresholdClose.blueEnumGetPropPos()) {
+            switch (redPropThresholdFar.EnumGetPropPos()) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
                     telemetry.addLine("left");
