@@ -12,12 +12,12 @@ import org.firstinspires.ftc.vision.VisionPortal;
     public class CameraTest2 extends LinearOpMode {
 
         private VisionPortal portal;
-        private RedPropThreshold redPropThreshold = new RedPropThreshold();
+        private RedPropThresholdClose redPropThreshold = new RedPropThresholdClose();
 
 
     @Override
         public void runOpMode() throws InterruptedException {
-
+    redPropThreshold.initProp();
             portal = new VisionPortal.Builder()
                     .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                     .setCameraResolution(new Size(640, 480))
@@ -26,11 +26,13 @@ import org.firstinspires.ftc.vision.VisionPortal;
                     .addProcessor(redPropThreshold)
                     .build();
             while (!isStopRequested()) {
-                telemetry.addData("Prop Position", redPropThreshold.redGetPropPosition());
-                telemetry.addData("Left Box: ", redPropThreshold.redLeftBox);
-                telemetry.addData("Right Box: ", redPropThreshold.redMiddleBox);
-                telemetry.addData("Averaged Left Box:", redPropThreshold.averagedRedLeftBox);
-                telemetry.addData("Averaged Right Box:", redPropThreshold.averagedRedMiddleBox);
+                telemetry.addData("Prop Position", redPropThreshold.GetPropPosition());
+                telemetry.addData("Left Box: ", redPropThreshold.leftBox);
+                telemetry.addData("Middle Box: ", redPropThreshold.middleBox);
+                telemetry.addData("Right Box:", redPropThreshold.rightBox);
+                telemetry.addData("Averaged Left Box:", redPropThreshold.averagedLeftBox);
+                telemetry.addData("Averaged Middle Box:", redPropThreshold.averagedMiddleBox);
+                telemetry.addData("Averaged Right Box:", redPropThreshold.averagedRightBox);
                 telemetry.update();
 
             }

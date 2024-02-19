@@ -17,8 +17,8 @@ public class RedPropThresholdFar extends PropThreshold {
     @Override
     public void initProp() {
         PropColor = PropColorEnum.RED;
-        activeLeftRect = LEFT_RECTANGLE_FAR;
-        activeMiddleRect = MIDDLE_RECTANGLE_FAR;
-        activeRightRect = RIGHT_RECTANGLE_FAR;
+        activeLeftRect = LEFT_RECTANGLE_CLOSE;
+        activeMiddleRect = MIDDLE_RECTANGLE_CLOSE;
+        activeRightRect = RIGHT_RECTANGLE_CLOSE;
     }
 }

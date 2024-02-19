@@ -61,11 +61,11 @@ public class PropThreshold implements VisionProcessor {
             new Point(320, 479)
     );
     static final Rect MIDDLE_RECTANGLE_FAR = new Rect(
-            new Point(321, 230),
-            new Point(520, 479)
+            new Point(340, 230),
+            new Point(525, 479)
     );
     static final Rect RIGHT_RECTANGLE_FAR = new Rect(
-            new Point(520, 230),
+            new Point(526, 230),
             new Point(639, 479)
     );
 
@@ -108,18 +108,18 @@ public class PropThreshold implements VisionProcessor {
          lowMat.release();
          highMat.release();
 
-         leftBox = Core.sumElems(finalMat.submat(LEFT_RECTANGLE_CLOSE)).val[0];
-         middleBox = Core.sumElems(finalMat.submat(MIDDLE_RECTANGLE_CLOSE)).val[0];
-         rightBox = Core.sumElems(finalMat.submat(RIGHT_RECTANGLE_CLOSE)).val[0];
+         leftBox = Core.sumElems(finalMat.submat(activeLeftRect)).val[0];
+         middleBox = Core.sumElems(finalMat.submat(activeMiddleRect)).val[0];
+         rightBox = Core.sumElems(finalMat.submat(activeRightRect)).val[0];
 
 //        blueLeftBoxFar = Core.sumElems(finalMat.submat(LEFT_RECTANGLE_FAR)).val[0];
 //        blueMiddleBoxFar = Core.sumElems(finalMat.submat(MIDDLE_RECTANGLE_FAR)).val[0];
 //        blueRightBoxFar = Core.sumElems(finalMat.submat(RIGHT_RECTANGLE_FAR)).val[0];
 
 
-        averagedLeftBox = leftBox / LEFT_RECTANGLE_CLOSE.area() / 255;
-        averagedMiddleBox = middleBox / MIDDLE_RECTANGLE_CLOSE.area() / 255; //Makes value [0,1]
-        averagedRightBox = rightBox / RIGHT_RECTANGLE_CLOSE.area() / 255;
+        averagedLeftBox = leftBox / activeLeftRect.area() / 255;
+        averagedMiddleBox = middleBox / activeMiddleRect.area() / 255; //Makes value [0,1]
+        averagedRightBox = rightBox / activeRightRect.area() / 255;
 
 
 //        averagedBlueLeftBoxFar = blueLeftBoxFar / LEFT_RECTANGLE_FAR.area() / 255;
@@ -127,14 +127,14 @@ public class PropThreshold implements VisionProcessor {
 //        averagedBlueRightBoxFar = blueRightBoxFar / RIGHT_RECTANGLE_FAR.area() / 255;
 
 
-        if(averagedLeftBox > Threshold){        //Must Tune Red Threshold
-            OutStr = "blueLeft";
+        if(averagedLeftBox > Threshold && averagedLeftBox > averagedMiddleBox){        //Must Tune Red Threshold
+            OutStr = "Left";
             PropPos = PropPosEnum.LEFT;
-        }else if(averagedMiddleBox > Threshold){
-            OutStr = "blueCenter";
+        }else if(averagedMiddleBox > Threshold && averagedRightBox < averagedMiddleBox){
+            OutStr = "Center";
             PropPos = PropPosEnum.CENTER;
         }else if(averagedRightBox > Threshold){
-            OutStr = "blueRight";
+            OutStr = "Right";
             PropPos = PropPosEnum.RIGHT;
         }
 //        if(averagedBlueLeftBoxFar > Threshold){        //Must Tune Red Threshold
@@ -151,15 +151,15 @@ public class PropThreshold implements VisionProcessor {
 
 //        Imgproc.rectangle(
 //                frame,
-//                new Point(240, 230),
-//                new Point(440, 479),
+//                new Point(340, 230),
+//                new Point(520, 479),
 //                new Scalar(255, 0, 0), 10);
 
         Imgproc.rectangle(
                 frame,
                 activeMiddleRect.tl(),
                 activeMiddleRect.br(),
-                new Scalar(255, 0, 0), 10);
+                new Scalar(0, 255, 0), 10);
 
 
    //     lowMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline

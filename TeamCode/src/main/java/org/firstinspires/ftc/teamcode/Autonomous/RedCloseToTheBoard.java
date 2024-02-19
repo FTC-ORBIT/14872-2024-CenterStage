@@ -22,7 +22,7 @@ public class RedCloseToTheBoard extends LinearOpMode {
     public static double leftAngle = -1.433;
     public static double rightConeX = 22.5;
 
-    public static double rightConeY = 8;
+    public static double rightConeY = 9;
 
     public static double leftDriveX = 22.02;
     public static double leftConeX = 26.5;
@@ -60,6 +60,7 @@ public class RedCloseToTheBoard extends LinearOpMode {
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(rightConeX, rightConeY, startPose.getHeading()))
+                .lineToLinearHeading(startPose)
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, goToParkingY, startPose.getHeading()))
                 .build();
 
@@ -71,20 +72,23 @@ public class RedCloseToTheBoard extends LinearOpMode {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
                     telemetry.addLine("left");
+                    telemetry.update();
                     break;
                 case CENTER:
                     drive.followTrajectorySequence(centerCone);
                     telemetry.addLine("center");
+                    telemetry.update();
                     break;
                 case RIGHT:
                     drive.followTrajectorySequence(rightCone);
                     telemetry.addLine("right");
+                    telemetry.update();
                     break;
                 case NONE:
                     telemetry.addLine("Doesn't see prop");
+                    telemetry.update();
                     break;
             }
-            telemetry.update();
         }
     }
 }

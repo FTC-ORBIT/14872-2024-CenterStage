@@ -77,20 +77,25 @@ public class BlueFarFormTheBoard extends  LinearOpMode{
             case LEFT:
                 drive.followTrajectorySequence(leftCone);
                 telemetry.addLine("left");
+                telemetry.update();
                 break;
             case CENTER:
                 drive.followTrajectorySequence(centerCone);
                 telemetry.addLine("center");
+                telemetry.update();
                 break;
             case RIGHT:
                 drive.followTrajectorySequence(rightCone);
                 telemetry.addLine("right");
+                telemetry.update();
                 break;
             case NONE:
                 telemetry.addLine("Doesn't see prop");
+                telemetry.update();
                 break;
         }
-            telemetry.update();
-        }        }
+
+        }
+     }
     }
 

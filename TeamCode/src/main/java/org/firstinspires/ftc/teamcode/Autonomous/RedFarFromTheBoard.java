@@ -22,7 +22,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
     public static double rightDriveX = 27;
     public static double rightConeX = 29.06;
 
-    public static double rightConeY = 5.2;
+    public static double rightConeY = 5;
 
     public static double rightConeAngle =5.05;
     public static double leftConeX = 22.5;
@@ -51,21 +51,21 @@ public class RedFarFromTheBoard extends  LinearOpMode{
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(centerConeX, startPose.getY(), startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY(), startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, -parkingY, startPose.getHeading()))
                 .build();
 
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(leftConeX, leftConeY, startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() ,startPose.getHeading() ))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, -parkingY, startPose.getHeading()))
                 .build();
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
          .lineToLinearHeading(new Pose2d(rightDriveX, startPose.getY(), startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(rightConeX , rightConeY , rightConeAngle))
-                .lineToLinearHeading(new Pose2d(rightConeX , startPose.getY() , rightConeAngle))
+                .lineToLinearHeading(new Pose2d(rightConeX , rightConeY , -rightConeAngle))
+                .lineToLinearHeading(new Pose2d(rightConeX , startPose.getY() , -rightConeAngle))
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() , startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, -parkingY, startPose.getHeading()))
                 .build();
 
         waitForStart();
@@ -74,19 +74,23 @@ public class RedFarFromTheBoard extends  LinearOpMode{
             sleep((long) delay);
             switch (redPropThresholdFar.EnumGetPropPos()) {
                 case LEFT:
-                    drive.followTrajectorySequence(leftCone);
                     telemetry.addLine("left");
+                    telemetry.update();
+                    drive.followTrajectorySequence(leftCone);
                     break;
                 case CENTER:
-                    drive.followTrajectorySequence(centerCone);
                     telemetry.addLine("center");
+                    telemetry.update();
+                    drive.followTrajectorySequence(centerCone);
                     break;
                 case RIGHT:
-                    drive.followTrajectorySequence(rightCone);
                     telemetry.addLine("right");
+                    telemetry.update();
+                    drive.followTrajectorySequence(rightCone);
                     break;
                 case NONE:
                     telemetry.addLine("Doesn't see prop");
+                    telemetry.update();
                     break;
             }
             telemetry.update();
