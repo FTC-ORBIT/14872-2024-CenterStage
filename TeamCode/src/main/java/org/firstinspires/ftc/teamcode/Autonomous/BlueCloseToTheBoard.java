@@ -37,6 +37,8 @@ public class BlueCloseToTheBoard extends LinearOpMode {
 
         drive.setPoseEstimate(startPose);
 
+        bluePropThresholdClose.initProp();
+
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
@@ -64,7 +66,7 @@ public class BlueCloseToTheBoard extends LinearOpMode {
 
         if (!isStopRequested()) {
             sleep((long) delay);
-            switch (bluePropThresholdClose.blueEnumGetPropPos()) {
+            switch (bluePropThresholdClose.EnumGetPropPos()) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
                     telemetry.addLine("left");

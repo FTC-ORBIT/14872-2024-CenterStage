@@ -15,7 +15,7 @@ public class CameraTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
+        bluePropThresholdClose.initProp();
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
@@ -24,13 +24,13 @@ public class CameraTest extends LinearOpMode {
 
 
         while (!isStopRequested()) {
-            telemetry.addData("the prop is in:", bluePropThresholdClose.blueGetPropPosition());
-            telemetry.addData("left box:" , bluePropThresholdClose.blueLeftBoxClose);
-            telemetry.addData("middle box:" , bluePropThresholdClose.blueMiddleBoxClose);
-            telemetry.addData("right box:", bluePropThresholdClose.blueRightBoxClose);
-            telemetry.addData("Averaged Left Box:", bluePropThresholdClose.averagedBlueLeftBoxClose);
-            telemetry.addData("Averaged Middle Box:", bluePropThresholdClose.averagedBlueMiddleBoxClose);
-            telemetry.addData("Averaged Right Box:", bluePropThresholdClose.averagedBlueRightBoxClose);
+            telemetry.addData("the prop is in:", bluePropThresholdClose.GetPropPosition());
+            telemetry.addData("left box:" , bluePropThresholdClose.leftBox);
+            telemetry.addData("middle box:" , bluePropThresholdClose.middleBox);
+            telemetry.addData("right box:", bluePropThresholdClose.rightBox);
+            telemetry.addData("Averaged Left Box:", bluePropThresholdClose.averagedLeftBox);
+            telemetry.addData("Averaged Middle Box:", bluePropThresholdClose.averagedMiddleBox);
+            telemetry.addData("Averaged Right Box:", bluePropThresholdClose.averagedRightBox);
             telemetry.update();
         }//Will output prop position on Driver Station Console
 
