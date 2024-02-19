@@ -18,7 +18,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 public class BlueCloseToTheBoard extends LinearOpMode {
     public static double driveToConeX = 29.5;
     public static double goToParkingY = -38;
-
+    public static double delay = 3;
     public static double leftAngle = 1.433;
     public static double rightConeX = 22.5;
 
@@ -63,6 +63,7 @@ public class BlueCloseToTheBoard extends LinearOpMode {
         waitForStart();
 
         if (!isStopRequested()) {
+            sleep((long) delay);
             switch (bluePropThresholdClose.blueEnumGetPropPos()) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);

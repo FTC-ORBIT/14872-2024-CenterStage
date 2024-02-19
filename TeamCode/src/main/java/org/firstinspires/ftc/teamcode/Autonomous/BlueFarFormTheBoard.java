@@ -17,14 +17,14 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @Config
 public class BlueFarFormTheBoard extends  LinearOpMode{
     public static double centerConeX = 29.5;
-
+    public static double delay = 3;
     public static double parkingY = -88;
-    public static double rightDriveX = 24.9;
+    public static double rightDriveX = 27;
     public static double rightConeX = 29.06;
 
     public static double rightConeY = -5.2;
 
-    public static double rightConeAngle =4.7;
+    public static double rightConeAngle =5.05;
     public static double leftConeX = 22.5;
 
     public static double leftConeY = 7;
@@ -56,7 +56,7 @@ public class BlueFarFormTheBoard extends  LinearOpMode{
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(rightDriveX, startPose.getY(), startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(rightConeX , rightConeY , rightConeAngle))
-                .lineToLinearHeading(new Pose2d(rightConeX , rightConeY+5, rightConeAngle))
+                .lineToLinearHeading(new Pose2d(rightConeX , startPose.getY() , rightConeAngle))
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() , startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
                 .build();
@@ -70,6 +70,7 @@ public class BlueFarFormTheBoard extends  LinearOpMode{
         waitForStart();
 
         if (!isStopRequested()) {
+            sleep((long) delay);
             switch (bluePropThresholdClose.blueEnumGetPropPos()) {
             case LEFT:
                 drive.followTrajectorySequence(leftCone);
