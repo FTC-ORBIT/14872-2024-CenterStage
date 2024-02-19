@@ -9,27 +9,27 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.RedPropThreshold;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThresholdClose;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous(name = "RedFarFromTheBoard")
 @Config
 public class RedFarFromTheBoard extends  LinearOpMode{
-    public static double centerConeXRed = 29.5;
+    public static double centerConeX = 29.5;
+    public static double delay = 3;
+    public static double parkingY = -88;
+    public static double rightDriveX = 27;
+    public static double rightConeX = 29.06;
 
-    public static double parkingYRed = 88;
+    public static double rightConeY = 5.2;
 
-    public static double rightConeXRed = 22.5;
+    public static double rightConeAngle =5.05;
+    public static double leftConeX = 22.5;
 
-    public static double rightConeYRed = 8;
-
-
-    public static double leftConeXRED = 22.5;
-
-    public static double leftConeYRed = -7;
+    public static double leftConeY = -7;
     private VisionPortal portal;
-    private RedPropThreshold redPropThreshold = new RedPropThreshold();
+    private BluePropThresholdClose bluePropThresholdClose = new BluePropThresholdClose();
 
     @Override
     public void runOpMode() throws InterruptedException{
@@ -37,7 +37,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
-                .addProcessor(redPropThreshold)
+                .addProcessor(bluePropThresholdClose)
                 .build();
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -48,39 +48,47 @@ public class RedFarFromTheBoard extends  LinearOpMode{
 
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(centerConeXRed, startPose.getY(), startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(centerConeX, startPose.getY(), startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY(), startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingYRed, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
                 .build();
 
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(rightConeXRed, rightConeYRed, startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingYRed, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(leftConeX, leftConeY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() ,startPose.getHeading() ))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
                 .build();
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(leftConeXRED, leftConeYRed, startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() ,startPose.getHeading() ))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingYRed, startPose.getHeading()))
+         .lineToLinearHeading(new Pose2d(rightDriveX, startPose.getY(), startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(rightConeX , rightConeY , rightConeAngle))
+                .lineToLinearHeading(new Pose2d(rightConeX , startPose.getY() , rightConeAngle))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() , startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
                 .build();
 
         waitForStart();
 
         if (!isStopRequested()) {
-            switch (redPropThreshold.redEnumGetPropPos()) {
+            sleep((long) delay);
+            switch (bluePropThresholdClose.blueEnumGetPropPos()) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
+                    telemetry.addLine("left");
                     break;
                 case CENTER:
                     drive.followTrajectorySequence(centerCone);
+                    telemetry.addLine("center");
                     break;
                 case RIGHT:
                     drive.followTrajectorySequence(rightCone);
+                    telemetry.addLine("right");
                     break;
                 case NONE:
                     telemetry.addLine("Doesn't see prop");
                     break;
             }
-        }
-    }
+            telemetry.update();
+        }        }
 }
+
