@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThreshold;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.RedPropThreshold;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -17,18 +16,18 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @Autonomous(name = "RedFarFromTheBoard")
 @Config
 public class RedFarFromTheBoard extends  LinearOpMode{
-    public static double centerConeX = 29.5;
+    public static double centerConeXRed = 29.5;
 
-    public static double parkingY = 88;
+    public static double parkingYRed = 88;
 
-    public static double rightConeX = 22.5;
+    public static double rightConeXRed = 22.5;
 
-    public static double rightConeY = 8;
+    public static double rightConeYRed = 8;
 
 
-    public static double leftConeX = 22.5;
+    public static double leftConeXRED = 22.5;
 
-    public static double leftConeY = -7;
+    public static double leftConeYRed = -7;
     private VisionPortal portal;
     private RedPropThreshold redPropThreshold = new RedPropThreshold();
 
@@ -49,20 +48,20 @@ public class RedFarFromTheBoard extends  LinearOpMode{
 
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(centerConeX, startPose.getY(), startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(centerConeXRed, startPose.getY(), startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY(), startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingYRed, startPose.getHeading()))
                 .build();
 
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(rightConeX, rightConeY, startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(rightConeXRed, rightConeYRed, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingYRed, startPose.getHeading()))
                 .build();
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(leftConeX, leftConeY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(leftConeXRED, leftConeYRed, startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() ,startPose.getHeading() ))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingYRed, startPose.getHeading()))
                 .build();
 
         waitForStart();
