@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThresholdClose;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThresholdFar;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 
@@ -29,15 +30,16 @@ public class BlueFarFormTheBoard extends  LinearOpMode{
 
     public static double leftConeY = 7;
     private VisionPortal portal;
-    private BluePropThresholdClose bluePropThresholdClose = new BluePropThresholdClose();
+    private BluePropThresholdFar bluePropThresholdFar = new BluePropThresholdFar();
 
     @Override
     public void runOpMode() throws InterruptedException{
 
+        bluePropThresholdFar.initProp();
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
-                .addProcessor(bluePropThresholdClose)
+                .addProcessor(bluePropThresholdFar)
                 .build();
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -71,24 +73,29 @@ public class BlueFarFormTheBoard extends  LinearOpMode{
 
         if (!isStopRequested()) {
             sleep((long) delay);
-            switch (bluePropThresholdClose.blueEnumGetPropPos()) {
+            switch (bluePropThresholdFar.EnumGetPropPos()) {
             case LEFT:
                 drive.followTrajectorySequence(leftCone);
                 telemetry.addLine("left");
+                telemetry.update();
                 break;
             case CENTER:
                 drive.followTrajectorySequence(centerCone);
                 telemetry.addLine("center");
+                telemetry.update();
                 break;
             case RIGHT:
                 drive.followTrajectorySequence(rightCone);
                 telemetry.addLine("right");
+                telemetry.update();
                 break;
             case NONE:
                 telemetry.addLine("Doesn't see prop");
+                telemetry.update();
                 break;
         }
-            telemetry.update();
-        }        }
+
+        }
+     }
     }
 
