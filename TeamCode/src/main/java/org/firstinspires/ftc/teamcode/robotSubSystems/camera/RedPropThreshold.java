@@ -26,14 +26,14 @@ public class RedPropThreshold implements VisionProcessor {
     public static String redOutStr = "none"; //Set a default value in case vision does not work
     public PropPosEnum redPropPos = PropPosEnum.NONE;
     static final Rect LEFT_RECTANGLE = new Rect(
-            new Point(0, 0),
-            new Point(232, 479)
+            new Point(0, 230),
+            new Point(240, 479)
 //            new Point(200, 359)
     );
 
     static final Rect MIDDLE_RECTANGLE = new Rect(
-            new Point(232, 0),
-            new Point(510 , 479)
+            new Point(241, 230),
+            new Point(440 , 479)
 //            new Point(420, 359)
     );
 

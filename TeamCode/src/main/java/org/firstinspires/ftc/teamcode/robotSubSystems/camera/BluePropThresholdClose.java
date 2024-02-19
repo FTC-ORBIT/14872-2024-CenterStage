@@ -11,7 +11,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-public class BluePropThreshold implements VisionProcessor {
+public class BluePropThresholdClose implements VisionProcessor {
     Mat testMat = new Mat();
         Mat highMat = new Mat();
     Mat lowMat = new Mat();
@@ -20,25 +20,47 @@ public class BluePropThreshold implements VisionProcessor {
 
     public static String blueOutStr = "none"; //Set a default value in case vision does not work
     public PropPosEnum bluePropPos = PropPosEnum.NONE;
-    public double blueLeftBox;
-    public double blueMiddleBox;
+    public double blueLeftBoxClose;
+    public double blueMiddleBoxClose;
 
-    public double blueRightBox;
-    public double averagedBlueLeftBox;
-    public double averagedBlueMiddleBox;
+    public double blueRightBoxClose;
 
-    public double averagedBlueRightBox;
-    static final Rect LEFT_RECTANGLE = new Rect(
-            new Point(0, 190),
+    public double blueLeftBoxFar;
+    public double blueMiddleBoxFar;
+
+    public double blueRightBoxFar;
+    public double averagedBlueLeftBoxClose;
+    public double averagedBlueMiddleBoxClose;
+
+    public double averagedBlueRightBoxClose;
+
+    public double averagedBlueLeftBoxFar;
+    public double averagedBlueMiddleBoxFar;
+
+    public double averagedBlueRightBoxFar;
+    static final Rect LEFT_RECTANGLE_CLOSE = new Rect(
+            new Point(0, 230),
             new Point(240, 479)
     );
 
-    static final Rect MIDDLE_RECTANGLE = new Rect(
-            new Point(241, 190),
+    static final Rect MIDDLE_RECTANGLE_CLOSE = new Rect(
+            new Point(241, 230),
             new Point(440 , 479)
     );
-    static final Rect RIGHT_RECTANGLE = new Rect(
-            new Point(441, 190),
+    static final Rect RIGHT_RECTANGLE_CLOSE = new Rect(
+            new Point(441, 230),
+            new Point(639, 479)
+    );
+    static final Rect LEFT_RECTANGLE_FAR = new Rect(
+            new Point(0, 230),
+            new Point(320, 479)
+    );
+    static final Rect MIDDLE_RECTANGLE_FAR = new Rect(
+            new Point(321, 230),
+            new Point(520, 479)
+    );
+    static final Rect RIGHT_RECTANGLE_FAR = new Rect(
+            new Point(520, 230),
             new Point(639, 479)
     );
 
@@ -80,35 +102,61 @@ public class BluePropThreshold implements VisionProcessor {
          lowMat.release();
          highMat.release();
 
-         blueLeftBox = Core.sumElems(finalMat.submat(LEFT_RECTANGLE)).val[0];
-         blueMiddleBox = Core.sumElems(finalMat.submat(MIDDLE_RECTANGLE)).val[0];
-         blueRightBox = Core.sumElems(finalMat.submat(RIGHT_RECTANGLE)).val[0];
+         blueLeftBoxClose = Core.sumElems(finalMat.submat(LEFT_RECTANGLE_CLOSE)).val[0];
+         blueMiddleBoxClose = Core.sumElems(finalMat.submat(MIDDLE_RECTANGLE_CLOSE)).val[0];
+         blueRightBoxClose = Core.sumElems(finalMat.submat(RIGHT_RECTANGLE_CLOSE)).val[0];
+
+        blueLeftBoxFar = Core.sumElems(finalMat.submat(LEFT_RECTANGLE_FAR)).val[0];
+        blueMiddleBoxFar = Core.sumElems(finalMat.submat(MIDDLE_RECTANGLE_FAR)).val[0];
+        blueRightBoxFar = Core.sumElems(finalMat.submat(RIGHT_RECTANGLE_FAR)).val[0];
 
 
-        averagedBlueLeftBox = blueLeftBox / LEFT_RECTANGLE.area() / 255;
-        averagedBlueMiddleBox = blueMiddleBox / MIDDLE_RECTANGLE.area() / 255; //Makes value [0,1]
-        averagedBlueRightBox = blueRightBox / RIGHT_RECTANGLE.area() / 255;
+        averagedBlueLeftBoxClose = blueLeftBoxClose / LEFT_RECTANGLE_CLOSE.area() / 255;
+        averagedBlueMiddleBoxClose = blueMiddleBoxClose / MIDDLE_RECTANGLE_CLOSE.area() / 255; //Makes value [0,1]
+        averagedBlueRightBoxClose = blueRightBoxClose / RIGHT_RECTANGLE_CLOSE.area() / 255;
+
+
+        averagedBlueLeftBoxFar = blueLeftBoxFar / LEFT_RECTANGLE_FAR.area() / 255;
+        averagedBlueMiddleBoxFar = blueMiddleBoxFar / MIDDLE_RECTANGLE_FAR.area() / 255; //Makes value [0,1]
+        averagedBlueRightBoxFar = blueRightBoxFar / RIGHT_RECTANGLE_FAR.area() / 255;
 
 
 
-        if(averagedBlueLeftBox > blueThreshold){        //Must Tune Red Threshold
-            blueOutStr = "blueLeft";
+//        if(averagedBlueLeftBoxClose > blueThreshold){        //Must Tune Red Threshold
+//            blueOutStr = "blueLeft";
+//            bluePropPos = PropPosEnum.LEFT;
+//        }else if(averagedBlueMiddleBoxClose > blueThreshold){
+//            blueOutStr = "blueCenter";
+//            bluePropPos = PropPosEnum.CENTER;
+//        }else if(averagedBlueRightBoxClose > blueThreshold){
+//            blueOutStr = "blueRight";
+//            bluePropPos = PropPosEnum.RIGHT;
+//        }
+        if(averagedBlueLeftBoxFar > blueThreshold){        //Must Tune Red Threshold
+            blueOutStr = "blueLeftFar";
             bluePropPos = PropPosEnum.LEFT;
-        }else if(averagedBlueMiddleBox > blueThreshold){
+        }else if(averagedBlueMiddleBoxFar > blueThreshold){
             blueOutStr = "blueCenter";
             bluePropPos = PropPosEnum.CENTER;
-        }else if(averagedBlueRightBox > blueThreshold){
+        }else if(averagedBlueRightBoxFar > blueThreshold){
             blueOutStr = "blueRight";
             bluePropPos = PropPosEnum.RIGHT;
         }
 
+
+//        Imgproc.rectangle(
+//                frame,
+//                new Point(240, 230),
+//                new Point(440, 479),
+//                new Scalar(255, 0, 0), 10);
+
         Imgproc.rectangle(
                 frame,
-//                new Point(90,160),
-//                new Point(270, 479),
-                new Point(240, 190),
-                new Point(440, 479),
+                new Point(320, 230),
+                new Point(520, 479),
                 new Scalar(255, 0, 0), 10);
+
+
    //     lowMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline
 //                                  on the driver station stream, do not use this permanently in your code as
 //                                  you use the "frame" mat for all of your pipelines, such as April Tags*/

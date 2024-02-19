@@ -11,7 +11,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @Autonomous(name="Vision Test Blue")
 public class CameraTest extends LinearOpMode {
     private VisionPortal portal;
-    private BluePropThreshold bluePropThreshold = new BluePropThreshold();
+    private BluePropThresholdClose bluePropThresholdClose = new BluePropThresholdClose();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -19,17 +19,18 @@ public class CameraTest extends LinearOpMode {
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
-                .addProcessor(bluePropThreshold)
+                .addProcessor(bluePropThresholdClose)
                 .build();
 
 
         while (!isStopRequested()) {
-            telemetry.addData("left box:" , bluePropThreshold.blueLeftBox);
-            telemetry.addData("middle box:" , bluePropThreshold.blueMiddleBox);
-            telemetry.addData("right box:", bluePropThreshold.blueRightBox);
-            telemetry.addData("Averaged Left Box:", bluePropThreshold.averagedBlueLeftBox);
-            telemetry.addData("Averaged Middle Box:", bluePropThreshold.averagedBlueMiddleBox);
-            telemetry.addData("Averaged Right Box:", bluePropThreshold.averagedBlueRightBox);
+            telemetry.addData("the prop is in:", bluePropThresholdClose.blueGetPropPosition());
+            telemetry.addData("left box:" , bluePropThresholdClose.blueLeftBoxClose);
+            telemetry.addData("middle box:" , bluePropThresholdClose.blueMiddleBoxClose);
+            telemetry.addData("right box:", bluePropThresholdClose.blueRightBoxClose);
+            telemetry.addData("Averaged Left Box:", bluePropThresholdClose.averagedBlueLeftBoxClose);
+            telemetry.addData("Averaged Middle Box:", bluePropThresholdClose.averagedBlueMiddleBoxClose);
+            telemetry.addData("Averaged Right Box:", bluePropThresholdClose.averagedBlueRightBoxClose);
             telemetry.update();
         }//Will output prop position on Driver Station Console
 

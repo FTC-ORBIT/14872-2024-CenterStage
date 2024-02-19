@@ -1,18 +1,15 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.util.Size;
-import android.widget.Switch;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThreshold;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThresholdClose;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 
@@ -22,17 +19,16 @@ public class BlueCloseToTheBoard extends LinearOpMode {
     public static double driveToConeX = 29.5;
     public static double goToParkingY = -38;
 
-    public static double leftAngle = 0;
+    public static double leftAngle = 1.433;
     public static double rightConeX = 22.5;
 
     public static double rightConeY = -8;
 
-    public static double leftDriveX = 13;
-    public static double leftConeX = 22.5;
-
-    public static double leftConeY = 11;
+    public static double leftDriveX = 22.02;
+    public static double leftConeX = 26.5;
+    public static double leftConeY = 3.2;
     private VisionPortal portal;
-    private BluePropThreshold bluePropThreshold = new BluePropThreshold();
+    private BluePropThresholdClose bluePropThresholdClose = new BluePropThresholdClose();
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -44,7 +40,7 @@ public class BlueCloseToTheBoard extends LinearOpMode {
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
-                .addProcessor(bluePropThreshold)
+                .addProcessor(bluePropThresholdClose)
                 .build();
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
@@ -67,20 +63,24 @@ public class BlueCloseToTheBoard extends LinearOpMode {
         waitForStart();
 
         if (!isStopRequested()) {
-            switch (bluePropThreshold.blueEnumGetPropPos()) {
+            switch (bluePropThresholdClose.blueEnumGetPropPos()) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
+                    telemetry.addLine("left");
                     break;
                 case CENTER:
                     drive.followTrajectorySequence(centerCone);
+                    telemetry.addLine("center");
                     break;
                 case RIGHT:
                     drive.followTrajectorySequence(rightCone);
+                    telemetry.addLine("right");
                     break;
                 case NONE:
                     telemetry.addLine("Doesn't see prop");
                     break;
             }
+            telemetry.update();
         }
     }
 }
