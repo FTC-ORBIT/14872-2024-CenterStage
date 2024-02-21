@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
 
@@ -15,12 +16,11 @@ public class Test extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-      Drivetrain.init(hardwareMap);
-      Intake.init(hardwareMap);
+        Fourbar.init(hardwareMap);
             waitForStart();
         while (!isStopRequested()) {
-          Drivetrain.testEncoder(telemetry);
-          Intake.test(telemetry);
+          Fourbar.test(gamepad1, telemetry);
+          telemetry.addData("Fourbar pos", Fourbar.servo.getPosition());
             telemetry.update();
         }
 

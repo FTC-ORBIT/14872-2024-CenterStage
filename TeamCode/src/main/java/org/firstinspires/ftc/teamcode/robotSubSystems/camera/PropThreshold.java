@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
 
 import android.graphics.Canvas;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
@@ -22,7 +23,7 @@ public class PropThreshold implements VisionProcessor {
     public static String OutStr = "none"; //Set a default value in case vision does not work
     public PropPosEnum PropPos = PropPosEnum.NONE;
 
-    public PropColorEnum PropColor = PropColorEnum.BLUE;
+    public PropColorEnum PropColor = PropColorEnum.RED;
     public Rect activeLeftRect;
     public Rect activeMiddleRect;
     public Rect activeRightRect;
@@ -44,28 +45,28 @@ public class PropThreshold implements VisionProcessor {
 //
 //    public double averagedBlueRightBoxFar;
     static final Rect LEFT_RECTANGLE_CLOSE = new Rect(
-            new Point(0, 230),
+            new Point(0, 225),
             new Point(240, 479)
     );
 
     static final Rect MIDDLE_RECTANGLE_CLOSE = new Rect(
-            new Point(241, 230),
+            new Point(241, 225),
             new Point(440 , 479)
     );
     static final Rect RIGHT_RECTANGLE_CLOSE = new Rect(
-            new Point(441, 230),
+            new Point(441, 225),
             new Point(639, 479)
     );
     static final Rect LEFT_RECTANGLE_FAR = new Rect(
-            new Point(0, 230),
+            new Point(0, 225),
             new Point(320, 479)
     );
     static final Rect MIDDLE_RECTANGLE_FAR = new Rect(
-            new Point(340, 230),
+            new Point(340, 225),
             new Point(525, 479)
     );
     static final Rect RIGHT_RECTANGLE_FAR = new Rect(
-            new Point(526, 230),
+            new Point(526, 225),
             new Point(639, 479)
     );
 
