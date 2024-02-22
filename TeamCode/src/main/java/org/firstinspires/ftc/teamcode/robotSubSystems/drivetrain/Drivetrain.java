@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 public class Drivetrain {
 
     public static final DcMotor[] motors = new DcMotor[4];
-
+    private static float driveFactor = DrivetrainConstants.power;
     private static Pose2d pose;
     public static Vector lastPosition;
     // equal to the last Autonomous position?
@@ -40,11 +40,16 @@ public class Drivetrain {
 
     }
 
-    public static void operate(final Vector velocity_W, float omega , Telemetry telemetry) {
+    public static void operate(final Vector velocity_W, float omega , Telemetry telemetry, Gamepad gamepad) {
         final float robotAngle = (float) Math.toRadians(OrbitGyro.getAngle());
         final Vector velocity_RobotCS_W = velocity_W.rotate(-robotAngle);
         if(velocity_RobotCS_W.norm() <= Math.sqrt(0.005) && Math.abs(omega) == 0) stop();
         else drive(velocity_RobotCS_W, omega);
+        if (gamepad.left_stick_button){
+            driveFactor = DrivetrainConstants.slowPower;
+        }else {
+            driveFactor = DrivetrainConstants.power;
+        }
 
         telemetry.addData("lf power" , motors[0].getPower());
         telemetry.addData("rf power" , motors[1].getPower());
@@ -92,11 +97,12 @@ public class Drivetrain {
         double highestPower = 1;
         final double max = Math.max(Math.abs(lfPower),
                 Math.max(Math.abs(lbPower), Math.max(Math.abs(rfPower), Math.abs(rbPower))));
+
         if (max > 1)  highestPower = max;
-        motors[0].setPower(DrivetrainConstants.power * (lfPower / highestPower));
-        motors[1].setPower(DrivetrainConstants.power * (rfPower / highestPower));
-        motors[2].setPower(DrivetrainConstants.power * (lbPower / highestPower));
-        motors[3].setPower(DrivetrainConstants.power * (rbPower / highestPower));
+        motors[0].setPower(driveFactor * (lfPower / highestPower));
+        motors[1].setPower(driveFactor * (rfPower / highestPower));
+        motors[2].setPower(driveFactor * (lbPower / highestPower));
+        motors[3].setPower(driveFactor * (rbPower / highestPower));
 
     }
 

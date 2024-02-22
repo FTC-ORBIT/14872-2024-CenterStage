@@ -73,7 +73,7 @@ public class Robot extends LinearOpMode {
           final boolean placing = SubSystemManager.wanted.equals(RobotState.MIN) || SubSystemManager.wanted.equals(RobotState.LOW) || SubSystemManager.wanted.equals(RobotState.MID);
           Vector leftStick = new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y).scale(placing ? 0.25f : 1);
           float omega = gamepad1.right_trigger - gamepad1.left_trigger;
-          Drivetrain.operate(leftStick,  omega , telemetry);
+          Drivetrain.operate(leftStick,  omega , telemetry , gamepad1);
           SubSystemManager.setSubsystemToState(gamepad1 , gamepad2 , telemetry);
 //            OrbitLED.operate();
            GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;

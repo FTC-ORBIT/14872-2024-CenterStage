@@ -5,8 +5,8 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class ElevatorConstants {
     public static final float intakeHeight = 0;
-    public static final float minHeight = 2189;
-    public static final float lowHeight = 2874;
+    public static final float minHeight = 1336;
+    public static final float lowHeight = 2017;
     public static final float midHeight =  3229;
     public static final float overrideFactor = 30;
     public static  final  float climbHeight = 2150;

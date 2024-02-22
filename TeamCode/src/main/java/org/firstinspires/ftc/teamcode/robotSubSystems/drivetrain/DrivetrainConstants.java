@@ -5,5 +5,6 @@ public class DrivetrainConstants {
     public final static float forward_offset = -0.2f;
     public final static float deadWheelDiameter = 0.035f;
     public final static float ticksPerRevolutionExternalEncoder = 8192;
-    public final static float power = 0.9f;
+    public final static float power = 1f;
+    public final static float slowPower =0.6f;
 }
