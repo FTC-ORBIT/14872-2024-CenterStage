@@ -8,8 +8,19 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.RedPropThresholdFar;
+import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
+import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
+import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorConstants;
+import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.FourbarState;
+import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
+import org.firstinspires.ftc.teamcode.robotSubSystems.intake.IntakeState;
+import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 
@@ -17,8 +28,9 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @Config
 public class RedFarFormTheBoard extends  LinearOpMode{
     public static double centerConeX = 29.5;
-    public static double delay = 3;
+    public static double delay = 3000;
     public static double parkingY = -88;
+    public static double boardY = -78;
     public static double rightDriveX = 27;
     public static double rightConeX = 29.06;
 
@@ -33,6 +45,12 @@ public class RedFarFormTheBoard extends  LinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException{
+        OrbitGyro.init(hardwareMap);
+        Elevator.init(hardwareMap);
+        Outtake.init(hardwareMap);
+        Intake.init(hardwareMap);
+        Fourbar.init(hardwareMap);
+        Plane.init(hardwareMap);
 
         redPropThresholdFar.initProp();
         portal = new VisionPortal.Builder()
@@ -50,19 +68,22 @@ public class RedFarFormTheBoard extends  LinearOpMode{
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(centerConeX, startPose.getY(), startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY(), startPose.getHeading())) //                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY(), startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY , startPose.getHeading()))
                 .build();
 
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(rightDriveX, startPose.getY(), startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(rightConeX , rightConeY , rightConeAngle))
                 .lineToLinearHeading(new Pose2d(rightConeX , startPose.getY() , rightConeAngle))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() , startPose.getHeading())) //                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() , startPose.getHeading()))
+                                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
                 .build();
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(leftConeX, leftConeY, startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() ,startPose.getHeading() )) //                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() ,startPose.getHeading() ))
+                                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
                 .build();
 
         waitForStart();

@@ -49,18 +49,21 @@ public class BlueCloseToTheBoard extends LinearOpMode {
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(driveToConeX, startPose.getY(), startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY(), startPose.getHeading())) //                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, goToParkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY(), startPose.getHeading()))
+                                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, goToParkingY, startPose.getHeading()))
                 .build();
 
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
             .lineToLinearHeading(new Pose2d(leftDriveX  , startPose.getY() , startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(leftConeX,leftConeY,leftAngle)) //                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, goToParkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(leftConeX,leftConeY,leftAngle))
+                                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, goToParkingY, startPose.getHeading()))
                 .build();
 
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(rightConeX, rightConeY, startPose.getHeading()))
-                .lineToLinearHeading(startPose) //                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, goToParkingY, startPose.getHeading()))
+                .lineToLinearHeading(startPose)
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, goToParkingY, startPose.getHeading()))
                 .build();
         TrajectorySequence test = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 10, startPose.getY(), startPose.getHeading()))

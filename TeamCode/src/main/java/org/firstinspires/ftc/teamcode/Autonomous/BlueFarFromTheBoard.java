@@ -50,19 +50,22 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(centerConeX, startPose.getY(), startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY(), startPose.getHeading())) //                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, -parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY(), startPose.getHeading()))
+                                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, -parkingY, startPose.getHeading()))
                 .build();
 
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(leftConeX, leftConeY, startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() ,startPose.getHeading() )) //                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, -parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() ,startPose.getHeading() ))
+                                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, -parkingY, startPose.getHeading()))
                 .build();
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
          .lineToLinearHeading(new Pose2d(rightDriveX, startPose.getY(), startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(rightConeX , rightConeY , -rightConeAngle))
                 .lineToLinearHeading(new Pose2d(rightConeX , startPose.getY() , -rightConeAngle))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() , startPose.getHeading())) //                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, -parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() , startPose.getHeading()))
+                                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, -parkingY, startPose.getHeading()))
                 .build();
 
         waitForStart();

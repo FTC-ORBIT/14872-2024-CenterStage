@@ -147,7 +147,7 @@ public class SubSystemManager {
                     fixpixelState = FixpixelState.CLOSE;
                     break;
             }
-            if (gamepad1.dpad_right) { 
+            if (gamepad1.back) {
                 fourbarState = FourbarState.REVERSE;
                 elevatorState = ElevatorStates.CLIMB;
             }
@@ -169,7 +169,7 @@ public class SubSystemManager {
      //       Fixpixel.operate(fixpixelState , gamepad1 , telemetry);
             lastState = wanted;
             if (gamepad1.dpad_down) OrbitGyro.resetGyro();
-        if (gamepad1.share) Plane.operate(PlaneState.THROW);
+        if (gamepad1.touchpad) Plane.operate(PlaneState.THROW);
     }
 
     public static void printStates(Telemetry telemetry) {
