@@ -16,7 +16,7 @@ public class Outtake {
 
     public static void init(HardwareMap hardwareMap) {
         servo = hardwareMap.get(Servo.class, "outtakeServo");
-
+        servo.setPosition(OuttakeConstants.closedPos);
     }
 
     public static void operate(OuttakeState state) {
@@ -36,34 +36,34 @@ public class Outtake {
     }
 
     public static void test(Gamepad gamepad, Telemetry telemetry) {
-//
-//        if (gamepad.left_bumper) {
-//            pos = OuttakeConstants.closedPos;
-//        } else if (gamepad.right_bumper) {
-//            pos = OuttakeConstants.openPos;
+
+        if (gamepad.left_bumper) {
+            pos = OuttakeConstants.closedPos;
+        } else if (gamepad.right_bumper) {
+            pos = OuttakeConstants.openPos;
+        }
+//        if (gamepad.dpad_left &&  !lastLeft){
+//            pos += 0.05;
+//            if (pos > 1){
+//                pos = 1;
+//            }
+//        }else if (gamepad.dpad_right && !lastRight){
+//            pos -= 0.05;
+//            if (pos < 0){
+//                pos = 0;
+//            }
 //        }
-        if (gamepad.left_bumper &&  !lastLeft){
-            pos += 0.05;
-            if (pos > 1){
-                pos = 1;
-            }
-        }else if (gamepad.right_bumper && !lastRight){
-            pos -= 0.05;
-            if (pos < 0){
-                pos = 0;
-            }
-        }
-        if (gamepad.dpad_left && !lastlT){
-            pos += 0.001;
-            if (pos > 1){
-                pos = 1;
-            }
-        }else if (gamepad.dpad_right && !lastRT){
-            pos -= 0.001;
-            if (pos < 0){
-                pos = 0;
-            }
-        }
+//        if (gamepad.dpad_up && !lastlT){
+//            pos += 0.001;
+//            if (pos > 1){
+//                pos = 1;
+//            }
+//        }else if (gamepad.dpad_down && !lastRT){
+//            pos -= 0.001;
+//            if (pos < 0){
+//                pos = 0;
+//            }
+//        }
         servo.setPosition(pos);
         lastLeft = gamepad.left_bumper;
         lastRight = gamepad.right_bumper;

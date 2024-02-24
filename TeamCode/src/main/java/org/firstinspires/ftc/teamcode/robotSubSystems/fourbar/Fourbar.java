@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.fourbar;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -13,10 +14,13 @@ public class Fourbar {
     public static boolean lastRight = false;
     public static boolean lastRT = false;
     public static boolean lastLT = false;
+
+    public static ElapsedTime time = new ElapsedTime();
     public static void init(HardwareMap hardwareMap){
         servo = hardwareMap.get(Servo.class, "fourbarServo");
+        time.reset();
     }
-    public static void operate(FourbarState state, Gamepad gamepad, Telemetry telemetry) {
+    public static void operateTeleop(FourbarState state) {
         switch (state){
             case MOVE:
                 pos = FourbarConstants.midMove;
@@ -24,14 +28,23 @@ public class Fourbar {
             case REVERSE:
                pos = FourbarConstants.reverse;
                 break;
-            case MOVETOMID:
-                pos = FourbarConstants.midMove;
-                break;
-
         }
 
           servo.setPosition(pos);
     }
+
+    public static void operateAutonomous(FourbarState state) {
+            switch (state) {
+                case MOVE:
+                    pos = FourbarConstants.midMove;
+                    break;
+                case REVERSE:
+                    pos = FourbarConstants.reverse;
+                    break;
+            }
+            servo.setPosition(pos);
+        }
+
     public static void test(Gamepad gamepad, Telemetry telemetry){
 
 //        if (gamepad.right_bumper) pos = FourbarConstants.midMove;

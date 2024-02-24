@@ -16,6 +16,7 @@ public class Elevator {
     public static float currentPos2 = 0;
     public static final PID elevatorPID = new PID(ElevatorConstants.elevatorKp, ElevatorConstants.elevatorKi, ElevatorConstants.elevatorKd, ElevatorConstants.elevatorKf, ElevatorConstants.elevatorIzone);
     public static final PID encoderPID = new PID(ElevatorConstants.encoderKp, ElevatorConstants.encoderKi, ElevatorConstants.encoderKd, ElevatorConstants.encoderKf, ElevatorConstants.encoderIzone);
+
     public static void init(HardwareMap hardwareMap) {
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevatorMotor");
         elevatorMotor2 = hardwareMap.get(DcMotor.class, "elevatorMotor2");
@@ -26,11 +27,9 @@ public class Elevator {
 
     // the y axis in the gamepad joysticks are inverted, so we use -gamepad to use a positive y
     // the y axis varies between 1 and -1.
-    public static void operate(ElevatorStates state, Gamepad gamepad1, Telemetry telemetry) {
+    public static void operateTeleop(ElevatorStates state, Gamepad gamepad1, Telemetry telemetry) {
         switch (state) {
             case OVERRIDE:
-//                elevatorMotor.setPower(-gamepad1.right_stick_y * ElevatorConstants.overrideFactor);
-//                elevatorMotor2.setPower(-gamepad1.right_stick_y * ElevatorConstants.overrideFactor);
                 pos += -gamepad1.right_stick_y * ElevatorConstants.overrideFactor;
                 break;
             case LOW:
@@ -68,6 +67,58 @@ public class Elevator {
     telemetry.addData("pos", currentPos);
         telemetry.addData("pos2", currentPos2);
     }
+
+    public static void operateAutonomous (ElevatorStates state, Telemetry telemetry) {
+            switch (state) {
+                case LOW:
+                    pos = ElevatorConstants.lowHeight;
+                    break;
+                case MID:
+                    pos = ElevatorConstants.midHeight;
+                    break;
+                case INTAKE:
+                default:
+                    pos = ElevatorConstants.intakeHeight;
+                    break;
+                case CLIMB:
+                    pos = ElevatorConstants.climbHeight;
+                    break;
+                case MIN:
+                    pos = ElevatorConstants.minHeight;
+                    break;
+            }
+            if (pos == ElevatorConstants.minHeight) {
+                while (currentPos < pos || currentPos2 < pos) {
+                    currentPos = elevatorMotor.getCurrentPosition();
+                    currentPos2 = elevatorMotor2.getCurrentPosition();
+                    elevatorPID.setWanted(pos);
+                    encoderPID.setWanted(0);
+                    elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
+                    elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
+                    //TODO - elevator max = 3254 , 3244
+
+                    telemetry.addData("pos", currentPos);
+                    telemetry.addData("pos2", currentPos2);
+                }
+            } else {
+                while (currentPos > pos || currentPos2 > pos) {
+                    currentPos = elevatorMotor.getCurrentPosition();
+                    currentPos2 = elevatorMotor2.getCurrentPosition();
+                    elevatorPID.setWanted(pos);
+                    encoderPID.setWanted(0);
+                    elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
+                    elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
+                    //TODO - elevator max = 3254 , 3244
+
+                    telemetry.addData("pos", currentPos);
+                    telemetry.addData("pos2", currentPos2);
+                    telemetry.update();
+                }
+            }
+        elevatorMotor.setPower(0);
+        elevatorMotor2.setPower(0);
+    }
+
     public static double getPos(){
         return currentPos;
     }
