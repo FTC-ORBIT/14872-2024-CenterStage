@@ -40,7 +40,7 @@ public class Outtake {
         if (gamepad.left_bumper) {
             pos = OuttakeConstants.closedPos;
         } else if (gamepad.right_bumper) {
-            pos = OuttakeConstants.openPos;
+            pos = OuttakeConstants.outPos;
         }
 //        if (gamepad.dpad_left &&  !lastLeft){
 //            pos += 0.05;

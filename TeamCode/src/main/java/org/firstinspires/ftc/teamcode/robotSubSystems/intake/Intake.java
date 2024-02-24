@@ -33,7 +33,14 @@ public class Intake {
         motor.setPower(power);
     }
 
-    public static void test(Telemetry telemetry){
+    public static void test(Gamepad gamepad1 , Telemetry telemetry){
+        if (gamepad1.a){
+            motor.setPower(-1);
+        }else if (gamepad1.b){
+            motor.setPower(1);
+        }else {
+            motor.setPower(0);
+        }
         telemetry.addData("intakeMotor", motor.getCurrentPosition());
 
     }

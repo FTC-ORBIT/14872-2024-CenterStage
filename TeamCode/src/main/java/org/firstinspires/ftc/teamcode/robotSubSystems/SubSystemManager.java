@@ -113,7 +113,7 @@ public class SubSystemManager {
                         outtakeState = OuttakeState.OUT;
                     }
                     if (minHeightToOpenFourbar <=Elevator.getPos()) {
-                        fourbarState = FourbarState.MOVE;
+                        fourbarState = FourbarState.MID;
                     }
                     fixpixelState = FixpixelState.CLOSE;
                     break;

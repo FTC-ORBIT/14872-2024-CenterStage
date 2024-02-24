@@ -65,6 +65,7 @@ public class Robot extends LinearOpMode {
 
 
         waitForStart();
+
         GlobalData.robotState = RobotState.TRAVEL;
 
         while (!isStopRequested()) {

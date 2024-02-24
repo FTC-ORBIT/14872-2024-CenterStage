@@ -23,10 +23,13 @@ public class Fourbar {
     public static void operateTeleop(FourbarState state) {
         switch (state){
             case MOVE:
-                pos = FourbarConstants.midMove;
+                pos = FourbarConstants.move;
                 break;
             case REVERSE:
                pos = FourbarConstants.reverse;
+                break;
+            case MID:
+                pos = FourbarConstants.midMove;
                 break;
         }
 
@@ -36,10 +39,13 @@ public class Fourbar {
     public static void operateAutonomous(FourbarState state) {
             switch (state) {
                 case MOVE:
-                    pos = FourbarConstants.midMove;
+                    pos = FourbarConstants.move;
                     break;
                 case REVERSE:
                     pos = FourbarConstants.reverse;
+                    break;
+                case MID:
+                    pos = FourbarConstants.midMove;
                     break;
             }
             servo.setPosition(pos);
@@ -49,13 +55,13 @@ public class Fourbar {
 
 //        if (gamepad.right_bumper) pos = FourbarConstants.midMove;
 //        if (gamepad.left_bumper) pos = FourbarConstants.reverse;
-        if (gamepad.left_bumper &&  !lastLeft){
+        if (gamepad.dpad_up &&  !lastLeft){
             pos += 0.05;
             if (pos > 1){
                 pos = 1;
 
             }
-        }else if (gamepad.right_bumper && !lastRight){
+        }else if (gamepad.dpad_down && !lastRight){
             pos -= 0.05;
             if (pos < 0){
                 pos = 0;
