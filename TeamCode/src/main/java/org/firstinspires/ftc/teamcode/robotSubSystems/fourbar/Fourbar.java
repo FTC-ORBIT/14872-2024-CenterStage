@@ -55,13 +55,13 @@ public class Fourbar {
 
 //        if (gamepad.right_bumper) pos = FourbarConstants.midMove;
 //        if (gamepad.left_bumper) pos = FourbarConstants.reverse;
-        if (gamepad.dpad_up &&  !lastLeft){
+        if (gamepad.left_bumper &&  !lastLeft){
             pos += 0.05;
             if (pos > 1){
                 pos = 1;
 
             }
-        }else if (gamepad.dpad_down && !lastRight){
+        }else if (gamepad.right_bumper && !lastRight){
             pos -= 0.05;
             if (pos < 0){
                 pos = 0;
@@ -83,5 +83,7 @@ public class Fourbar {
         lastRight = gamepad.right_bumper;
         lastLT = gamepad.dpad_left;
         lastRT = gamepad.dpad_right;
+        telemetry.addData("pos" , servo.getPosition());
+        telemetry.update();
     }
 }

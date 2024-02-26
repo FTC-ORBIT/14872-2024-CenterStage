@@ -4,10 +4,15 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class Plane {
     public static Servo planeServo;
     private static float pos = 0;
-
+    public static boolean lastLeft = false;
+    public static boolean lastRight = false;
+    public static boolean lastRT = false;
+    public static boolean lastLT = false;
     public static void init(HardwareMap hardwareMap) {
         planeServo = hardwareMap.get(Servo.class, "planeServo");
     }
@@ -24,9 +29,38 @@ public class Plane {
         }
         planeServo.setPosition(pos);
     }
-    public static void test(Gamepad gamepad1 , Gamepad gamepad2 ){
-        if (gamepad1.left_bumper) planeServo.setPosition(0.05);
-        if (gamepad1.right_bumper) planeServo.setPosition(0);
+    public static void test(Gamepad gamepad , Telemetry telemetry){
+        if (gamepad.dpad_up &&  !lastLeft){
+            pos += 0.05;
+            if (pos > 1){
+                pos = 1;
+
+            }
+        }else if (gamepad.dpad_down && !lastRight){
+            pos -= 0.05;
+            if (pos < 0){
+                pos = 0;
+            }
+        }
+        if (gamepad.dpad_left && !lastLT){
+            pos += 0.001;
+            if (pos > 1){
+                pos = 1;
+            }
+        }else if (gamepad.dpad_right && !lastRT){
+            pos -= 0.001;
+            if (pos < 0){
+                pos = 0;
+            }
+        }
+        planeServo.setPosition(pos);
+        lastLeft = gamepad.dpad_up;
+        lastRight = gamepad.dpad_down;
+        lastLT = gamepad.dpad_left;
+        lastRT = gamepad.dpad_right;
+        telemetry.addData("pos" , Plane.planeServo.getPosition());
+        telemetry.update();
+    }
 
     }
-}
+

@@ -62,19 +62,9 @@ public class Test extends LinearOpMode {
         waitForStart();
 
         while (!isStopRequested()) {
-            if (gamepad2.right_bumper) OrbitGyro.resetGyro();
-            Vector leftStick = new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y);
-            float omega = gamepad1.right_trigger - gamepad1.left_trigger;
-            Drivetrain.operate(leftStick,  omega , telemetry , gamepad1);
-            GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
-            Intake.test(gamepad1 , telemetry);
-            Elevator.test(gamepad1, telemetry);
-            Outtake.test(gamepad1, telemetry);
-            Fourbar.test(gamepad1 , telemetry);
-            telemetry.addData("Fourbar pos", Fourbar.servo.getPosition());
-          telemetry.addData("pos", Elevator.elevatorMotor.getCurrentPosition());
-          telemetry.addData("pos2" , Elevator.elevatorMotor2.getCurrentPosition());
-            telemetry.update();
+                Fourbar.test(gamepad1, telemetry);
+            }
+
         }
 
 
@@ -83,4 +73,3 @@ public class Test extends LinearOpMode {
 // mid:
 // high: ?
     }
-}

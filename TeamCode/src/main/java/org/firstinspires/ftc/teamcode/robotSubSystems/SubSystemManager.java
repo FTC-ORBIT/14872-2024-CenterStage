@@ -102,7 +102,7 @@ public class SubSystemManager {
                         outtakeState = OuttakeState.OUT;
                     }
                     if (minHeightToOpenFourbar <=Elevator.getPos()) {
-                        fourbarState = FourbarState.MOVE;
+                        fourbarState = FourbarState.MID;
                     }
                     fixpixelState = FixpixelState.CLOSE;
                     break;
@@ -142,7 +142,7 @@ public class SubSystemManager {
                         outtakeState = OuttakeState.OUT;
                     }
                     if (minHeightToOpenFourbar <=Elevator.getPos()) {
-                        fourbarState = FourbarState.MOVE;
+                        fourbarState = FourbarState.MID;
                     }
                     fixpixelState = FixpixelState.CLOSE;
                     break;
@@ -162,14 +162,14 @@ public class SubSystemManager {
         }
 
 
-          Intake.operate(intakeState);
+         Intake.operate(intakeState);
          Outtake.operate(outtakeState);
             Elevator.operateTeleop(elevatorState, gamepad1, telemetry );
             Fourbar.operateTeleop(fourbarState);
      //       Fixpixel.operate(fixpixelState , gamepad1 , telemetry);
             lastState = wanted;
             if (gamepad1.dpad_down) OrbitGyro.resetGyro();
-        if (gamepad1.touchpad) Plane.operate(PlaneState.THROW);
+        if (gamepad2.back) Plane.operate(PlaneState.THROW);
     }
 
     public static void printStates(Telemetry telemetry) {

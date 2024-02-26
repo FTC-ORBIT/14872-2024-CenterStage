@@ -10,6 +10,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Vector;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
+import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
+import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
+import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
+import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 
 public class Drivetrain {
 
@@ -45,11 +49,14 @@ public class Drivetrain {
         final Vector velocity_RobotCS_W = velocity_W.rotate(-robotAngle);
         if(velocity_RobotCS_W.norm() <= Math.sqrt(0.005) && Math.abs(omega) == 0) stop();
         else drive(velocity_RobotCS_W, omega);
-        if (gamepad.left_stick_button){
+        if (Elevator.pos > 0){
             driveFactor = DrivetrainConstants.slowPower;
-        }else {
+        }else{
             driveFactor = DrivetrainConstants.power;
         }
+
+
+
 
         telemetry.addData("lf power" , motors[0].getPower());
         telemetry.addData("rf power" , motors[1].getPower());
