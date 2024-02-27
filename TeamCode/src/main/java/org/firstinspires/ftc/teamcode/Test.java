@@ -62,7 +62,7 @@ public class Test extends LinearOpMode {
         waitForStart();
 
         while (!isStopRequested()) {
-                Fourbar.test(gamepad1, telemetry);
+                Plane.test(gamepad1, telemetry);
             }
 
         }

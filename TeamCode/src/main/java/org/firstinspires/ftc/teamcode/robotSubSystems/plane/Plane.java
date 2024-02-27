@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Plane {
     public static Servo planeServo;
-    private static float pos = 0;
+    private static float pos = 0.5f;
     public static boolean lastLeft = false;
     public static boolean lastRight = false;
     public static boolean lastRT = false;
@@ -30,13 +30,13 @@ public class Plane {
         planeServo.setPosition(pos);
     }
     public static void test(Gamepad gamepad , Telemetry telemetry){
-        if (gamepad.dpad_up &&  !lastLeft){
+        if (gamepad.left_bumper &&  !lastLeft){
             pos += 0.05;
             if (pos > 1){
                 pos = 1;
 
             }
-        }else if (gamepad.dpad_down && !lastRight){
+        }else if (gamepad.right_bumper && !lastRight){
             pos -= 0.05;
             if (pos < 0){
                 pos = 0;

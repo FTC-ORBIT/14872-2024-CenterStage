@@ -27,6 +27,7 @@ public class SubSystemManager {
     private static OuttakeState outtakeState = OuttakeState.CLOSED;
     private static FourbarState fourbarState = FourbarState.REVERSE;
     private static FixpixelState fixpixelState = FixpixelState.CLOSE;
+    private static PlaneState planeState = PlaneState.STOP;
     private static Delay delayElevator = new Delay(0.6f);
     private static Delay intakeDelay = new Delay(1f);
     private static boolean toggleButton = true;
@@ -169,7 +170,7 @@ public class SubSystemManager {
      //       Fixpixel.operate(fixpixelState , gamepad1 , telemetry);
             lastState = wanted;
             if (gamepad1.dpad_down) OrbitGyro.resetGyro();
-        if (gamepad2.back) Plane.operate(PlaneState.THROW);
+        if (gamepad1.options) Plane.operate(PlaneState.THROW);
     }
 
     public static void printStates(Telemetry telemetry) {
@@ -184,6 +185,5 @@ public class SubSystemManager {
 //        telemetry.addData("fixPixel-Servo_2" , Fixpixel.servo2.getPosition());
         telemetry.addData("outtake" , Outtake.servo.getPosition());
         telemetry.addData("plane" , Plane.planeServo.getPosition());
-
     }
 }
