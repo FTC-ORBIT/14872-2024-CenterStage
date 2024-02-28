@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 public class Drivetrain {
 
     public static final DcMotor[] motors = new DcMotor[4];
-    private static float driveFactor = DrivetrainConstants.power;
+    public static float driveFactor = DrivetrainConstants.power;
     private static Pose2d pose;
     public static Vector lastPosition;
     // equal to the last Autonomous position?
@@ -49,7 +49,7 @@ public class Drivetrain {
         final Vector velocity_RobotCS_W = velocity_W.rotate(-robotAngle);
         if(velocity_RobotCS_W.norm() <= Math.sqrt(0.005) && Math.abs(omega) == 0) stop();
         else drive(velocity_RobotCS_W, omega);
-        if (Elevator.pos > 0){
+        if (SubSystemManager.elevatorState == ElevatorStates.MIN || SubSystemManager.elevatorState == ElevatorStates.LOW || SubSystemManager.elevatorState == ElevatorStates.MID){
             driveFactor = DrivetrainConstants.slowPower;
         }else{
             driveFactor = DrivetrainConstants.power;

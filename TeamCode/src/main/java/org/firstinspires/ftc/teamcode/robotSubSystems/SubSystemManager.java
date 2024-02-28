@@ -23,7 +23,7 @@ public class SubSystemManager {
 
     public static RobotState lastState = RobotState.TRAVEL;
     private  static IntakeState intakeState = IntakeState.STOP;
-    private  static ElevatorStates elevatorState = ElevatorStates.INTAKE;
+    public   static ElevatorStates elevatorState = ElevatorStates.INTAKE;
     private static OuttakeState outtakeState = OuttakeState.CLOSED;
     private static FourbarState fourbarState = FourbarState.REVERSE;
     private static FixpixelState fixpixelState = FixpixelState.CLOSE;
