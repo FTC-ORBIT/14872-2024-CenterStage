@@ -170,7 +170,7 @@ public class SubSystemManager {
      //       Fixpixel.operate(fixpixelState , gamepad1 , telemetry);
             lastState = wanted;
             if (gamepad1.dpad_down) OrbitGyro.resetGyro();
-        if (gamepad1.options) Plane.operate(PlaneState.THROW);
+        if (gamepad1.options && gamepad1.dpad_left || gamepad1.options && gamepad1.dpad_right) Plane.operate(PlaneState.THROW);
     }
 
     public static void printStates(Telemetry telemetry) {
