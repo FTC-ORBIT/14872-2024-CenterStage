@@ -84,10 +84,10 @@ public class Elevator {
                     pos = ElevatorConstants.climbHeight;
                     break;
                 case MIN:
-                    pos = ElevatorConstants.minHeight;
+                    pos = ElevatorConstants.autoHeight;
                     break;
             }
-            if (pos == ElevatorConstants.minHeight) {
+            if (pos == ElevatorConstants.autoHeight) {
                 while (currentPos < pos || currentPos2 < pos) {
                     currentPos = elevatorMotor.getCurrentPosition();
                     currentPos2 = elevatorMotor2.getCurrentPosition();
