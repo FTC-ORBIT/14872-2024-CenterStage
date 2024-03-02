@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
 public class Elevator {
     public static DcMotor elevatorMotor;
     public static DcMotor elevatorMotor2;
+    public static float lastPos;
     public static float pos;
     public static float currentPos = 0;
     public static float currentPos2 = 0;
@@ -48,21 +49,27 @@ public class Elevator {
             case MIN:
                 pos = ElevatorConstants.minHeight;
                 break;
+            case FIX:
+                pos = lastPos;
+                break;
         }
+        //TODO - elevator max = 3254 , 3244
+        if (currentPos > 3240 || currentPos2 > 3240) pos -= 100;
+        //TODO - elevator min = 0!
+        if (0 > currentPos || 0 > currentPos2){
+            pos += 10;
+            telemetry.addLine("elevator below 0");
+            telemetry.update();
+        }
+        lastPos = pos;
         currentPos = elevatorMotor.getCurrentPosition();
         currentPos2 = elevatorMotor2.getCurrentPosition();
         elevatorPID.setWanted(pos);
         encoderPID.setWanted(0);
-//        if (power < elevatorPID.update(currentPos2, telemetry)){
-//            elevatorMotor.setPower(power);
-//            elevatorMotor2.setPower(-power);
-//        }else {
             elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2 , telemetry));
             elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos , telemetry));
-//        }
-        //TODO - elevator max = 3254 , 3244
-//        elevatorMotor.setPower(-gamepad1.right_stick_y);
-//        elevatorMotor2.setPower(-gamepad1.right_stick_y);
+
+
 
     telemetry.addData("pos", currentPos);
         telemetry.addData("pos2", currentPos2);
@@ -95,20 +102,17 @@ public class Elevator {
                     encoderPID.setWanted(0);
                     elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
                     elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
-                    //TODO - elevator max = 3254 , 3244
-
                     telemetry.addData("pos", currentPos);
                     telemetry.addData("pos2", currentPos2);
                 }
             } else {
-                while (currentPos > pos || currentPos2 > pos) {
+                while (currentPos > pos && currentPos2 > pos) {
                     currentPos = elevatorMotor.getCurrentPosition();
                     currentPos2 = elevatorMotor2.getCurrentPosition();
                     elevatorPID.setWanted(pos);
                     encoderPID.setWanted(0);
                     elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
                     elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
-                    //TODO - elevator max = 3254 , 3244
 
                     telemetry.addData("pos", currentPos);
                     telemetry.addData("pos2", currentPos2);
@@ -133,3 +137,4 @@ public class Elevator {
 
     }
 }
+//dani yalechan!

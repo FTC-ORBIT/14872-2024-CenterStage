@@ -39,7 +39,7 @@ public class SubSystemManager {
         }
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
-                        :gamepad.x ? RobotState.MIN:gamepad.y ? RobotState.LOW: gamepad.back ? RobotState.FIXPIXEL:gamepad.dpad_up ? RobotState.MID: gamepad.right_bumper  ? RobotState.DEPLETE: lastState;
+                        :gamepad.x ? RobotState.MIN:gamepad.y ? RobotState.LOW: gamepad.dpad_up ? RobotState.FIXPIXEL: gamepad.right_bumper  ? RobotState.DEPLETE: lastState;
     }
 
     private static RobotState getStateFromWantedAndCurrent(RobotState stateFromDriver){
@@ -101,17 +101,9 @@ public class SubSystemManager {
                     if (!ElevatorToggleButton) elevatorState = ElevatorStates.LOW;
                     if (gamepad1.left_bumper) {
                         outtakeState = OuttakeState.OUT;
-                    }
-                    if (minHeightToOpenFourbar <=Elevator.getPos()) {
-                        fourbarState = FourbarState.MID;
-                    }
-                    fixpixelState = FixpixelState.CLOSE;
-                    break;
-                case MID:
-                    intakeState = IntakeState.STOP;
-                    if (!ElevatorToggleButton) elevatorState = ElevatorStates.MID;
-                    if (gamepad1.left_bumper){
-                        outtakeState = OuttakeState.OUT;
+                        if (gamepad1.left_bumper){
+                            outtakeState = OuttakeState.TOWOUT;
+                        }
                     }
                     if (minHeightToOpenFourbar <=Elevator.getPos()) {
                         fourbarState = FourbarState.MID;
@@ -127,20 +119,19 @@ public class SubSystemManager {
                     break;
                 case FIXPIXEL:
                     outtakeState = OuttakeState.CLOSED;
-                    if (intakeDelay.isDelayPassed()) {
-                        intakeState = IntakeState.STOP;
-                    }
+                    intakeState = IntakeState.STOP;
                     fourbarState = FourbarState.REVERSE;
-                    if (delayElevator.isDelayPassed() && !ElevatorToggleButton) {
-                        elevatorState = ElevatorStates.INTAKE;
-                    }
-                    fixpixelState = FixpixelState.OPEN;
+                    elevatorState = ElevatorStates.FIX;
+                    fixpixelState = FixpixelState.CLOSE;
                     break;
                 case MIN:
                     intakeState = IntakeState.STOP;
                     if (!ElevatorToggleButton) elevatorState = ElevatorStates.MIN;
                     if (gamepad1.left_bumper){
                         outtakeState = OuttakeState.OUT;
+                        if (gamepad1.left_bumper){
+                            outtakeState = OuttakeState.TOWOUT;
+                        }
                     }
                     if (minHeightToOpenFourbar <=Elevator.getPos()) {
                         fourbarState = FourbarState.MID;
@@ -152,16 +143,14 @@ public class SubSystemManager {
                 fourbarState = FourbarState.REVERSE;
                 elevatorState = ElevatorStates.CLIMB;
             }
-            if (gamepad1.dpad_left){
-                fourbarState = FourbarState.REVERSE;
-                elevatorState = ElevatorStates.INTAKE;
-            }
-
+        if (gamepad1.dpad_left){
+            elevatorState = ElevatorStates.INTAKE;
+            fourbarState = FourbarState.REVERSE;
+        }
         if (gamepad1.right_stick_y != 0 ){
             elevatorState = ElevatorStates.OVERRIDE;
             ElevatorToggleButton = true;
         }
-
 
          Intake.operate(intakeState);
          Outtake.operate(outtakeState);
@@ -187,3 +176,5 @@ public class SubSystemManager {
         telemetry.addData("plane" , Plane.planeServo.getPosition());
     }
 }
+
+//dani yalechan!

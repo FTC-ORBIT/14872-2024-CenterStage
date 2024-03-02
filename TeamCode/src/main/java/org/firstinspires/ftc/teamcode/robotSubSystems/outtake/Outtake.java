@@ -8,7 +8,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Outtake {
     public static Servo servo;
+    public static Servo servo2;
     public static float pos;
+    public static float pos2;
     public static boolean lastLeft = false;
     public static boolean lastRight = false;
     public static boolean lastRT = false;
@@ -24,15 +26,23 @@ public class Outtake {
             case CLOSED:
             default:
                 pos = OuttakeConstants.closedPos;
+                pos2 = OuttakeConstants.closedPos;
                 break;
             case OPEN:
                 pos = OuttakeConstants.openPos;
+                pos2 = OuttakeConstants.openPos;
                 break;
             case OUT:
                 pos = OuttakeConstants.outPos;
+                pos2 = OuttakeConstants.closedPos;
+                break;
+            case TOWOUT:
+                pos = OuttakeConstants.outPos;
+                pos2 = OuttakeConstants.outPos;
                 break;
         }
         servo.setPosition(pos);
+        servo2.setPosition(pos2);
     }
 
     public static void test(Gamepad gamepad, Telemetry telemetry) {
@@ -76,3 +86,4 @@ public class Outtake {
     }
 
 
+//dani yalechan!

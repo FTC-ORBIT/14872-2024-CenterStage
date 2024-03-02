@@ -22,9 +22,9 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-@Autonomous(name = "RedCloseToTheBoardCloseToTheWall")
+@Autonomous(name = "RedCloseToTheBoardFarFromTheWall")
 @Config
-public class RedCloseToTheBoardCloseToTheWall extends LinearOpMode {
+public class RedCloseToTheBoardFarFromTheWall extends LinearOpMode {
 
     public static double maxVeloDrop = 7;
 
@@ -34,6 +34,7 @@ public class RedCloseToTheBoardCloseToTheWall extends LinearOpMode {
     public static TrajectoryAccelerationConstraint accConstraintLeft = SampleMecanumDrive.getAccelerationConstraint(15);
     public static double driveToConeX = 29;
     public static double goToParkingY = -39;
+    public static double goToParkingX = 45;
     public static double delay = 1;
     public static double rightConeX = 22.5;
     public static double rightConeY = -8;
@@ -81,7 +82,7 @@ public class RedCloseToTheBoardCloseToTheWall extends LinearOpMode {
                     Elevator.operateAutonomous(ElevatorStates.MIN, telemetry);
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
-                .waitSeconds(1)
+                .waitSeconds(3)
                 .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(boardPos34X, boardPosY, Math.toRadians(startPose.getHeading() - 90)))
                 .waitSeconds(delay)
@@ -101,8 +102,9 @@ public class RedCloseToTheBoardCloseToTheWall extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
                 })
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, goToParkingY, Math.toRadians (startPose.getHeading() - 90)))
+                .lineToLinearHeading(new Pose2d(boardPos34X, boardPosY + 20,Math.toRadians(startPose.getHeading() - 90)))
                 .turn(Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(goToParkingX, goToParkingY, startPose.getHeading()))
                 .build();
 
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
@@ -197,3 +199,4 @@ public class RedCloseToTheBoardCloseToTheWall extends LinearOpMode {
         }
     }
 }
+

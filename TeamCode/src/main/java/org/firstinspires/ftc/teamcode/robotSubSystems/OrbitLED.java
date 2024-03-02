@@ -33,7 +33,7 @@ public class OrbitLED {
                 case LOW:
                     pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
                     break;
-                case  MID:
+                case  INTAKE:
                     pattern = RevBlinkinLedDriver.BlinkinPattern.HOT_PINK;
                     break;
             }
