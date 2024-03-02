@@ -95,6 +95,9 @@ public class PropThreshold implements VisionProcessor {
         Scalar highHSVRedLower = new Scalar(160, 100, 20); //Wraps around Color Wheel
         Scalar highHSVRedUpper = new Scalar(180, 255, 255);
 
+        Scalar HSVYellowLower = new Scalar(10, 60, 20);
+        Scalar HSVYellowHigher = new Scalar(40, 255, 255);
+
         if(PropColor == PropColorEnum.BLUE) {
             Core.inRange(testMat, lowHSVBlueLower, lowHSVBlueUpper, finalMat);
         } else{
