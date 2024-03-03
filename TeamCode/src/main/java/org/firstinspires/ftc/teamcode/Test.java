@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
 import org.opencv.android.FpsMeter;
 
@@ -62,9 +63,10 @@ public class Test extends LinearOpMode {
         waitForStart();
 
         while (!isStopRequested()) {
-                Elevator.test(gamepad1 , telemetry);
-                telemetry.addData("pos" , Elevator.elevatorMotor.getCurrentPosition());
-                telemetry.addData("pos2" , Elevator.elevatorMotor2.getCurrentPosition());
+                Outtake.test(gamepad1 , telemetry);
+                Intake.test(gamepad1, telemetry);
+                telemetry.addData("outtake pos" , Outtake.servo.getPosition());
+                telemetry.addData("intake pos" , Intake.motor.getCurrentPosition());
                 telemetry.update();
             }
 

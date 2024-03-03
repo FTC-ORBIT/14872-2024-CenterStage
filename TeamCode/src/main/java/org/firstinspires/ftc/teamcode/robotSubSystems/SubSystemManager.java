@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robotSubSystems;
 import static org.firstinspires.ftc.teamcode.robotData.Constants.minHeightToOpenFourbar;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
@@ -32,6 +33,7 @@ public class SubSystemManager {
     private static Delay intakeDelay = new Delay(1f);
     private static boolean toggleButton = true;
     private static boolean ElevatorToggleButton = false;
+    private static ElapsedTime elapsedTime = new ElapsedTime();
     public static RobotState wanted = RobotState.TRAVEL;
     private static RobotState getState(Gamepad gamepad) {
         if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back || gamepad.dpad_up){
@@ -75,10 +77,15 @@ public class SubSystemManager {
             if (wanted.equals(RobotState.INTAKE) && lastState.equals(RobotState.TRAVEL)){
                 intakeDelay.startAction(GlobalData.currentTime);
             }
+            if (!wanted.equals(RobotState.TRAVEL)){
+                elapsedTime.reset();
+            }
             switch (wanted) {
                 case TRAVEL:
                     outtakeState = OuttakeState.CLOSED;
-                    if (intakeDelay.isDelayPassed()) {
+                    if (intakeDelay.isDelayPassed() && elapsedTime.milliseconds() < 700) {
+                        intakeState = IntakeState.DEPLETE;
+                    } else if (intakeDelay.isDelayPassed() && elapsedTime.milliseconds() > 700) {
                         intakeState = IntakeState.STOP;
                     }
                     fourbarState = FourbarState.REVERSE;
@@ -174,6 +181,7 @@ public class SubSystemManager {
 //        telemetry.addData("fixPixel-Servo_2" , Fixpixel.servo2.getPosition());
         telemetry.addData("outtake" , Outtake.servo.getPosition());
         telemetry.addData("plane" , Plane.planeServo.getPosition());
+        telemetry.addData("time for deplete in travel", elapsedTime);
     }
 }
 

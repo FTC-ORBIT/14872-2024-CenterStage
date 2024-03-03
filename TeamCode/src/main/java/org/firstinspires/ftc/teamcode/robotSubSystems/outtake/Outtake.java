@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Outtake {
     public static Servo servo;
-    public static Servo servo2;
+//    public static Servo servo2;
     public static float pos;
     public static float pos2;
     public static boolean lastLeft = false;
@@ -42,7 +42,7 @@ public class Outtake {
                 break;
         }
         servo.setPosition(pos);
-        servo2.setPosition(pos2);
+//        servo2.setPosition(pos2);
     }
 
     public static void test(Gamepad gamepad, Telemetry telemetry) {
