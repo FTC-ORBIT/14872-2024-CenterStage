@@ -29,7 +29,7 @@ public class SubSystemManager {
     private static FourbarState fourbarState = FourbarState.REVERSE;
     private static FixpixelState fixpixelState = FixpixelState.CLOSE;
     private static PlaneState planeState = PlaneState.STOP;
-    private static Delay delayElevator = new Delay(0.6f);
+    private static Delay delayElevator = new Delay(0.95f);
     private static Delay intakeDelay = new Delay(1f);
     private static boolean toggleButton = true;
     private static boolean ElevatorToggleButton = false;
@@ -77,15 +77,11 @@ public class SubSystemManager {
             if (wanted.equals(RobotState.INTAKE) && lastState.equals(RobotState.TRAVEL)){
                 intakeDelay.startAction(GlobalData.currentTime);
             }
-            if (!wanted.equals(RobotState.TRAVEL)){
-                elapsedTime.reset();
-            }
+
             switch (wanted) {
                 case TRAVEL:
                     outtakeState = OuttakeState.CLOSED;
-                    if (intakeDelay.isDelayPassed() && elapsedTime.milliseconds() < 700) {
-                        intakeState = IntakeState.DEPLETE;
-                    } else if (intakeDelay.isDelayPassed() && elapsedTime.milliseconds() > 700) {
+                    if (intakeDelay.isDelayPassed()){
                         intakeState = IntakeState.STOP;
                     }
                     fourbarState = FourbarState.REVERSE;
