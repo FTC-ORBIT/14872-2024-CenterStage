@@ -25,7 +25,7 @@ public class BlueCloseToTheBoard extends LinearOpMode {
     public static double rightConeY = 9;
 
     public static double leftDriveX = 22.02;
-    public static double leftConeX = 26.5;
+    public static double  leftConeX = 26.5;
     public static double leftConeY = -4;
 
 

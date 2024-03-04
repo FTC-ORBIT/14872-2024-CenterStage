@@ -107,7 +107,7 @@ public class PropThreshold implements VisionProcessor {
         }
 //        Core.inRange(testMat, lowHSVBlueLower, lowHSVBlueUpper,lowMat);
 
-        testMat.release();
+//        testMat.release();
 
         lowMat.release();
         highMat.release();
@@ -166,6 +166,38 @@ public class PropThreshold implements VisionProcessor {
                 new Scalar(0, 255, 0), 10);
 
 
+        Imgproc.rectangle(
+                frame,
+                rectHitL.tl(),
+                rectHitL.br(),
+                new Scalar(255, 0, 0), 10);
+
+        Imgproc.rectangle(
+                frame,
+                rectHitR.tl(),
+                rectHitR.br(),
+                new Scalar(255, 0, 80), 10);
+
+        Imgproc.rectangle(
+                frame,
+                rectMissL.tl(),
+                rectMissL.br(),
+                new Scalar(0, 200, 0), 10);
+
+        Imgproc.rectangle(
+                frame,
+                rectMissR.tl(),
+                rectMissR.br(),
+                new Scalar(0, 255, 0), 10);
+
+        Imgproc.rectangle(
+                frame,
+                activeRect.tl(),
+                activeRect.br(),
+                new Scalar(0, 255, 255), 10);
+
+
+
 //     lowMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline
 //                                  on the driver station stream, do not use this permanently in your code as
 //                                  you use the "frame" mat for all of your pipelines, such as April Tags*/
@@ -199,10 +231,10 @@ public class PropThreshold implements VisionProcessor {
     public Rect rectMissL = new Rect(20, 20, 100, 100);
     public Rect rectMissR = new Rect(20, 20, 100, 100);
 
-    public Rect activeRect = null;
+    public Rect activeRect = rectHitL;
     public int activeRectIndx = 0;
     public String activeRectStr = "rectHitL";
-    public int rectStep = 5;
+    public int rectStep = 20;
     public Gamepad lastGamepad = new Gamepad();
 
     public void test(Gamepad gamepad, Telemetry telemetry) {
@@ -243,17 +275,17 @@ public class PropThreshold implements VisionProcessor {
             if (activeRect.x > testMat.cols() - 1)
                 activeRect.x = testMat.cols() - 1;
         }
-        if (gamepad.dpad_down && !lastGamepad.dpad_down) {
+        if (gamepad.dpad_up && !lastGamepad.dpad_up) {
             activeRect.y -= rectStep;
             if (activeRect.y < 0)
                 activeRect.y = 0;
-        } else if (gamepad.dpad_up && !lastGamepad.dpad_up) {
+        } else if (gamepad.dpad_down && !lastGamepad.dpad_down) {
             activeRect.y += rectStep;
             if (activeRect.y > testMat.rows() - 1)
                 activeRect.y = testMat.rows() - 1;
         }
 
-        if (gamepad.x && !lastGamepad.x) {
+        if (gamepad.x && !lastGamepad.x ) {
             activeRect.width -= rectStep;
             if (activeRect.width < 1)
                 activeRect.width = 1;
@@ -262,11 +294,11 @@ public class PropThreshold implements VisionProcessor {
             if (activeRect.br().x > testMat.cols() - 1)
                 activeRect.width = testMat.cols() - activeRect.x;
         }
-        if (gamepad.a && !lastGamepad.a) {
+        if (gamepad.y && !lastGamepad.y) {
             activeRect.height -= rectStep;
             if (activeRect.height < 0)
                 activeRect.height = 0;
-        } else if (gamepad.y && !lastGamepad.y) {
+        } else if (gamepad.a && !lastGamepad.a) {
             activeRect.height += rectStep;
             if (activeRect.br().y > testMat.rows() - 1)
                 activeRect.height = testMat.rows() - activeRect.y;
@@ -286,6 +318,8 @@ public class PropThreshold implements VisionProcessor {
         telemetry.addData("BR = ", activeRect.br());
         telemetry.addLine("");
         telemetry.addData("rectStep = ", rectStep);
+        telemetry.addLine("gamepad = " + gamepad.toString());
+        telemetry.addLine("lastGamepad = " + lastGamepad.toString());
 
 //        lastLeft = gamepad.left_bumper;
 //        lastRight = gamepad.right_bumper;
