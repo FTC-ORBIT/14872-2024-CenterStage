@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Outtake {
     public static Servo servo;
-//    public static Servo servo2;
+     public static Servo servo2;
     public static float pos;
     public static float pos2;
     public static boolean lastLeft = false;
@@ -19,6 +19,9 @@ public class Outtake {
     public static void init(HardwareMap hardwareMap) {
         servo = hardwareMap.get(Servo.class, "outtakeServo");
         servo.setPosition(OuttakeConstants.closedPos);
+
+        servo2 = hardwareMap.get(Servo.class, "outtakeServo2");
+        servo2.setPosition(OuttakeConstants.closedPos);
     }
 
     public static void operate(OuttakeState state) {
@@ -26,11 +29,11 @@ public class Outtake {
             case CLOSED:
             default:
                 pos = OuttakeConstants.closedPos;
-                pos2 = OuttakeConstants.closedPos;
+                pos2 = OuttakeConstants.closedPos2;
                 break;
             case OPEN:
                 pos = OuttakeConstants.openPos;
-                pos2 = OuttakeConstants.openPos;
+                pos2 = OuttakeConstants.openPos2;
                 break;
             case OUT:
                 pos = OuttakeConstants.outPos;
@@ -42,7 +45,7 @@ public class Outtake {
                 break;
         }
         servo.setPosition(pos);
-//        servo2.setPosition(pos2);
+        servo2.setPosition(pos2);
     }
 
     public static void test(Gamepad gamepad, Telemetry telemetry) {
@@ -50,7 +53,7 @@ public class Outtake {
         if (gamepad.left_bumper) {
             pos = OuttakeConstants.closedPos;
         } else if (gamepad.right_bumper) {
-            pos = OuttakeConstants.outPos;
+            pos = OuttakeConstants.openPos;
         }
 //        if (gamepad.dpad_left &&  !lastLeft){
 //            pos += 0.05;

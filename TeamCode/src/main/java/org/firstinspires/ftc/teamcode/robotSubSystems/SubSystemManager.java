@@ -32,8 +32,8 @@ public class SubSystemManager {
     private static Delay delayElevator = new Delay(0.95f);
     private static Delay intakeDelay = new Delay(1f);
     private static boolean toggleButton = true;
-    private static boolean ElevatorToggleButton = false;
     private static ElapsedTime elapsedTime = new ElapsedTime();
+    private static boolean ElevatorToggleButton = false;
     public static RobotState wanted = RobotState.TRAVEL;
     private static RobotState getState(Gamepad gamepad) {
         if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back || gamepad.dpad_up){
@@ -77,11 +77,13 @@ public class SubSystemManager {
             if (wanted.equals(RobotState.INTAKE) && lastState.equals(RobotState.TRAVEL)){
                 intakeDelay.startAction(GlobalData.currentTime);
             }
-
+        if (!wanted.equals(RobotState.TRAVEL)){
+            elapsedTime.reset();
+        }
             switch (wanted) {
                 case TRAVEL:
                     outtakeState = OuttakeState.CLOSED;
-                    if (intakeDelay.isDelayPassed()){
+                    if (intakeDelay.isDelayPassed() ){
                         intakeState = IntakeState.STOP;
                     }
                     fourbarState = FourbarState.REVERSE;
@@ -96,7 +98,7 @@ public class SubSystemManager {
                         elevatorState = ElevatorStates.INTAKE;
                     }
                     outtakeState = OuttakeState.OPEN;
-                    fourbarState = FourbarState.REVERSE;
+                    fourbarState = FourbarState.COLLECT;
                     fixpixelState = FixpixelState.CLOSE;
                     break;
                 case LOW:
@@ -132,7 +134,7 @@ public class SubSystemManager {
                     if (!ElevatorToggleButton) elevatorState = ElevatorStates.MIN;
                     if (gamepad1.left_bumper){
                         outtakeState = OuttakeState.OUT;
-                        if (gamepad1.left_bumper){
+                        if (gamepad1.left_bumper && gamepad1.dpad_left){
                             outtakeState = OuttakeState.TOWOUT;
                         }
                     }
@@ -146,10 +148,7 @@ public class SubSystemManager {
                 fourbarState = FourbarState.REVERSE;
                 elevatorState = ElevatorStates.CLIMB;
             }
-        if (gamepad1.dpad_left){
-            elevatorState = ElevatorStates.INTAKE;
-            fourbarState = FourbarState.REVERSE;
-        }
+
         if (gamepad1.right_stick_y != 0 ){
             elevatorState = ElevatorStates.OVERRIDE;
             ElevatorToggleButton = true;

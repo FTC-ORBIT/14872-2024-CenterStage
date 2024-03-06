@@ -31,6 +31,9 @@ public class Fourbar {
             case MID:
                 pos = FourbarConstants.midMove;
                 break;
+            case COLLECT:
+                pos = FourbarConstants.collect;
+                break;
         }
 
           servo.setPosition(pos);
