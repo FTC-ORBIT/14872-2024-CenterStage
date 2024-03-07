@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.FourbarState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -27,10 +28,10 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @Autonomous(name = "RedFarFromTheBoard")
 @Config
 public class RedFarFormTheBoard extends  LinearOpMode{
-    public static double centerConeX = 29.5;
+    public static double centerConeX = 28;
     public static double delay = 3000;
     public static double parkingY = -88;
-    public static double boardY = -78;
+    public static double boardY = -84;
     public static double rightDriveX = 27;
     public static double rightConeX = 29.06;
 
@@ -40,6 +41,14 @@ public class RedFarFormTheBoard extends  LinearOpMode{
     public static double leftConeX = 22.5;
 
     public static double leftConeY = 7;
+    public static double centerAfterConeX = 23;
+    public static double centerAfterConeY = 18;
+    public static double centerGateX= 49.07;
+    public static double centerGateY = 16.41;
+    public static double afterGateX = 53.2;
+    public static double afterGateY = -70.345;
+    public static double boardPos34  = 26;
+    public static double markerY = -70;
     private VisionPortal portal;
     private RedPropThresholdFar redPropThresholdFar = new RedPropThresholdFar();
 
@@ -68,7 +77,35 @@ public class RedFarFormTheBoard extends  LinearOpMode{
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(centerConeX, startPose.getY(), startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY(), startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(centerConeX - 4, startPose.getY(), startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(centerAfterConeX, centerAfterConeY ,startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(centerGateX , centerGateY ,startPose.getHeading()))
+                .turn(Math.toRadians(-90))
+                .lineToLinearHeading(new Pose2d(centerGateX + 3, centerGateY , Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(boardPos34, markerY,Math.toRadians(-90)))
+                .addTemporalMarker(() -> {
+                    Elevator.operateAutonomous(ElevatorStates.MIN, telemetry);
+                    Fourbar.operateAutonomous(FourbarState.MOVE);
+                })
+                .waitSeconds(1)
+                .lineToLinearHeading(new Pose2d(boardPos34 , boardY , Math.toRadians(-90)))
+                .waitSeconds(2)
+                .addTemporalMarker(() -> {
+                    Outtake.operate(OuttakeState.TOWOUT);
+                })
+                .lineToLinearHeading(new Pose2d(boardPos34, markerY,Math.toRadians(-90)))
+
+                .addTemporalMarker(() -> {
+                    Outtake.operate(OuttakeState.CLOSED);
+                })
+                .addTemporalMarker(() -> {
+                    Fourbar.operateTeleop(FourbarState.REVERSE);
+                })
+                .waitSeconds(1)
+                .addTemporalMarker(() -> {
+                    Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
+                })
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY , startPose.getHeading()))
                 .build();
 

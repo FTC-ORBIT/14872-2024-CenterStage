@@ -87,7 +87,7 @@ public class RedCloseToTheBoardFarFromTheWall extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(boardPos34X, boardPosY, Math.toRadians(startPose.getHeading() - 90)))
                 .waitSeconds(delay)
                 .addTemporalMarker(() -> {
-                    Outtake.operate(OuttakeState.OUT);
+                    Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .waitSeconds(delay)
                 .resetConstraints()
@@ -120,7 +120,7 @@ public class RedCloseToTheBoardFarFromTheWall extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(boardPos56X, boardPosY , Math.toRadians(-80)))
                 .waitSeconds(1.5)
                 .addTemporalMarker(() -> {
-                    Outtake.operate(OuttakeState.OUT);
+                    Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .lineToLinearHeading(new Pose2d(boardPos56X, rightPreBoardY , Math.toRadians(-85)))
                 .turn(startPose.getHeading())
@@ -154,7 +154,7 @@ public class RedCloseToTheBoardFarFromTheWall extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(boardPos12X, boardPosY, Math.toRadians(startPose.getHeading() - 90)))
                 .waitSeconds(delay)
                 .addTemporalMarker(() -> {
-                    Outtake.operate(OuttakeState.OUT);
+                    Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .waitSeconds(delay)
                 .resetConstraints()
