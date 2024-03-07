@@ -106,7 +106,7 @@ public class SubSystemManager {
                     if (!ElevatorToggleButton) elevatorState = ElevatorStates.LOW;
                     if (gamepad1.left_bumper) {
                         outtakeState = OuttakeState.OUT;
-                        if (gamepad1.left_bumper){
+                        if (gamepad1.left_bumper && gamepad1.dpad_left){
                             outtakeState = OuttakeState.TOWOUT;
                         }
                     }

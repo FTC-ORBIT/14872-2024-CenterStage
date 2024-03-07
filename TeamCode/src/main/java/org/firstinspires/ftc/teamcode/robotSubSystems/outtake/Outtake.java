@@ -37,7 +37,7 @@ public class Outtake {
                 break;
             case OUT:
                 pos = OuttakeConstants.outPos;
-                pos2 = OuttakeConstants.closedPos;
+                pos2 = OuttakeConstants.closedPos2;
                 break;
             case TOWOUT:
                 pos = OuttakeConstants.outPos;

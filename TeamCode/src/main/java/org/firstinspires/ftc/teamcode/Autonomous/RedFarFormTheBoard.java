@@ -45,9 +45,9 @@ public class RedFarFormTheBoard extends  LinearOpMode{
     public static double centerAfterConeY = 18;
     public static double centerGateX= 49.07;
     public static double centerGateY = 16.41;
-    public static double afterGateX = 53.2;
+    public static double afterGateX = 53;
     public static double afterGateY = -70.345;
-    public static double boardPos34  = 26;
+    public static double boardPos34  = 26.3;
     public static double markerY = -70;
     private VisionPortal portal;
     private RedPropThresholdFar redPropThresholdFar = new RedPropThresholdFar();
@@ -114,13 +114,13 @@ public class RedFarFormTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(rightConeX , rightConeY , rightConeAngle))
                 .lineToLinearHeading(new Pose2d(rightConeX , startPose.getY() , rightConeAngle))
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() , startPose.getHeading()))
-                                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
                 .build();
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(leftConeX, leftConeY, startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, startPose.getY() ,startPose.getHeading() ))
-                                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY, startPose.getHeading()))
                 .build();
 
         waitForStart();
