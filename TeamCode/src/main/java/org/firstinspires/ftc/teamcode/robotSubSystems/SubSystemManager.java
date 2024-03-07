@@ -71,7 +71,7 @@ public class SubSystemManager {
     public static void setSubsystemToState(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         final RobotState wanted = getStateFromWantedAndCurrent(getState(gamepad1));
 
-            if ((wanted.equals(RobotState.TRAVEL)|| wanted.equals(RobotState.INTAKE)) && (lastState.equals(RobotState.LOW) || lastState.equals(RobotState.MID) || lastState.equals(RobotState.MIN))){
+            if ((wanted.equals(RobotState.TRAVEL)|| wanted.equals(RobotState.INTAKE) || wanted.equals(RobotState.DEPLETE)) && (lastState.equals(RobotState.LOW) || lastState.equals(RobotState.MID) || lastState.equals(RobotState.MIN))){
                 delayElevator.startAction(GlobalData.currentTime);
             }
             if (wanted.equals(RobotState.INTAKE) && lastState.equals(RobotState.TRAVEL)){
@@ -118,7 +118,9 @@ public class SubSystemManager {
                 case DEPLETE:
                     fourbarState = FourbarState.REVERSE;
                     intakeState = IntakeState.DEPLETE;
-                    if (!ElevatorToggleButton)  elevatorState = ElevatorStates.INTAKE;
+                    if (delayElevator.isDelayPassed() && !ElevatorToggleButton) {
+                        elevatorState = ElevatorStates.INTAKE;
+                    }
                     outtakeState = OuttakeState.CLOSED;
                     fixpixelState = FixpixelState.CLOSE;
                     break;

@@ -85,7 +85,7 @@ public class RedFarFormTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(boardPos34, markerY,Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
-                    Elevator.operateAutonomous(ElevatorStates.MIN, telemetry);
+                    Elevator.operateAutonomous(ElevatorStates.AUTO, telemetry);
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
                 .waitSeconds(1)

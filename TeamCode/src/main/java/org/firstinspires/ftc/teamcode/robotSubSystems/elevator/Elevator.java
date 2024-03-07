@@ -93,6 +93,9 @@ public class Elevator {
                 case MIN:
                     pos = ElevatorConstants.autoHeight;
                     break;
+                case AUTO:
+                    pos = ElevatorConstants.autoHeightFar;
+                    break;
             }
             if (pos == ElevatorConstants.autoHeight) {
                 while (currentPos < pos || currentPos2 < pos) {
