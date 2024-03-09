@@ -15,6 +15,7 @@ public class Plane {
     public static boolean lastLT = false;
     public static void init(HardwareMap hardwareMap) {
         planeServo = hardwareMap.get(Servo.class, "planeServo");
+        planeServo.setPosition(PlaneConstants.stopPos);
     }
 
     public static void operate(PlaneState state) {
