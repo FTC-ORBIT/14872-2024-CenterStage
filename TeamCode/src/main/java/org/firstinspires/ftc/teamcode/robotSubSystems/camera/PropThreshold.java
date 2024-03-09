@@ -226,10 +226,11 @@ public class PropThreshold implements VisionProcessor {
 //    public boolean lastRT = false;
 //    public boolean lastLT = false;
 
-    public Rect rectHitL = new Rect(20, 20, 100, 100);
-    public Rect rectHitR = new Rect(20, 20, 100, 100);
-    public Rect rectMissL = new Rect(20, 20, 100, 100);
-    public Rect rectMissR = new Rect(20, 20, 100, 100);
+//  estimated yellow pixel detection boxes @ 46cm camera-board distance
+    public Rect rectHitL = new Rect(260, 240, 60, 240);
+    public Rect rectHitR = new Rect(340, 240, 60, 240);
+    public Rect rectMissL = new Rect(160, 240, 60, 240);
+    public Rect rectMissR = new Rect(440, 240, 60, 240);
 
     public Rect activeRect = rectHitL;
     public int activeRectIndx = 0;
@@ -311,6 +312,8 @@ public class PropThreshold implements VisionProcessor {
             rectStep += 1;
         }
 
+        lastGamepad.copy(gamepad);
+
         telemetry.addLine(String.format("Set Rectangle:  %s   - Indx: %d",
                 activeRectStr, activeRectIndx));
         telemetry.addData("x, y, width, height:  ", activeRect.toString());
@@ -325,7 +328,6 @@ public class PropThreshold implements VisionProcessor {
 //        lastRight = gamepad.right_bumper;
 //        lastLT = gamepad.dpad_left;
 //        lastRT = gamepad.dpad_right;
-        lastGamepad.copy(gamepad);
     }
 
 }
