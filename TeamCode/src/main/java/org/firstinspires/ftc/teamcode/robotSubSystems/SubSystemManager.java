@@ -44,7 +44,7 @@ public class SubSystemManager {
         if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back || gamepad.dpad_up) {
             ElevatorToggleButton = false;
         }
-        if (gamepad.x || gamepad.y){
+        if (gamepad.x || gamepad.y ||  gamepad.right_bumper){
             outtakeCounter =0;
         }
         return gamepad.b ? RobotState.TRAVEL
