@@ -28,11 +28,11 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @Autonomous(name = "Red Far Far Wall")
 @Config
 public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
-    public static double maxVeloDrop = 7;
+    public static double maxVeloDrop = 10;
     public static TrajectoryVelocityConstraint velConstraintDrop = SampleMecanumDrive.getVelocityConstraint(maxVeloDrop, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     public static TrajectoryAccelerationConstraint accConstraintDrop = SampleMecanumDrive.getAccelerationConstraint(maxVeloDrop);
     public static double centerConeX = 28;
-    public static double delay = 3000;
+    public static double delay = 5000;
     public static double parkingY = -88;
     public static double parkingX = 46.19;
     public static double boardY = -84;
@@ -51,21 +51,21 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
     public static double centerGateY = 16.41;
     public static double afterGateX = 53;
     public static double afterGateY = -70.345;
-    public static double boardPos12 = 35;
+    public static double boardPos12 = 34.5;
     public static double boardPos34 = 30.0;
-    public static double boardPos56 = 25.05;
+    public static double boardPos56 = 23.3;
     // TODO X6 = 22.5
-    // TODO X5 = 25.05
+    // TODO X5 = 23.3
     // TODO X4 = 28.19
     // TODO X3 = 30.0
-    // TODO X2 = 35
+    // TODO X2 = 34.5
     // TODO X1 = 37
     public static double leftAfterPropX = 16;
     public static double leftAfterPropY = -3.5;
     public static double leftBeforeGateX =48;
     public static double rightAfterPropY = 3;
     public static double rightBeforeGateX = 52.8;
-    public static double markerY = -75;
+    public static double markerY = -77;
 
     private VisionPortal portal;
     private RedPropThresholdFar redPropThresholdFar = new RedPropThresholdFar();
@@ -108,12 +108,13 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
-                .waitSeconds(1)
+                .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(boardPos34 , boardY , Math.toRadians(-90)))
                 .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
+                .resetConstraints()
                 .lineToLinearHeading(new Pose2d(boardPos34, markerY,Math.toRadians(-90)))
 
                 .addTemporalMarker(() -> {
@@ -147,11 +148,14 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
                 .waitSeconds(1)
+                .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(boardPos56 , boardY , Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
+                .resetConstraints()
                 .lineToLinearHeading(new Pose2d(boardPos56, markerY , Math.toRadians(-90)))
+                .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
@@ -181,7 +185,6 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
-                .waitSeconds(1)
                 .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(boardPos12 , boardY , Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
