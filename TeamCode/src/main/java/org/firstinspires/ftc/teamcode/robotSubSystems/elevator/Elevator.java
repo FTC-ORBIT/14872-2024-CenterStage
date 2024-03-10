@@ -97,7 +97,9 @@ public class Elevator {
                     pos = ElevatorConstants.autoHeightFar;
                     break;
             }
-            if (pos == ElevatorConstants.autoHeight) {
+            currentPos = elevatorMotor.getCurrentPosition();
+            currentPos2 = elevatorMotor2.getCurrentPosition();
+            if (pos == ElevatorConstants.autoHeight || pos == ElevatorConstants.autoHeightFar) {
                 while (currentPos < pos || currentPos2 < pos) {
                     currentPos = elevatorMotor.getCurrentPosition();
                     currentPos2 = elevatorMotor2.getCurrentPosition();

@@ -25,15 +25,16 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-@Autonomous(name = "Red Far Close Wall")
+@Autonomous(name = "Red Far Far Wall")
 @Config
-public class RedFarFormTheBoard extends  LinearOpMode{
+public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
     public static double maxVeloDrop = 7;
     public static TrajectoryVelocityConstraint velConstraintDrop = SampleMecanumDrive.getVelocityConstraint(maxVeloDrop, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     public static TrajectoryAccelerationConstraint accConstraintDrop = SampleMecanumDrive.getAccelerationConstraint(maxVeloDrop);
     public static double centerConeX = 28;
     public static double delay = 3000;
     public static double parkingY = -88;
+    public static double parkingX = 46.19;
     public static double boardY = -84;
     public static double rightDriveX = 27;
     public static double rightConeX = 29.06;
@@ -43,7 +44,7 @@ public class RedFarFormTheBoard extends  LinearOpMode{
     public static double rightConeAngle =5.05;
     public static double leftConeX = 22.5;
 
-    public static double leftConeY = 9;
+    public static double leftConeY = 8;
     public static double centerAfterConeX = 23;
     public static double centerAfterConeY = 18;
     public static double centerGateX= 49.07;
@@ -125,7 +126,8 @@ public class RedFarFormTheBoard extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
                 })
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY , startPose.getHeading()))
+                .turn(startPose.getHeading())
+                .lineToLinearHeading(new Pose2d(parkingX, parkingY , startPose.getHeading()))
                 .build();
 
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
@@ -160,11 +162,13 @@ public class RedFarFormTheBoard extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
                 })
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY , startPose.getHeading()))
+                .turn(startPose.getHeading())
+                .lineToLinearHeading(new Pose2d(parkingX, parkingY , startPose.getHeading()))
                 .build();
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(leftConeX, leftConeY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, leftConeY , startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(leftAfterPropX, leftAfterPropY, startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(leftBeforeGateX, leftAfterPropY , startPose.getHeading()))
                 .turn(Math.toRadians(-90))
@@ -178,10 +182,12 @@ public class RedFarFormTheBoard extends  LinearOpMode{
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
                 .waitSeconds(1)
+                .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(boardPos12 , boardY , Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
+                .resetConstraints()
                 .lineToLinearHeading(new Pose2d(boardPos12,markerY,Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
@@ -193,7 +199,8 @@ public class RedFarFormTheBoard extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
                 })
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY , startPose.getHeading()))
+                .turn(startPose.getHeading())
+                .lineToLinearHeading(new Pose2d(parkingX, parkingY , startPose.getHeading()))
                 .build();
 
         waitForStart();
@@ -201,28 +208,28 @@ public class RedFarFormTheBoard extends  LinearOpMode{
         if (!isStopRequested()) {
             sleep((long) delay);
             switch (redPropThresholdFar.EnumGetPropPos()) {
-            case LEFT:
-                drive.followTrajectorySequence(leftCone);
-                telemetry.addLine("left");
-                telemetry.update();
-                break;
-            case CENTER:
-                drive.followTrajectorySequence(centerCone);
-                telemetry.addLine("center");
-                telemetry.update();
-                break;
-            case RIGHT:
-                drive.followTrajectorySequence(rightCone);
-                telemetry.addLine("right");
-                telemetry.update();
-                break;
-            case NONE:
-                telemetry.addLine("Doesn't see prop");
-                telemetry.update();
-                break;
-        }
+                case LEFT:
+                    drive.followTrajectorySequence(leftCone);
+                    telemetry.addLine("left");
+                    telemetry.update();
+                    break;
+                case CENTER:
+                    drive.followTrajectorySequence(centerCone);
+                    telemetry.addLine("center");
+                    telemetry.update();
+                    break;
+                case RIGHT:
+                    drive.followTrajectorySequence(rightCone);
+                    telemetry.addLine("right");
+                    telemetry.update();
+                    break;
+                case NONE:
+                    telemetry.addLine("Doesn't see prop");
+                    telemetry.update();
+                    break;
+            }
 
         }
-     }
     }
+}
 

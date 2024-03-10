@@ -6,6 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
+import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.FourbarState;
+import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -19,7 +25,9 @@ public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
+        Elevator.init(hardwareMap);
+        Fourbar.init(hardwareMap);
+        Outtake.init(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
@@ -34,12 +42,19 @@ public class LocalizationTest extends LinearOpMode {
             );
 
             drive.update();
-
+            if (gamepad1.a){
+                Elevator.operateAutonomous(ElevatorStates.AUTO , telemetry);
+                Fourbar.operateAutonomous(FourbarState.MOVE);
+                if (gamepad1.left_bumper)Outtake.operate(OuttakeState.TOWOUT);
+                if (gamepad1.right_bumper)Outtake.operate(OuttakeState.CLOSED);
+                }
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", poseEstimate.getHeading());
             telemetry.update();
+            }
+
         }
     }
-}
+

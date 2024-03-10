@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-@Autonomous(name = "RedCloseToTheBoardFarFromTheWall")
+@Autonomous(name = "Red Close Far Wall" )
 @Config
 public class RedCloseToTheBoardFarFromTheWall extends LinearOpMode {
 
