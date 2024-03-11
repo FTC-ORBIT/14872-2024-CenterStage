@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.RedPropThresholdClose;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThresholdClose;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
@@ -24,7 +24,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous(name = "Blue Close Far Wall" )
 @Config
-public class BlueCloseToTheBoardFarFromTheBoard extends LinearOpMode {
+public class BlueCloseToTheBoardFarFromTheWall extends LinearOpMode {
 
     public static double maxVeloDrop = 7;
 
@@ -52,7 +52,7 @@ public class BlueCloseToTheBoardFarFromTheBoard extends LinearOpMode {
     public static double rightPreBoardY = 23.0;
 
     private VisionPortal portal;
-    private final RedPropThresholdClose redPropThresholdClose = new RedPropThresholdClose();
+    private final BluePropThresholdClose bluePropThresholdClose = new BluePropThresholdClose();
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -61,7 +61,7 @@ public class BlueCloseToTheBoardFarFromTheBoard extends LinearOpMode {
 
         drive.setPoseEstimate(startPose);
 
-        redPropThresholdClose.initProp();
+        bluePropThresholdClose.initProp();
 
         Elevator.init(hardwareMap);
         Fourbar.init(hardwareMap);
@@ -70,7 +70,7 @@ public class BlueCloseToTheBoardFarFromTheBoard extends LinearOpMode {
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
-                .addProcessor(redPropThresholdClose)
+                .addProcessor(bluePropThresholdClose)
                 .build();
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
@@ -176,7 +176,7 @@ public class BlueCloseToTheBoardFarFromTheBoard extends LinearOpMode {
 
         if (!isStopRequested()) {
             telemetry.update();
-            switch (redPropThresholdClose.EnumGetPropPos()) {
+            switch (bluePropThresholdClose.EnumGetPropPos()) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
                     telemetry.addLine("left");

@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThresholdFar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.RedPropThresholdFar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
@@ -32,9 +33,8 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
     public static TrajectoryVelocityConstraint velConstraintDrop = SampleMecanumDrive.getVelocityConstraint(maxVeloDrop, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     public static TrajectoryAccelerationConstraint accConstraintDrop = SampleMecanumDrive.getAccelerationConstraint(maxVeloDrop);
     public static double centerConeX = 28;
-    public static double delay = 3000;
     public static double parkingY = 88;
-    public static double boardY = 84;
+    public static double boardY = 86;
     public static double rightDriveX = 27;
     public static double rightConeX = 29.06;
 
@@ -67,7 +67,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
     public static double markerY = 75;
 
     private VisionPortal portal;
-    private RedPropThresholdFar redPropThresholdFar = new RedPropThresholdFar();
+    private BluePropThresholdFar bluePropThresholdFar = new BluePropThresholdFar();
 
     @Override
     public void runOpMode() throws InterruptedException{
@@ -78,11 +78,11 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
         Fourbar.init(hardwareMap);
         Plane.init(hardwareMap);
 
-        redPropThresholdFar.initProp();
+        bluePropThresholdFar.initProp();
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
-                .addProcessor(redPropThresholdFar)
+                .addProcessor(bluePropThresholdFar)
                 .build();
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -99,6 +99,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(centerGateX , centerGateY ,startPose.getHeading()))
                 .turn(Math.toRadians(90))
                 .lineToLinearHeading(new Pose2d(centerGateX + 3, centerGateY , Math.toRadians(90)))
+                .waitSeconds(3)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(boardPos34, markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
@@ -134,6 +135,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(leftBeforeGateX, leftAfterPropY , startPose.getHeading()))
                 .turn(Math.toRadians(90))
                 .lineToLinearHeading(new Pose2d(leftBeforeGateX + 5, leftAfterPropY , Math.toRadians(90)))
+                .waitSeconds(3)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(boardPos12, markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
@@ -142,11 +144,12 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
-                .waitSeconds(1)
+                .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(boardPos12 , boardY , Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
+                .waitSeconds(2)
                 .lineToLinearHeading(new Pose2d(boardPos12,markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
@@ -168,7 +171,9 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(rightConeX , startPose.getY() , rightConeAngle))
                 .resetConstraints()
                 .lineToLinearHeading(new Pose2d(rightConeX, rightAfterPropY, rightConeAngle))
-                .lineToLinearHeading(new Pose2d(rightBeforeGateX, rightAfterPropY , rightConeAngle))
+                .lineToLinearHeading(new Pose2d(rightBeforeGateX, rightAfterPropY , startPose.getHeading()))
+                .turn(Math.toRadians(90))
+                .waitSeconds(3)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(boardPos56, markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
@@ -198,8 +203,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
         waitForStart();
 
         if (!isStopRequested()) {
-            sleep((long) delay);
-            switch (redPropThresholdFar.EnumGetPropPos()) {
+            switch (bluePropThresholdFar.EnumGetPropPos()) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
                     telemetry.addLine("left");

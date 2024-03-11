@@ -27,24 +27,24 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @Config
 public class BlueCloseToTheBoardCloseToTheWall extends LinearOpMode {
 
-    public static double maxVeloDrop = 7;
+    public static double maxVeloDrop = 10;
 
     public static TrajectoryVelocityConstraint velConstraintDrop = SampleMecanumDrive.getVelocityConstraint(maxVeloDrop, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     public static TrajectoryAccelerationConstraint accConstraintDrop = SampleMecanumDrive.getAccelerationConstraint(maxVeloDrop);
     public static TrajectoryVelocityConstraint velConstraintLeft = SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     public static TrajectoryAccelerationConstraint accConstraintLeft = SampleMecanumDrive.getAccelerationConstraint(15);
     public static double driveToConeX = 29;
-    public static double goToParkingY = 39;
+    public static double goToParkingY = 27;
     public static double delay = 1;
     public static double rightConeX = 22.5;
     public static double rightConeY = 8;
     public static double leftDriveX = 22.02;
     public static double leftConeX = 30;
-    public static double leftConeY = -3.2;
+    public static double leftConeY = -4.5;
     public static double prepareToPixelDropX = 25;
     public static double prepareToPixelDropY = -1.4;
-    public static double boardPosY = 27;
-    public static double boardPos12X = 35.5;
+    public static double boardPosY = 30;
+    public static double boardPos12X = 35.8;
     public static double boardPos34X = 28;
     public static double boardPos56X = 16;
     public static double rightAfterConeX = 1.0;
@@ -112,8 +112,9 @@ public class BlueCloseToTheBoardCloseToTheWall extends LinearOpMode {
                 .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(leftDriveX  , startPose.getY() , startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(leftConeX, leftConeY, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(leftConeX, leftConeY + 5, Math.toRadians(-90)))
                 .resetConstraints()
-                .lineToLinearHeading(new Pose2d(prepareToPixelDropX, startPose.getY() + 10, Math.toRadians(startPose.getHeading() + 90)))
+                .lineToLinearHeading(new Pose2d(prepareToPixelDropX, startPose.getY() + 10, Math.toRadians(startPose.getHeading() - 90)))
                 .turn(Math.toRadians(180))
                 .lineToLinearHeading(new Pose2d(boardPos12X, boardPosY - 3, Math.toRadians(startPose.getHeading() + 90)))
                 .addTemporalMarker(() -> {
@@ -123,12 +124,12 @@ public class BlueCloseToTheBoardCloseToTheWall extends LinearOpMode {
                 .waitSeconds(1)
                 .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(boardPos12X, boardPosY, Math.toRadians(startPose.getHeading() + 90)))
-                .waitSeconds(delay)
+                .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
-                .waitSeconds(delay)
                 .resetConstraints()
+                .waitSeconds(1)
                 .lineToLinearHeading(new Pose2d(boardPos12X, boardPosY - 8, Math.toRadians(startPose.getHeading() + 90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
@@ -140,8 +141,9 @@ public class BlueCloseToTheBoardCloseToTheWall extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
                 })
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, goToParkingY, Math.toRadians (startPose.getHeading() + 90)))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 5, goToParkingY , Math.toRadians(startPose.getHeading() + 90)))
                 .turn(Math.toRadians(-90))
+                .lineToLinearHeading(new Pose2d(startPose.getX()  , goToParkingY, Math.toRadians (startPose.getHeading())))
                 .build();
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(velConstraintLeft, accConstraintLeft).lineToLinearHeading(new Pose2d(rightConeX, rightConeY, startPose.getHeading()))

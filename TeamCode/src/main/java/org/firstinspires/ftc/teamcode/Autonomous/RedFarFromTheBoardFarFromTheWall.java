@@ -28,14 +28,14 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @Autonomous(name = "Red Far Far Wall")
 @Config
 public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
-    public static double maxVeloDrop = 10;
+    public static double maxVeloDrop = 6.5;
     public static TrajectoryVelocityConstraint velConstraintDrop = SampleMecanumDrive.getVelocityConstraint(maxVeloDrop, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     public static TrajectoryAccelerationConstraint accConstraintDrop = SampleMecanumDrive.getAccelerationConstraint(maxVeloDrop);
     public static double centerConeX = 28;
     public static double delay = 5000;
     public static double parkingY = -88;
     public static double parkingX = 46.19;
-    public static double boardY = -84;
+    public static double boardY = -86;
     public static double rightDriveX = 27;
     public static double rightConeX = 29.06;
 
@@ -44,19 +44,19 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
     public static double rightConeAngle =5.05;
     public static double leftConeX = 22.5;
 
-    public static double leftConeY = 8;
+    public static double leftConeY = 9;
     public static double centerAfterConeX = 23;
     public static double centerAfterConeY = 18;
     public static double centerGateX= 49.07;
     public static double centerGateY = 16.41;
     public static double afterGateX = 53;
     public static double afterGateY = -70.345;
-    public static double boardPos12 = 34.5;
-    public static double boardPos34 = 30.0;
+    public static double boardPos12 = 37;
+    public static double boardPos34 = 30;
     public static double boardPos56 = 23.3;
     // TODO X6 = 22.5
     // TODO X5 = 23.3
-    // TODO X4 = 28.19
+    // TODO X4 = 28.28
     // TODO X3 = 30.0
     // TODO X2 = 34.5
     // TODO X1 = 37
@@ -99,6 +99,7 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(centerAfterConeX, centerAfterConeY ,startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(centerGateX , centerGateY ,startPose.getHeading()))
                 .turn(Math.toRadians(-90))
+                .waitSeconds(5)
                 .lineToLinearHeading(new Pose2d(centerGateX + 3, centerGateY , Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(boardPos34, markerY,Math.toRadians(-90)))
@@ -139,6 +140,7 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .resetConstraints()
                 .lineToLinearHeading(new Pose2d(rightConeX, rightAfterPropY, rightConeAngle))
                 .lineToLinearHeading(new Pose2d(rightBeforeGateX, rightAfterPropY , rightConeAngle))
+                .waitSeconds(2)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(boardPos56, markerY,Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
@@ -177,6 +179,7 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(leftBeforeGateX, leftAfterPropY , startPose.getHeading()))
                 .turn(Math.toRadians(-90))
                 .lineToLinearHeading(new Pose2d(leftBeforeGateX + 5, leftAfterPropY , Math.toRadians(-90)))
+                .waitSeconds(5)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(boardPos12, markerY,Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
@@ -190,6 +193,7 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
+                .waitSeconds(2)
                 .resetConstraints()
                 .lineToLinearHeading(new Pose2d(boardPos12,markerY,Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
@@ -209,7 +213,6 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
         waitForStart();
 
         if (!isStopRequested()) {
-            sleep((long) delay);
             switch (redPropThresholdFar.EnumGetPropPos()) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
@@ -217,6 +220,7 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                     telemetry.update();
                     break;
                 case CENTER:
+                default:
                     drive.followTrajectorySequence(centerCone);
                     telemetry.addLine("center");
                     telemetry.update();
