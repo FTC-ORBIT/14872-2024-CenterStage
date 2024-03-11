@@ -25,15 +25,16 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-@Autonomous(name = "Blue Far Close Wall")
+@Autonomous(name = "Blue Far Far Wall")
 @Config
-public class BlueFarFromTheBoard extends  LinearOpMode{
-    public static double maxVeloDrop = 7;
+public class BlueFarFromTheBoardFarFromTheWall extends  LinearOpMode{
+    public static double maxVeloDrop = 10;
     public static TrajectoryVelocityConstraint velConstraintDrop = SampleMecanumDrive.getVelocityConstraint(maxVeloDrop, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     public static TrajectoryAccelerationConstraint accConstraintDrop = SampleMecanumDrive.getAccelerationConstraint(maxVeloDrop);
     public static double centerConeX = 28;
-    public static double delay = 3000;
+    public static double delay = 5000;
     public static double parkingY = 88;
+    public static double parkingX = 46.19;
     public static double boardY = 84;
     public static double rightDriveX = 27;
     public static double rightConeX = 29.06;
@@ -43,28 +44,28 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
     public static double rightConeAngle =-5.05;
     public static double leftConeX = 22.5;
 
-    public static double leftConeY = -9;
+    public static double leftConeY = -8;
     public static double centerAfterConeX = 23;
     public static double centerAfterConeY = -18;
     public static double centerGateX= 49.07;
     public static double centerGateY = -16.41;
     public static double afterGateX = 53;
     public static double afterGateY = 70.345;
-    public static double boardPos12 = 35;
+    public static double boardPos12 = 34.5;
     public static double boardPos34 = 30.0;
-    public static double boardPos56 = 25.05;
+    public static double boardPos56 = 23.3;
     // TODO X6 = 22.5
-    // TODO X5 = 25.05
+    // TODO X5 = 23.3
     // TODO X4 = 28.19
     // TODO X3 = 30.0
-    // TODO X2 = 35
+    // TODO X2 = 34.5
     // TODO X1 = 37
     public static double leftAfterPropX = 16;
     public static double leftAfterPropY = 3.5;
     public static double leftBeforeGateX =48;
     public static double rightAfterPropY = -3;
     public static double rightBeforeGateX = 52.8;
-    public static double markerY = 75;
+    public static double markerY = 77;
 
     private VisionPortal portal;
     private RedPropThresholdFar redPropThresholdFar = new RedPropThresholdFar();
@@ -97,23 +98,24 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(centerConeX - 4, startPose.getY(), startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(centerAfterConeX, centerAfterConeY ,startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(centerGateX , centerGateY ,startPose.getHeading()))
-                .turn(Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(centerGateX + 3, centerGateY , Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(boardPos34, markerY,Math.toRadians(90)))
+                .turn(Math.toRadians(-90))
+                .lineToLinearHeading(new Pose2d(centerGateX + 3, centerGateY , Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(boardPos34, markerY,Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.AUTO, telemetry);
                 })
                 .addTemporalMarker(() -> {
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
-                .waitSeconds(1)
-                .lineToLinearHeading(new Pose2d(boardPos34 , boardY , Math.toRadians(90)))
+                .setConstraints(velConstraintDrop, accConstraintDrop)
+                .lineToLinearHeading(new Pose2d(boardPos34 , boardY , Math.toRadians(-90)))
                 .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
-                .lineToLinearHeading(new Pose2d(boardPos34, markerY,Math.toRadians(90)))
+                .resetConstraints()
+                .lineToLinearHeading(new Pose2d(boardPos34, markerY,Math.toRadians(-90)))
 
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
@@ -125,29 +127,32 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
                 })
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY , startPose.getHeading()))
+                .turn(startPose.getHeading())
+                .lineToLinearHeading(new Pose2d(parkingX, parkingY , startPose.getHeading()))
                 .build();
 
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(leftConeX, leftConeY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, leftConeY , startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(leftAfterPropX, leftAfterPropY, startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(leftBeforeGateX, leftAfterPropY , startPose.getHeading()))
-                .turn(Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(leftBeforeGateX + 5, leftAfterPropY , Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(boardPos12, markerY,Math.toRadians(90)))
+                .turn(Math.toRadians(-90))
+                .lineToLinearHeading(new Pose2d(leftBeforeGateX + 5, leftAfterPropY , Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(boardPos12, markerY,Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.AUTO, telemetry);
                 })
                 .addTemporalMarker(() -> {
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
-                .waitSeconds(1)
-                .lineToLinearHeading(new Pose2d(boardPos12 , boardY , Math.toRadians(90)))
+                .setConstraints(velConstraintDrop, accConstraintDrop)
+                .lineToLinearHeading(new Pose2d(boardPos12 , boardY , Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
-                .lineToLinearHeading(new Pose2d(boardPos12,markerY,Math.toRadians(90)))
+                .resetConstraints()
+                .lineToLinearHeading(new Pose2d(boardPos12,markerY,Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
@@ -158,19 +163,20 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
                 })
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY , startPose.getHeading()))
+                .turn(startPose.getHeading())
+                .lineToLinearHeading(new Pose2d(parkingX, parkingY , startPose.getHeading()))
                 .build();
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
-                .setConstraints(velConstraintDrop, accConstraintDrop)
+                   .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(rightDriveX, startPose.getY(), startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(rightConeX , rightConeY , rightConeAngle))
                 .lineToLinearHeading(new Pose2d(rightConeX , startPose.getY() , rightConeAngle))
                 .resetConstraints()
                 .lineToLinearHeading(new Pose2d(rightConeX, rightAfterPropY, rightConeAngle))
                 .lineToLinearHeading(new Pose2d(rightBeforeGateX, rightAfterPropY , rightConeAngle))
-                .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(boardPos56, markerY,Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(boardPos56, markerY,Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.AUTO, telemetry);
                 })
@@ -178,11 +184,14 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
                 .waitSeconds(1)
-                .lineToLinearHeading(new Pose2d(boardPos56 , boardY , Math.toRadians(90)))
+                .setConstraints(velConstraintDrop, accConstraintDrop)
+                .lineToLinearHeading(new Pose2d(boardPos56 , boardY , Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
-                .lineToLinearHeading(new Pose2d(boardPos56, markerY , Math.toRadians(90)))
+                .resetConstraints()
+                .lineToLinearHeading(new Pose2d(boardPos56, markerY , Math.toRadians(-90)))
+                .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
@@ -193,8 +202,10 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
                 })
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, parkingY , startPose.getHeading()))
+                .turn(startPose.getHeading())
+                .lineToLinearHeading(new Pose2d(parkingX, parkingY , startPose.getHeading()))
                 .build();
+
         waitForStart();
 
         if (!isStopRequested()) {
