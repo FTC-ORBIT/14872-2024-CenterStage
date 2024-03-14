@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems;
 
+import static org.firstinspires.ftc.teamcode.robotData.Constants.MaxHeightForFourbarDelay;
 import static org.firstinspires.ftc.teamcode.robotData.Constants.minHeightToOpenFourbar;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -31,7 +32,7 @@ public class SubSystemManager {
     private static FourbarState fourbarState = FourbarState.REVERSE;
     private static FixpixelState fixpixelState = FixpixelState.CLOSE;
     private static PlaneState planeState = PlaneState.STOP;
-    private static Delay delayElevator = new Delay(0.95f);
+    private static Delay delayElevator = new Delay(0.75f);
     private static Delay intakeDelay = new Delay(1f);
     private static boolean toggleButton = true;
     private static ElapsedTime elapsedTime = new ElapsedTime();
@@ -79,7 +80,7 @@ public class SubSystemManager {
     public static void setSubsystemToState(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         final RobotState wanted = getStateFromWantedAndCurrent(getState(gamepad1));
 
-        if ((wanted.equals(RobotState.TRAVEL) || wanted.equals(RobotState.INTAKE) || wanted.equals(RobotState.DEPLETE)) && (lastState.equals(RobotState.LOW) || lastState.equals(RobotState.MID) || lastState.equals(RobotState.MIN))) {
+        if ((wanted.equals(RobotState.TRAVEL) || wanted.equals(RobotState.INTAKE) || wanted.equals(RobotState.DEPLETE)) && (lastState.equals(RobotState.LOW) || lastState.equals(RobotState.MID) ||  lastState.equals(RobotState.MIN))) {
             delayElevator.startAction(GlobalData.currentTime);
         }
         if (wanted.equals(RobotState.INTAKE) && lastState.equals(RobotState.TRAVEL)) {
@@ -201,7 +202,7 @@ public class SubSystemManager {
         Fourbar.operateTeleop(fourbarState);
         //       Fixpixel.operate(fixpixelState , gamepad1 , telemetry);
         lastState = wanted;
-        if (gamepad2.a) OrbitGyro.resetGyro();
+        if (gamepad2.a || gamepad1.dpad_down) OrbitGyro.resetGyro();
         if (gamepad2.back) Plane.operate(PlaneState.THROW);
     }
 

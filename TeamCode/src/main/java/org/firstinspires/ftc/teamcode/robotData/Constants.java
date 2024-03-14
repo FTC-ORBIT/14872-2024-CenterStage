@@ -35,4 +35,5 @@ public  class Constants {
 
     public static final float autoDriveAngleTolerance = Angle.degToRad(2.5f);
     public static final float autoDriveOmegaTolerance = Angle.degToRad(10);
+    public static final float MaxHeightForFourbarDelay = 1800;
 }

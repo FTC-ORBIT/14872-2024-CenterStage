@@ -217,6 +217,7 @@ public class RedFarFormTheBoard extends  LinearOpMode{
                 telemetry.update();
                 break;
             case NONE:
+                drive.followTrajectorySequence(centerCone);
                 telemetry.addLine("Doesn't see prop");
                 telemetry.update();
                 break;

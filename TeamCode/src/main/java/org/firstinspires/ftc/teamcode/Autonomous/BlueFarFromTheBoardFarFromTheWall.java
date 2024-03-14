@@ -52,7 +52,7 @@ public class BlueFarFromTheBoardFarFromTheWall extends  LinearOpMode{
     public static double centerGateY = -16.41;
     public static double afterGateX = 53;
     public static double afterGateY = 70.345;
-    public static double boardPos12 = 36.7;
+    public static double boardPos12 = 33.9;
     public static double boardPos34 = 28.19;
     public static double boardPos56 = 23.2;
     // TODO "MUST READ: in the BLUE autonomous the 1-6 is from right to left!!"
@@ -61,7 +61,7 @@ public class BlueFarFromTheBoardFarFromTheWall extends  LinearOpMode{
     // TODO X4 = 27.86
     // TODO X3 = 29.7
     // TODO X2 = 33.7
-    // TODO X1 = 36.7
+    // TODO X1 = 33.9
     public static double leftAfterPropX = 16;
     public static double leftAfterPropY = 3.5;
     public static double leftBeforeGateX =48;
@@ -152,6 +152,7 @@ public class BlueFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .resetConstraints()
+                .waitSeconds(2)
                 .lineToLinearHeading(new Pose2d(boardPos12,markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
@@ -227,6 +228,7 @@ public class BlueFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                     telemetry.update();
                     break;
                 case NONE:
+                    drive.followTrajectorySequence(centerCone);
                     telemetry.addLine("Doesn't see prop");
                     telemetry.update();
                     break;

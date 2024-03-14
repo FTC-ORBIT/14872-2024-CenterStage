@@ -52,12 +52,12 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
     public static double afterGateX = 53;
     public static double afterGateY = -70.345;
     public static double boardPos12 = 37;
-    public static double boardPos34 = 30;
+    public static double boardPos34 = 32.7;
     public static double boardPos56 = 23.3;
     // TODO X6 = 22.5
     // TODO X5 = 23.3
     // TODO X4 = 28.28
-    // TODO X3 = 30.0
+    // TODO X3 = 32.7
     // TODO X2 = 34.5
     // TODO X1 = 37
     public static double leftAfterPropX = 16;
@@ -231,6 +231,7 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                     telemetry.update();
                     break;
                 case NONE:
+                    drive.followTrajectorySequence(centerCone);
                     telemetry.addLine("Doesn't see prop");
                     telemetry.update();
                     break;
