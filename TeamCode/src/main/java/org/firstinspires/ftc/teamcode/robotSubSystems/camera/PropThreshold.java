@@ -139,9 +139,9 @@ public class PropThreshold implements VisionProcessor {
         highMat.release();
         if (PropColor == PropColorEnum.YELLOW) {
             yellowBoxesHash.put(HITLEFT,new ElementDetectBox(HITLEFT, rectHitL, finalMat));
-            yellowBoxesHash.put(HITRIGHT,new ElementDetectBox(HITRIGHT));
-            yellowBoxesHash.put(MISSLEFT,new ElementDetectBox(MISSLEFT));
-            yellowBoxesHash.put(MISSRIGHT,new ElementDetectBox(MISSRIGHT));
+            yellowBoxesHash.put(HITRIGHT,new ElementDetectBox(HITRIGHT, rectHitR, finalMat));
+            yellowBoxesHash.put(MISSLEFT,new ElementDetectBox(MISSLEFT, rectMissL, finalMat));
+            yellowBoxesHash.put(MISSRIGHT,new ElementDetectBox(MISSRIGHT, rectMissR, finalMat));
 
 //            hitLeftBox = Core.sumElems(finalMat.submat(rectHitL)).val[0];
 //            hitRightBox = Core.sumElems(finalMat.submat(rectHitR)).val[0];
