@@ -15,7 +15,7 @@ public class Outtake {
     public static boolean lastlT = false;
 
     public static void init(HardwareMap hardwareMap) {
-        servo = hardwareMap.get(Servo.class, "outtakeServo");
+        servo = hardwareMap.get(Servo.class, "clawServo");
         servo.setPosition(OuttakeConstants.closedPos);
     }
 

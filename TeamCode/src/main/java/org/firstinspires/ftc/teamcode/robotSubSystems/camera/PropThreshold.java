@@ -1,5 +1,10 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
 
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.HITLEFT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.HITRIGHT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.MISSLEFT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.MISSRIGHT;
+
 import android.graphics.Canvas;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -14,6 +19,8 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
+import java.util.HashMap;
+
 
 public class PropThreshold implements VisionProcessor {
     Mat testMat = new Mat();
@@ -24,6 +31,7 @@ public class PropThreshold implements VisionProcessor {
 
     public static String OutStr = "none"; //Set a default value in case vision does not work
     public PropPosEnum PropPos = PropPosEnum.NONE;
+
 
     public PropColorEnum PropColor = PropColorEnum.RED;
     public Rect activeLeftRect;
@@ -41,8 +49,18 @@ public class PropThreshold implements VisionProcessor {
     public double averagedMiddleBox;
 
     public double averagedRightBox;
+    public YellowPixelPosEnum yellowPixelPos = YellowPixelPosEnum.NOPIXEL;
+    public double hitLeftBox;
+    public double hitRightBox;
+    public double missLeftBox;
+    public double missRightBox;
+    public double avergedHitLeftBox;
+    public double avergedHitRightBox;
+    public double avergedMissLeftBox;
+    public double avergedMissRightBox;
 
-//    public double averagedBlueLeftBoxFar;
+
+    //    public double averagedBlueLeftBoxFar;
 //    public double averagedBlueMiddleBoxFar;
 //
 //    public double averagedBlueRightBoxFar;
@@ -98,12 +116,20 @@ public class PropThreshold implements VisionProcessor {
         Scalar highHSVRedLower = new Scalar(160, 100, 20); //Wraps around Color Wheel
         Scalar highHSVRedUpper = new Scalar(180, 255, 255);
 
+        Scalar HSVYellowLower = new Scalar(0,0,0);
+        Scalar HSVYellowUpper = new Scalar(0,0,0);
+
+        HashMap yellowBoxesHash = new HashMap();
+
+
         if (PropColor == PropColorEnum.BLUE) {
             Core.inRange(testMat, lowHSVBlueLower, lowHSVBlueUpper, finalMat);
-        } else {
+        } else if(PropColor == PropColorEnum.RED) {
             Core.inRange(testMat, lowHSVRedLower, lowHSVRedUpper, lowMat);
             Core.inRange(testMat, highHSVRedLower, highHSVRedUpper, highMat);
             Core.bitwise_or(lowMat, highMat, finalMat);
+        } else if (PropColor == PropColorEnum.YELLOW) {
+            Core.inRange(testMat, HSVYellowLower, lowHSVBlueUpper, finalMat);
         }
 //        Core.inRange(testMat, lowHSVBlueLower, lowHSVBlueUpper,lowMat);
 
@@ -111,19 +137,35 @@ public class PropThreshold implements VisionProcessor {
 
         lowMat.release();
         highMat.release();
+        if (PropColor == PropColorEnum.YELLOW) {
+            yellowBoxesHash.put(HITLEFT,new ElementDetectBox(HITLEFT, rectHitL, finalMat));
+            yellowBoxesHash.put(HITRIGHT,new ElementDetectBox(HITRIGHT));
+            yellowBoxesHash.put(MISSLEFT,new ElementDetectBox(MISSLEFT));
+            yellowBoxesHash.put(MISSRIGHT,new ElementDetectBox(MISSRIGHT));
 
-        leftBox = Core.sumElems(finalMat.submat(activeLeftRect)).val[0];
-        middleBox = Core.sumElems(finalMat.submat(activeMiddleRect)).val[0];
-        rightBox = Core.sumElems(finalMat.submat(activeRightRect)).val[0];
+//            hitLeftBox = Core.sumElems(finalMat.submat(rectHitL)).val[0];
+//            hitRightBox = Core.sumElems(finalMat.submat(rectHitR)).val[0];
+//            missLeftBox = Core.sumElems(finalMat.submat(rectMissL)).val[0];
+//            missRightBox = Core.sumElems(finalMat.submat(rectMissR)).val[0];
+//
+//            avergedHitLeftBox = hitLeftBox / rectHitL.area() / 255;
+//            avergedHitRightBox = hitRightBox / rectHitR.area() / 255;
+//            avergedMissLeftBox = missLeftBox / rectMissL.area() / 255;
+//            avergedMissRightBox = missRightBox / rectMissR.area() / 255;
+
+        } else {
+            leftBox = Core.sumElems(finalMat.submat(activeLeftRect)).val[0];
+            middleBox = Core.sumElems(finalMat.submat(activeMiddleRect)).val[0];
+            rightBox = Core.sumElems(finalMat.submat(activeRightRect)).val[0];
 
 //        blueLeftBoxFar = Core.sumElems(finalMat.submat(LEFT_RECTANGLE_FAR)).val[0];
 //        blueMiddleBoxFar = Core.sumElems(finalMat.submat(MIDDLE_RECTANGLE_FAR)).val[0];
 //        blueRightBoxFar = Core.sumElems(finalMat.submat(RIGHT_RECTANGLE_FAR)).val[0];
 
 
-        averagedLeftBox = leftBox / activeLeftRect.area() / 255;
-        averagedMiddleBox = middleBox / activeMiddleRect.area() / 255; //Makes value [0,1]
-        averagedRightBox = rightBox / activeRightRect.area() / 255;
+            averagedLeftBox = leftBox / activeLeftRect.area() / 255;
+            averagedMiddleBox = middleBox / activeMiddleRect.area() / 255; //Makes value [0,1]
+            averagedRightBox = rightBox / activeRightRect.area() / 255;
 
 
 //        averagedBlueLeftBoxFar = blueLeftBoxFar / LEFT_RECTANGLE_FAR.area() / 255;
@@ -131,15 +173,16 @@ public class PropThreshold implements VisionProcessor {
 //        averagedBlueRightBoxFar = blueRightBoxFar / RIGHT_RECTANGLE_FAR.area() / 255;
 
 
-        if (averagedLeftBox > Threshold && averagedLeftBox > averagedMiddleBox) {        //Must Tune Red Threshold
-            OutStr = "Left";
-            PropPos = PropPosEnum.LEFT;
-        } else if (averagedMiddleBox > Threshold && averagedRightBox < averagedMiddleBox) {
-            OutStr = "Center";
-            PropPos = PropPosEnum.CENTER;
-        } else if (averagedRightBox > Threshold) {
-            OutStr = "Right";
-            PropPos = PropPosEnum.RIGHT;
+            if (averagedLeftBox > Threshold && averagedLeftBox > averagedMiddleBox) {        //Must Tune Red Threshold
+                OutStr = "Left";
+                PropPos = PropPosEnum.LEFT;
+            } else if (averagedMiddleBox > Threshold && averagedRightBox < averagedMiddleBox) {
+                OutStr = "Center";
+                PropPos = PropPosEnum.CENTER;
+            } else if (averagedRightBox > Threshold) {
+                OutStr = "Right";
+                PropPos = PropPosEnum.RIGHT;
+            }
         }
 //        if(averagedBlueLeftBoxFar > Threshold){        //Must Tune Red Threshold
 //            OutStr = "blueLeftFar";
@@ -218,6 +261,9 @@ public class PropThreshold implements VisionProcessor {
 
     public PropPosEnum EnumGetPropPos() {
         return PropPos;
+    }
+    public YellowPixelPosEnum getYellowPixelPos() {
+        return yellowPixelPos;
     }
 
 
