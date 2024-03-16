@@ -78,10 +78,18 @@ public class SubSystemManager {
     }
 
     public static void setSubsystemToState(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
-        final RobotState wanted = getStateFromWantedAndCurrent(getState(gamepad1));
+//        final RobotState wanted = getStateFromWantedAndCurrent(getState(gamepad1));
+        wanted = getStateFromWantedAndCurrent(getState(gamepad1));
 
-        if ((wanted.equals(RobotState.TRAVEL) || wanted.equals(RobotState.INTAKE) || wanted.equals(RobotState.DEPLETE)) && (lastState.equals(RobotState.LOW) || lastState.equals(RobotState.MID) ||  lastState.equals(RobotState.MIN))) {
-            delayElevator.startAction(GlobalData.currentTime);
+
+        if (wanted.equals(RobotState.TRAVEL) || wanted.equals(RobotState.INTAKE) || wanted.equals(RobotState.DEPLETE)){
+            if (!wanted.equals(lastState)) {
+                if (Elevator.getPos() < 1700) {
+                    delayElevator.startAction(GlobalData.currentTime);
+                } else {
+                    delayElevator.startAction(GlobalData.currentTime - 1);
+                }
+            }
         }
         if (wanted.equals(RobotState.INTAKE) && lastState.equals(RobotState.TRAVEL)) {
             intakeDelay.startAction(GlobalData.currentTime);
@@ -201,15 +209,17 @@ public class SubSystemManager {
         Elevator.operateTeleop(elevatorState, gamepad1, telemetry);
         Fourbar.operateTeleop(fourbarState);
         //       Fixpixel.operate(fixpixelState , gamepad1 , telemetry);
+
         lastState = wanted;
         if (gamepad2.a || gamepad1.dpad_down) OrbitGyro.resetGyro();
         if (gamepad2.back) Plane.operate(PlaneState.THROW);
     }
 
     public static void printStates(Telemetry telemetry) {
-        telemetry.addData("GlobalData.robotState", GlobalData.robotState);
+        telemetry.addData("GlobalData.robotState", wanted);
+        telemetry.addData("last state", lastState);
         telemetry.addData("intakeState", intakeState);
-        telemetry.addData("delay", delayElevator.isDelayPassed());
+        telemetry.addData("delayElevator", delayElevator.isDelayPassed());
         telemetry.addData("intakeDelay", intakeDelay.isDelayPassed());
         telemetry.addData("elevator", Elevator.elevatorMotor.getCurrentPosition());
         telemetry.addData("elevator2", Elevator.elevatorMotor2.getCurrentPosition());
