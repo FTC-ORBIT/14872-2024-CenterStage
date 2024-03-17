@@ -4,6 +4,21 @@ import org.firstinspires.ftc.teamcode.robotData.Constants;
 
 public final class MathFuncs {
 
+    public static double max(Object... objectList) {
+        Integer counter =0;
+        double[] doubleArray = new double[objectList.length];
+        for(Object i : objectList ) {
+            doubleArray[counter] = (double) i;
+        }
+        double biggest =0;
+        for(double i : doubleArray ) {
+            if (biggest < i) {
+                biggest = i;
+            }
+        }
+        return biggest;
+    }
+
     public static float deadBand(final float val, final float xAtZero, final float xAtOne) {
         final float returnVal = (Math.abs(val) - xAtZero) / (xAtOne - xAtZero);
         return range(0, 1, returnVal) * Math.signum(val);

@@ -9,5 +9,6 @@ public class RedPropThresholdFar extends PropThreshold {
         activeLeftRect = LEFT_RECTANGLE_FAR;
         activeMiddleRect = MIDDLE_RECTANGLE_FAR;
         activeRightRect = RIGHT_RECTANGLE_FAR;
+
     }
 }

@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelP
 import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.HITRIGHT;
 import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.MISSLEFT;
 import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.MISSRIGHT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.NOPIXEL;
 
 import android.graphics.Canvas;
 
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.teamcode.OrbitUtils.MathFuncs;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -31,8 +33,6 @@ public class PropThreshold implements VisionProcessor {
 
     public static String OutStr = "none"; //Set a default value in case vision does not work
     public PropPosEnum PropPos = PropPosEnum.NONE;
-
-
     public PropColorEnum PropColor = PropColorEnum.RED;
     public Rect activeLeftRect;
     public Rect activeMiddleRect;
@@ -54,10 +54,11 @@ public class PropThreshold implements VisionProcessor {
     public double hitRightBox;
     public double missLeftBox;
     public double missRightBox;
-    public double avergedHitLeftBox;
-    public double avergedHitRightBox;
-    public double avergedMissLeftBox;
-    public double avergedMissRightBox;
+    public double averagedHitLeftBox;
+    public double averagedHitRightBox;
+    public double averagedMissLeftBox;
+    public double averagedMissRightBox;
+    public double yellowThreshold = 0.015;
 
 
     //    public double averagedBlueLeftBoxFar;
@@ -89,6 +90,36 @@ public class PropThreshold implements VisionProcessor {
             new Point(526, 225),
             new Point(639, 479)
     );
+    public Rect redLeftRectHitL = new Rect(410, 0, 60, 180);
+    public Rect redLeftRectHitR = new Rect(480, 0, 60, 180);
+    public Rect redLeftRectMissL = new Rect(340, 0, 60, 180);
+    public Rect redLeftRectMissR = new Rect(550, 0, 60, 180);
+
+    public Rect redCenterRectHitL = new Rect(430, 0, 60, 180);
+    public Rect redCenterRectHitR = new Rect(490, 0, 50, 180);
+    public Rect redCenterRectMissL = new Rect(365, 0, 60, 180);
+    public Rect redCenterRectMissR = new Rect(550, 0, 60, 180);
+
+    public Rect redRightRectHitL = new Rect(350, 0, 70, 180);
+    public Rect redRightRectHitR = new Rect(425, 0, 70, 180);
+    public Rect redRightRectMissL = new Rect(270, 0, 75, 180);
+    public Rect redRightRectMissR = new Rect(500, 0, 60, 180);
+
+    public Rect blueLeftRectHitL = new Rect(390, 0, 70, 180);
+    public Rect blueLeftRectHitR = new Rect(470, 0, 55, 180);
+    public Rect blueLeftRectMissL = new Rect(320, 0, 60, 180);
+    public Rect blueLeftRectMissR = new Rect(530, 0, 55, 180);
+
+    public Rect blueCenterRectHitL = new Rect(355, 0, 115, 190);
+    public Rect blueCenterRectHitR = new Rect(465, 0, 95, 190);
+    public Rect blueCenterRectMissL = new Rect(230, 0, 125, 190);
+    public Rect blueCenterRectMissR = new Rect(560, 0, 70, 190);
+
+    public Rect blueRightRectHitL = new Rect(380, 0, 90, 185);
+    public Rect blueRightRectHitR = new Rect(470, 0, 85 , 185);
+    public Rect blueRightRectMissL = new Rect(285, 0, 95, 185);
+    public Rect blueRightRectMissR = new Rect(555, 0, 70, 185);
+
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
@@ -116,8 +147,8 @@ public class PropThreshold implements VisionProcessor {
         Scalar highHSVRedLower = new Scalar(160, 100, 20); //Wraps around Color Wheel
         Scalar highHSVRedUpper = new Scalar(180, 255, 255);
 
-        Scalar HSVYellowLower = new Scalar(0,0,0);
-        Scalar HSVYellowUpper = new Scalar(0,0,0);
+        Scalar HSVYellowLower = new Scalar(10,49,0);
+        Scalar HSVYellowUpper = new Scalar(40,255,255);
 
         HashMap yellowBoxesHash = new HashMap();
 
@@ -138,10 +169,22 @@ public class PropThreshold implements VisionProcessor {
         lowMat.release();
         highMat.release();
         if (PropColor == PropColorEnum.YELLOW) {
-            yellowBoxesHash.put(HITLEFT,new ElementDetectBox(HITLEFT, rectHitL, finalMat));
-            yellowBoxesHash.put(HITRIGHT,new ElementDetectBox(HITRIGHT, rectHitR, finalMat));
-            yellowBoxesHash.put(MISSLEFT,new ElementDetectBox(MISSLEFT, rectMissL, finalMat));
-            yellowBoxesHash.put(MISSRIGHT,new ElementDetectBox(MISSRIGHT, rectMissR, finalMat));
+            //yellowBoxesHash.put(HITLEFT,new ElementDetectBox(HITLEFT, rectHitL, finalMat));
+            //yellowBoxesHash.put(HITRIGHT,new ElementDetectBox(HITRIGHT, rectHitR, finalMat));
+            //yellowBoxesHash.put(MISSLEFT,new ElementDetectBox(MISSLEFT, rectMissL, finalMat));
+            //yellowBoxesHash.put(MISSRIGHT,new ElementDetectBox(MISSRIGHT, rectMissR, finalMat));
+
+            yellowBoxesHash.put(Core.sumElems(finalMat.submat(redLeftRectHitL)).val[0] / redLeftRectHitL.area() / 255, HITLEFT);
+            yellowBoxesHash.put(Core.sumElems(finalMat.submat(redLeftRectHitR)).val[0] / redLeftRectHitR.area() / 255, HITRIGHT);
+            yellowBoxesHash.put(Core.sumElems(finalMat.submat(redLeftRectMissL)).val[0] / redLeftRectMissL.area() / 255, MISSLEFT);
+            yellowBoxesHash.put(Core.sumElems(finalMat.submat(redLeftRectMissR)).val[0] / redLeftRectMissR.area() / 255, MISSRIGHT);
+            double biggest = MathFuncs.max(yellowBoxesHash.keySet());
+            if (biggest < yellowThreshold) {
+                yellowPixelPos = NOPIXEL;
+            }
+            else {
+                yellowPixelPos = (YellowPixelPosEnum) yellowBoxesHash.get(biggest);
+            }
 
 //            hitLeftBox = Core.sumElems(finalMat.submat(rectHitL)).val[0];
 //            hitRightBox = Core.sumElems(finalMat.submat(rectHitR)).val[0];
@@ -211,26 +254,26 @@ public class PropThreshold implements VisionProcessor {
 
         Imgproc.rectangle(
                 frame,
-                rectHitL.tl(),
-                rectHitL.br(),
+                redLeftRectHitL.tl(),
+                redLeftRectHitL.br(),
                 new Scalar(255, 0, 0), 10);
 
         Imgproc.rectangle(
                 frame,
-                rectHitR.tl(),
-                rectHitR.br(),
+                redLeftRectHitR.tl(),
+                redLeftRectHitR.br(),
                 new Scalar(255, 0, 80), 10);
 
         Imgproc.rectangle(
                 frame,
-                rectMissL.tl(),
-                rectMissL.br(),
+                redLeftRectMissL.tl(),
+                redLeftRectMissL.br(),
                 new Scalar(0, 200, 0), 10);
 
         Imgproc.rectangle(
                 frame,
-                rectMissR.tl(),
-                rectMissR.br(),
+                redLeftRectMissR.tl(),
+                redLeftRectMissR.br(),
                 new Scalar(0, 255, 0), 10);
 
         Imgproc.rectangle(
@@ -273,12 +316,9 @@ public class PropThreshold implements VisionProcessor {
 //    public boolean lastLT = false;
 
 //  estimated yellow pixel detection boxes @ 46cm camera-board distance
-    public Rect rectHitL = new Rect(260, 240, 60, 240);
-    public Rect rectHitR = new Rect(340, 240, 60, 240);
-    public Rect rectMissL = new Rect(160, 240, 60, 240);
-    public Rect rectMissR = new Rect(440, 240, 60, 240);
 
-    public Rect activeRect = rectHitL;
+
+    public Rect activeRect = redLeftRectHitL;
     public int activeRectIndx = 0;
     public String activeRectStr = "rectHitL";
     public int rectStep = 20;
@@ -294,19 +334,19 @@ public class PropThreshold implements VisionProcessor {
 
             switch (activeRectIndx) {
                 case 0:
-                    activeRect = rectHitL;
+                    activeRect = redLeftRectHitL;
                     activeRectStr = "rectHitL";
                     break;
                 case 1:
-                    activeRect = rectHitR;
+                    activeRect = redLeftRectHitR;
                     activeRectStr = "rectHitR";
                     break;
                 case 2:
-                    activeRect = rectMissL;
+                    activeRect = redLeftRectMissL;
                     activeRectStr = "rectMissL";
                     break;
                 case 3:
-                    activeRect = rectMissR;
+                    activeRect = redLeftRectMissR;
                     activeRectStr = "rectMissR";
                     break;
             }
@@ -360,8 +400,7 @@ public class PropThreshold implements VisionProcessor {
 
         lastGamepad.copy(gamepad);
 
-        telemetry.addLine(String.format("Set Rectangle:  %s   - Indx: %d",
-                activeRectStr, activeRectIndx));
+        telemetry.addLine(String.format("Set Rectangle:  %s   - Indx: %d", activeRectStr, activeRectIndx));
         telemetry.addData("x, y, width, height:  ", activeRect.toString());
         telemetry.addData("TL = ", activeRect.tl());
         telemetry.addData("BR = ", activeRect.br());
