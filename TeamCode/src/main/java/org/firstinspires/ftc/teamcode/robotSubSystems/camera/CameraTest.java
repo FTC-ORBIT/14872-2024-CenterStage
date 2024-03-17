@@ -11,27 +11,32 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @Autonomous(name="Vision Test Blue")
 public class CameraTest extends LinearOpMode {
     private VisionPortal portal;
-    private RedPropThresholdClose redPropThresholdClose = new RedPropThresholdClose();
+    private BluePropThresholdClose bluePropThresholdClose = new BluePropThresholdClose();
 
     @Override
     public void runOpMode() throws InterruptedException {
-        redPropThresholdClose.initProp();
+        bluePropThresholdClose.initProp();
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
-                .addProcessor(redPropThresholdClose)
+                .addProcessor(bluePropThresholdClose)
                 .build();
 
 
         while (!isStopRequested()) {
-            telemetry.addData("the prop is in:", redPropThresholdClose.GetPropPosition());
-            telemetry.addData("left box:" , redPropThresholdClose.leftBox);
-            telemetry.addData("middle box:" , redPropThresholdClose.middleBox);
-            telemetry.addData("right box:", redPropThresholdClose.rightBox);
-            telemetry.addData("Averaged Left Box:", redPropThresholdClose.averagedLeftBox);
-            telemetry.addData("Averaged Middle Box:", redPropThresholdClose.averagedMiddleBox);
-            telemetry.addData("Averaged Right Box:", redPropThresholdClose.averagedRightBox);
+            telemetry.addData("the prop is in:", bluePropThresholdClose.GetPropPosition());
+            telemetry.addData("left box:" , bluePropThresholdClose.leftBox);
+            telemetry.addData("middle box:" , bluePropThresholdClose.middleBox);
+            telemetry.addData("right box:", bluePropThresholdClose.rightBox);
+            telemetry.addData("Averaged Left Box:", bluePropThresholdClose.averagedLeftBox);
+            telemetry.addData("Averaged Middle Box:", bluePropThresholdClose.averagedMiddleBox);
+            telemetry.addData("Averaged Right Box:", bluePropThresholdClose.averagedRightBox);
+
+
+            bluePropThresholdClose.test(gamepad1, telemetry);
             telemetry.update();
+
+
         }//Will output prop position on Driver Station Console
 
 

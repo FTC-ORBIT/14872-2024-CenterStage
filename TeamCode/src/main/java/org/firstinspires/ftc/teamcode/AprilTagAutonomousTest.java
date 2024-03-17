@@ -55,7 +55,7 @@ public class AprilTagAutonomousTest extends LinearOpMode
             @Override
             public void onOpened()
             {
-             camera.startStreaming(1920,1080);
+             camera.startStreaming(1280,960);
             }
 
             @Override

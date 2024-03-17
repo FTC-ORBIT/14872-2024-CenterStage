@@ -1,6 +1,13 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
 
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.HITLEFT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.HITRIGHT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.MISSLEFT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.MISSRIGHT;
+
 import android.graphics.Canvas;
+
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
@@ -12,16 +19,19 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
+import java.util.HashMap;
+
 
 public class PropThreshold implements VisionProcessor {
     Mat testMat = new Mat();
-        Mat highMat = new Mat();
+    Mat highMat = new Mat();
     Mat lowMat = new Mat();
-        Mat finalMat = new Mat();
+    Mat finalMat = new Mat();
     double Threshold = 0.015;
 
     public static String OutStr = "none"; //Set a default value in case vision does not work
     public PropPosEnum PropPos = PropPosEnum.NONE;
+
 
     public PropColorEnum PropColor = PropColorEnum.RED;
     public Rect activeLeftRect;
@@ -39,8 +49,18 @@ public class PropThreshold implements VisionProcessor {
     public double averagedMiddleBox;
 
     public double averagedRightBox;
+    public YellowPixelPosEnum yellowPixelPos = YellowPixelPosEnum.NOPIXEL;
+    public double hitLeftBox;
+    public double hitRightBox;
+    public double missLeftBox;
+    public double missRightBox;
+    public double avergedHitLeftBox;
+    public double avergedHitRightBox;
+    public double avergedMissLeftBox;
+    public double avergedMissRightBox;
 
-//    public double averagedBlueLeftBoxFar;
+
+    //    public double averagedBlueLeftBoxFar;
 //    public double averagedBlueMiddleBoxFar;
 //
 //    public double averagedBlueRightBoxFar;
@@ -74,6 +94,7 @@ public class PropThreshold implements VisionProcessor {
     public void init(int width, int height, CameraCalibration calibration) {
 
     }
+
     public void initProp() {
 
     }
@@ -95,32 +116,56 @@ public class PropThreshold implements VisionProcessor {
         Scalar highHSVRedLower = new Scalar(160, 100, 20); //Wraps around Color Wheel
         Scalar highHSVRedUpper = new Scalar(180, 255, 255);
 
-        if(PropColor == PropColorEnum.BLUE) {
+        Scalar HSVYellowLower = new Scalar(0,0,0);
+        Scalar HSVYellowUpper = new Scalar(0,0,0);
+
+        HashMap yellowBoxesHash = new HashMap();
+
+
+        if (PropColor == PropColorEnum.BLUE) {
             Core.inRange(testMat, lowHSVBlueLower, lowHSVBlueUpper, finalMat);
-        } else{
+        } else if(PropColor == PropColorEnum.RED) {
             Core.inRange(testMat, lowHSVRedLower, lowHSVRedUpper, lowMat);
             Core.inRange(testMat, highHSVRedLower, highHSVRedUpper, highMat);
-            Core.bitwise_or(lowMat,highMat, finalMat);
+            Core.bitwise_or(lowMat, highMat, finalMat);
+        } else if (PropColor == PropColorEnum.YELLOW) {
+            Core.inRange(testMat, HSVYellowLower, lowHSVBlueUpper, finalMat);
         }
 //        Core.inRange(testMat, lowHSVBlueLower, lowHSVBlueUpper,lowMat);
 
-        testMat.release();
+//        testMat.release();
 
-         lowMat.release();
-         highMat.release();
+        lowMat.release();
+        highMat.release();
+        if (PropColor == PropColorEnum.YELLOW) {
+            yellowBoxesHash.put(HITLEFT,new ElementDetectBox(HITLEFT, rectHitL, finalMat));
+            yellowBoxesHash.put(HITRIGHT,new ElementDetectBox(HITRIGHT, rectHitR, finalMat));
+            yellowBoxesHash.put(MISSLEFT,new ElementDetectBox(MISSLEFT, rectMissL, finalMat));
+            yellowBoxesHash.put(MISSRIGHT,new ElementDetectBox(MISSRIGHT, rectMissR, finalMat));
 
-         leftBox = Core.sumElems(finalMat.submat(activeLeftRect)).val[0];
-         middleBox = Core.sumElems(finalMat.submat(activeMiddleRect)).val[0];
-         rightBox = Core.sumElems(finalMat.submat(activeRightRect)).val[0];
+//            hitLeftBox = Core.sumElems(finalMat.submat(rectHitL)).val[0];
+//            hitRightBox = Core.sumElems(finalMat.submat(rectHitR)).val[0];
+//            missLeftBox = Core.sumElems(finalMat.submat(rectMissL)).val[0];
+//            missRightBox = Core.sumElems(finalMat.submat(rectMissR)).val[0];
+//
+//            avergedHitLeftBox = hitLeftBox / rectHitL.area() / 255;
+//            avergedHitRightBox = hitRightBox / rectHitR.area() / 255;
+//            avergedMissLeftBox = missLeftBox / rectMissL.area() / 255;
+//            avergedMissRightBox = missRightBox / rectMissR.area() / 255;
+
+        } else {
+            leftBox = Core.sumElems(finalMat.submat(activeLeftRect)).val[0];
+            middleBox = Core.sumElems(finalMat.submat(activeMiddleRect)).val[0];
+            rightBox = Core.sumElems(finalMat.submat(activeRightRect)).val[0];
 
 //        blueLeftBoxFar = Core.sumElems(finalMat.submat(LEFT_RECTANGLE_FAR)).val[0];
 //        blueMiddleBoxFar = Core.sumElems(finalMat.submat(MIDDLE_RECTANGLE_FAR)).val[0];
 //        blueRightBoxFar = Core.sumElems(finalMat.submat(RIGHT_RECTANGLE_FAR)).val[0];
 
 
-        averagedLeftBox = leftBox / activeLeftRect.area() / 255;
-        averagedMiddleBox = middleBox / activeMiddleRect.area() / 255; //Makes value [0,1]
-        averagedRightBox = rightBox / activeRightRect.area() / 255;
+            averagedLeftBox = leftBox / activeLeftRect.area() / 255;
+            averagedMiddleBox = middleBox / activeMiddleRect.area() / 255; //Makes value [0,1]
+            averagedRightBox = rightBox / activeRightRect.area() / 255;
 
 
 //        averagedBlueLeftBoxFar = blueLeftBoxFar / LEFT_RECTANGLE_FAR.area() / 255;
@@ -128,15 +173,16 @@ public class PropThreshold implements VisionProcessor {
 //        averagedBlueRightBoxFar = blueRightBoxFar / RIGHT_RECTANGLE_FAR.area() / 255;
 
 
-        if(averagedLeftBox > Threshold && averagedLeftBox > averagedMiddleBox){        //Must Tune Red Threshold
-            OutStr = "Left";
-            PropPos = PropPosEnum.LEFT;
-        }else if(averagedMiddleBox > Threshold && averagedRightBox < averagedMiddleBox){
-            OutStr = "Center";
-            PropPos = PropPosEnum.CENTER;
-        }else if(averagedRightBox > Threshold){
-            OutStr = "Right";
-            PropPos = PropPosEnum.RIGHT;
+            if (averagedLeftBox > Threshold && averagedLeftBox > averagedMiddleBox) {        //Must Tune Red Threshold
+                OutStr = "Left";
+                PropPos = PropPosEnum.LEFT;
+            } else if (averagedMiddleBox > Threshold && averagedRightBox < averagedMiddleBox) {
+                OutStr = "Center";
+                PropPos = PropPosEnum.CENTER;
+            } else if (averagedRightBox > Threshold) {
+                OutStr = "Right";
+                PropPos = PropPosEnum.RIGHT;
+            }
         }
 //        if(averagedBlueLeftBoxFar > Threshold){        //Must Tune Red Threshold
 //            OutStr = "blueLeftFar";
@@ -163,12 +209,42 @@ public class PropThreshold implements VisionProcessor {
                 new Scalar(0, 255, 0), 10);
 
 
-   //     lowMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline
+        Imgproc.rectangle(
+                frame,
+                rectHitL.tl(),
+                rectHitL.br(),
+                new Scalar(255, 0, 0), 10);
+
+        Imgproc.rectangle(
+                frame,
+                rectHitR.tl(),
+                rectHitR.br(),
+                new Scalar(255, 0, 80), 10);
+
+        Imgproc.rectangle(
+                frame,
+                rectMissL.tl(),
+                rectMissL.br(),
+                new Scalar(0, 200, 0), 10);
+
+        Imgproc.rectangle(
+                frame,
+                rectMissR.tl(),
+                rectMissR.br(),
+                new Scalar(0, 255, 0), 10);
+
+        Imgproc.rectangle(
+                frame,
+                activeRect.tl(),
+                activeRect.br(),
+                new Scalar(0, 255, 255), 10);
+
+
+
+//     lowMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline
 //                                  on the driver station stream, do not use this permanently in your code as
 //                                  you use the "frame" mat for all of your pipelines, such as April Tags*/
         return frame;            //You do not return the original mat anymore, instead return null
-
-
 
 
     }
@@ -179,12 +255,126 @@ public class PropThreshold implements VisionProcessor {
 
     }
 
-    public String GetPropPosition(){
+    public String GetPropPosition() {
         return OutStr;
     }
 
-    public PropPosEnum EnumGetPropPos(){
+    public PropPosEnum EnumGetPropPos() {
         return PropPos;
     }
+    public YellowPixelPosEnum getYellowPixelPos() {
+        return yellowPixelPos;
+    }
+
+
+//    public boolean lastLeft = false;
+//    public boolean lastRight = false;
+//    public boolean lastRT = false;
+//    public boolean lastLT = false;
+
+//  estimated yellow pixel detection boxes @ 46cm camera-board distance
+    public Rect rectHitL = new Rect(260, 240, 60, 240);
+    public Rect rectHitR = new Rect(340, 240, 60, 240);
+    public Rect rectMissL = new Rect(160, 240, 60, 240);
+    public Rect rectMissR = new Rect(440, 240, 60, 240);
+
+    public Rect activeRect = rectHitL;
+    public int activeRectIndx = 0;
+    public String activeRectStr = "rectHitL";
+    public int rectStep = 20;
+    public Gamepad lastGamepad = new Gamepad();
+
+    public void test(Gamepad gamepad, Telemetry telemetry) {
+
+        if (activeRect == null) activeRect = activeLeftRect;
+        if (gamepad.share && !lastGamepad.share) {
+            activeRectIndx++;
+            if (activeRectIndx > 3)
+                activeRectIndx = 0;
+
+            switch (activeRectIndx) {
+                case 0:
+                    activeRect = rectHitL;
+                    activeRectStr = "rectHitL";
+                    break;
+                case 1:
+                    activeRect = rectHitR;
+                    activeRectStr = "rectHitR";
+                    break;
+                case 2:
+                    activeRect = rectMissL;
+                    activeRectStr = "rectMissL";
+                    break;
+                case 3:
+                    activeRect = rectMissR;
+                    activeRectStr = "rectMissR";
+                    break;
+            }
+        }
+
+
+        if (gamepad.dpad_left && !lastGamepad.dpad_left) {
+            activeRect.x -= rectStep;
+            if (activeRect.x < 0)
+                activeRect.x = 0;
+        } else if (gamepad.dpad_right && !lastGamepad.dpad_right) {
+            activeRect.x += rectStep;
+            if (activeRect.x > testMat.cols() - 1)
+                activeRect.x = testMat.cols() - 1;
+        }
+        if (gamepad.dpad_up && !lastGamepad.dpad_up) {
+            activeRect.y -= rectStep;
+            if (activeRect.y < 0)
+                activeRect.y = 0;
+        } else if (gamepad.dpad_down && !lastGamepad.dpad_down) {
+            activeRect.y += rectStep;
+            if (activeRect.y > testMat.rows() - 1)
+                activeRect.y = testMat.rows() - 1;
+        }
+
+        if (gamepad.x && !lastGamepad.x ) {
+            activeRect.width -= rectStep;
+            if (activeRect.width < 1)
+                activeRect.width = 1;
+        } else if (gamepad.b && !lastGamepad.b) {
+            activeRect.width += rectStep;
+            if (activeRect.br().x > testMat.cols() - 1)
+                activeRect.width = testMat.cols() - activeRect.x;
+        }
+        if (gamepad.y && !lastGamepad.y) {
+            activeRect.height -= rectStep;
+            if (activeRect.height < 0)
+                activeRect.height = 0;
+        } else if (gamepad.a && !lastGamepad.a) {
+            activeRect.height += rectStep;
+            if (activeRect.br().y > testMat.rows() - 1)
+                activeRect.height = testMat.rows() - activeRect.y;
+        }
+
+
+        if (gamepad.left_bumper && !lastGamepad.left_bumper) {
+            rectStep -= 1;
+        } else if (gamepad.right_bumper && !lastGamepad.right_bumper) {
+            rectStep += 1;
+        }
+
+        lastGamepad.copy(gamepad);
+
+        telemetry.addLine(String.format("Set Rectangle:  %s   - Indx: %d",
+                activeRectStr, activeRectIndx));
+        telemetry.addData("x, y, width, height:  ", activeRect.toString());
+        telemetry.addData("TL = ", activeRect.tl());
+        telemetry.addData("BR = ", activeRect.br());
+        telemetry.addLine("");
+        telemetry.addData("rectStep = ", rectStep);
+        telemetry.addLine("gamepad = " + gamepad.toString());
+        telemetry.addLine("lastGamepad = " + lastGamepad.toString());
+
+//        lastLeft = gamepad.left_bumper;
+//        lastRight = gamepad.right_bumper;
+//        lastLT = gamepad.dpad_left;
+//        lastRT = gamepad.dpad_right;
+    }
+
 }
-// yoel yalechan!
+
