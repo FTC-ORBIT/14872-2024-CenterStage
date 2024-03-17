@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Plane {
     public static Servo planeServo;
-    private static float pos = 0.5f;
+    private static float pos = 1f;
     public static boolean lastLeft = false;
     public static boolean lastRight = false;
     public static boolean lastRT = false;
