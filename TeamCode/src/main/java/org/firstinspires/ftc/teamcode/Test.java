@@ -63,8 +63,8 @@ public class Test extends LinearOpMode {
         waitForStart();
 
         while (!isStopRequested()) {
-                Outtake.test(gamepad1 , telemetry);
-                telemetry.addData("pos" , Outtake.servo.getPosition());
+                Plane.test(gamepad1 , telemetry);
+                telemetry.addData("pos" , Plane.planeServo.getPosition());
                 telemetry.update();
             }
 

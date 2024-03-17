@@ -55,8 +55,8 @@ public class Plane {
             }
         }
         planeServo.setPosition(pos);
-        lastLeft = gamepad.dpad_up;
-        lastRight = gamepad.dpad_down;
+        lastLeft = gamepad.left_bumper;
+        lastRight = gamepad.right_bumper;
         lastLT = gamepad.dpad_left;
         lastRT = gamepad.dpad_right;
         telemetry.addData("pos" , Plane.planeServo.getPosition());
