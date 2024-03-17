@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Plane {
     public static Servo planeServo;
-    private static float pos = 0.5f;
+    private static float pos = 1f;
     public static boolean lastLeft = false;
     public static boolean lastRight = false;
     public static boolean lastRT = false;
@@ -55,8 +55,8 @@ public class Plane {
             }
         }
         planeServo.setPosition(pos);
-        lastLeft = gamepad.dpad_up;
-        lastRight = gamepad.dpad_down;
+        lastLeft = gamepad.left_bumper;
+        lastRight = gamepad.right_bumper;
         lastLT = gamepad.dpad_left;
         lastRT = gamepad.dpad_right;
         telemetry.addData("pos" , Plane.planeServo.getPosition());
