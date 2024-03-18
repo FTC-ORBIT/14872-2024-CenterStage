@@ -4,14 +4,9 @@ import org.firstinspires.ftc.teamcode.robotData.Constants;
 
 public final class MathFuncs {
 
-    public static double max(Object... objectList) {
-        Integer counter =0;
-        double[] doubleArray = new double[objectList.length];
-        for(Object i : objectList ) {
-            doubleArray[counter] = (double) i;
-        }
+    public static Double max(Object... objectList) {
         double biggest =0;
-        for(double i : doubleArray ) {
+        for(double i : (Double[]) objectList ) {
             if (biggest < i) {
                 biggest = i;
             }

@@ -131,6 +131,7 @@ public abstract class PropThreshold implements VisionProcessor {
                 rectMissR = leftRectMissR;
                 break;
             case CENTER:
+            case NONE:
                 rectHitL  = centerRectHitL ;
                 rectHitR  = centerRectHitR ;
                 rectMissL = centerRectMissL;
@@ -143,7 +144,12 @@ public abstract class PropThreshold implements VisionProcessor {
                 rectMissR = rightRectMissR;
                 break;
         }
-
+        yellowBoxesHash = new HashSet<ElementDetectBox>() {{
+            add(new ElementDetectBox(HITLEFT, rectHitL, finalMat));
+            add(new ElementDetectBox(HITRIGHT, rectHitR, finalMat));
+            add(new ElementDetectBox(MISSLEFT, rectMissL, finalMat));
+            add(new ElementDetectBox(MISSRIGHT, rectMissR, finalMat));
+        }};
     }
 
 
@@ -171,18 +177,15 @@ public abstract class PropThreshold implements VisionProcessor {
 //            yellowBoxesHash.put(HITRIGHT,new ElementDetectBox(HITRIGHT, rectHitR, finalMat));
 //            yellowBoxesHash.put(MISSLEFT,new ElementDetectBox(MISSLEFT, rectMissL, finalMat));
 //            yellowBoxesHash.put(MISSRIGHT,new ElementDetectBox(MISSRIGHT, rectMissR, finalMat));
-            yellowBoxesHash = new HashSet<ElementDetectBox>() {{
-                add(new ElementDetectBox(HITLEFT, rectHitL, finalMat));
-                add(new ElementDetectBox(HITRIGHT, rectHitR, finalMat));
-                add(new ElementDetectBox(MISSLEFT, rectMissL, finalMat));
-                add(new ElementDetectBox(MISSRIGHT, rectMissR, finalMat));
-            }};
+
 //            yellowBoxesHash.put(Core.sumElems(finalMat.submat(redLeftRectHitL)).val[0] / redLeftRectHitL.area() / 255, HITLEFT);
 //            yellowBoxesHash.put(Core.sumElems(finalMat.submat(redLeftRectHitR)).val[0] / redLeftRectHitR.area() / 255, HITRIGHT);
 //            yellowBoxesHash.put(Core.sumElems(finalMat.submat(redLeftRectMissL)).val[0] / redLeftRectMissL.area() / 255, MISSLEFT);
 //            yellowBoxesHash.put(Core.sumElems(finalMat.submat(redLeftRectMissR)).val[0] / redLeftRectMissR.area() / 255, MISSRIGHT);
 //            double biggest = MathFuncs.max(yellowBoxesHash.keySet());
-
+            for (ElementDetectBox eBox: yellowBoxesHash) {
+                eBox.boxAverageUpdate(finalMat);
+            }
             ElementDetectBox biggest = ElementDetectBox.max(yellowBoxesHash);
             if (biggest.averagedBox < yellowThreshold) {
                 yellowPixelPos = NOPIXEL;
@@ -310,18 +313,22 @@ public abstract class PropThreshold implements VisionProcessor {
                 case 0:
                     activeRect = rectHitL;
                     activeRectStr = "rectHitL";
+                    PropPos = PropPosEnum.LEFT;
                     break;
                 case 1:
                     activeRect = rectHitR;
                     activeRectStr = "rectHitR";
+                    PropPos = PropPosEnum.CENTER;
                     break;
                 case 2:
                     activeRect = rectMissL;
                     activeRectStr = "rectMissL";
+                    PropPos = PropPosEnum.RIGHT;
                     break;
                 case 3:
                     activeRect = rectMissR;
                     activeRectStr = "rectMissR";
+                    PropPos = PropPosEnum.NONE;
                     break;
             }
         }

@@ -33,6 +33,6 @@ public class RedPropThresholdFar extends PropThreshold {
         rightRectHitL  = new Rect(350, 0, 70, 180);
         rightRectHitR  = new Rect(425, 0, 70, 180);
         rightRectMissL = new Rect(270, 0, 75, 180);
-        rightRectMissR = new Rect(500, 0, 60, 180);
+        rightRectMissR = new Rect(500, 0, 30, 180);
     }
 }

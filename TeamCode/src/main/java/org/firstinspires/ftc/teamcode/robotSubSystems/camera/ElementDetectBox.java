@@ -17,10 +17,12 @@ public class ElementDetectBox {
     public ElementDetectBox(YellowPixelPosEnum place, Rect rect, Mat mat) {
         this.place = place;
         this.elementBox = rect;
-        this.box = Core.sumElems(mat.submat(rect)).val[0];
+        boxAverageUpdate(mat);
+    }
+    public void boxAverageUpdate(Mat mat) {
+        this.box = Core.sumElems(mat.submat(this.elementBox)).val[0];
 
-        this.averagedBox = this.box / rect.area() / 255;
-
+        this.averagedBox = this.box / this.elementBox.area() / 255;
     }
 
     public static ElementDetectBox max(HashSet<ElementDetectBox> boxList) {

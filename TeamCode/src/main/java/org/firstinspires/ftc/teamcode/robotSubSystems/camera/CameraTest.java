@@ -11,29 +11,33 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @Autonomous(name="Vision Test Blue")
 public class CameraTest extends LinearOpMode {
     private VisionPortal portal;
-    private BluePropThresholdClose bluePropThresholdClose = new BluePropThresholdClose();
+    private BluePropThresholdFar bluePropThreshold = new BluePropThresholdFar();
 
     @Override
     public void runOpMode() throws InterruptedException {
-        bluePropThresholdClose.initProp();
+        bluePropThreshold.initProp();
+
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
-                .addProcessor(bluePropThresholdClose)
+                .addProcessor(bluePropThreshold)
                 .build();
 
+        bluePropThreshold.initYellowPixel();
 
         while (!isStopRequested()) {
-            telemetry.addData("the prop is in:", bluePropThresholdClose.GetPropPosition());
-            telemetry.addData("left box:" , bluePropThresholdClose.leftBox);
-            telemetry.addData("middle box:" , bluePropThresholdClose.middleBox);
-            telemetry.addData("right box:", bluePropThresholdClose.rightBox);
-            telemetry.addData("Averaged Left Box:", bluePropThresholdClose.averagedLeftBox);
-            telemetry.addData("Averaged Middle Box:", bluePropThresholdClose.averagedMiddleBox);
-            telemetry.addData("Averaged Right Box:", bluePropThresholdClose.averagedRightBox);
+            telemetry.addData("the pixel is in:", bluePropThreshold.getYellowPixelPos()) ;
+//            telemetry.addData("the prop is in:", bluePropThreshold.GetPropPosition());
+            telemetry.addData("the prop is in:", bluePropThreshold.EnumGetPropPos());
+            telemetry.addData("left box:" , bluePropThreshold.leftBox);
+            telemetry.addData("middle box:" , bluePropThreshold.middleBox);
+            telemetry.addData("right box:", bluePropThreshold.rightBox);
+            telemetry.addData("Averaged Left Box:", bluePropThreshold.averagedLeftBox);
+            telemetry.addData("Averaged Middle Box:", bluePropThreshold.averagedMiddleBox);
+            telemetry.addData("Averaged Right Box:", bluePropThreshold.averagedRightBox);
 
 
-            bluePropThresholdClose.test(gamepad1, telemetry);
+            bluePropThreshold.test(gamepad1, telemetry);
             telemetry.update();
 
 

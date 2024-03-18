@@ -71,8 +71,8 @@ public class Robot extends LinearOpMode {
         while (!isStopRequested()) {
            if (gamepad2.right_bumper) OrbitGyro.resetGyro();
           GlobalData.currentTime = (float) robotTime.seconds();
-          final boolean placing = SubSystemManager.wanted.equals(RobotState.MIN) || SubSystemManager.wanted.equals(RobotState.LOW) || SubSystemManager.wanted.equals(RobotState.MID);
-          Vector leftStick = new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y).scale(placing ? 0.25f : 1);
+//          final boolean placing = SubSystemManager.wanted.equals(RobotState.MIN) || SubSystemManager.wanted.equals(RobotState.LOW) || SubSystemManager.wanted.equals(RobotState.MID);
+          Vector leftStick = new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y);
           float omega = gamepad1.right_trigger - gamepad1.left_trigger;
           Drivetrain.operate(leftStick,  omega , telemetry , gamepad1);
           SubSystemManager.setSubsystemToState(gamepad1 , gamepad2 , telemetry);

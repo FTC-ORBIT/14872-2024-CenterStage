@@ -7,7 +7,8 @@ public class BluePropThresholdFar extends PropThreshold {
 
     @Override
     public void initProp() {
-        PropColor = PropColorEnum.BLUE;
+        AllianceColor = PropColorEnum.BLUE;
+        PropColor = AllianceColor;
         activeLeftRect = LEFT_RECTANGLE_CLOSE;
         activeMiddleRect = MIDDLE_RECTANGLE_CLOSE;
         activeRightRect = RIGHT_RECTANGLE_CLOSE;

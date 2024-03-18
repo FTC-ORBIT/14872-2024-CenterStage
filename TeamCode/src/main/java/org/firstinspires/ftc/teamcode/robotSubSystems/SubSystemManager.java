@@ -79,7 +79,8 @@ public class SubSystemManager {
 
     public static void setSubsystemToState(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
 //        final RobotState wanted = getStateFromWantedAndCurrent(getState(gamepad1));
-        wanted = getStateFromWantedAndCurrent(getState(gamepad1));
+        wanted = getState(gamepad1);
+
 
 
         if (wanted.equals(RobotState.TRAVEL) || wanted.equals(RobotState.INTAKE) || wanted.equals(RobotState.DEPLETE)){
