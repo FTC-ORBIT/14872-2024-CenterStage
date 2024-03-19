@@ -64,6 +64,8 @@ public abstract class PropThreshold implements VisionProcessor {
 
 
 
+
+
     static final Rect LEFT_RECTANGLE_CLOSE = new Rect(
             new Point(0, 225),
             new Point(240, 479)
@@ -313,22 +315,22 @@ public abstract class PropThreshold implements VisionProcessor {
                 case 0:
                     activeRect = rectHitL;
                     activeRectStr = "rectHitL";
-                    PropPos = PropPosEnum.LEFT;
+//                    PropPos = PropPosEnum.LEFT;
                     break;
                 case 1:
                     activeRect = rectHitR;
                     activeRectStr = "rectHitR";
-                    PropPos = PropPosEnum.CENTER;
+//                    PropPos = PropPosEnum.CENTER;
                     break;
                 case 2:
                     activeRect = rectMissL;
                     activeRectStr = "rectMissL";
-                    PropPos = PropPosEnum.RIGHT;
+//                    PropPos = PropPosEnum.RIGHT;
                     break;
                 case 3:
                     activeRect = rectMissR;
                     activeRectStr = "rectMissR";
-                    PropPos = PropPosEnum.NONE;
+//                    PropPos = PropPosEnum.NONE;
                     break;
             }
         }

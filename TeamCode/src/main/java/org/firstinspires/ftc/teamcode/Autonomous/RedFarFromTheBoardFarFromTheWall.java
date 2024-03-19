@@ -13,7 +13,9 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.PropThreshold;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.RedPropThresholdFar;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
@@ -52,12 +54,12 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
     public static double afterGateX = 53;
     public static double afterGateY = -70.345;
     public static double boardPos12 = 37;
-    public static double boardPos34 = 32.7;
+    public static double boardPos34 = 32.6;
     public static double boardPos56 = 23.3;
     // TODO X6 = 22.5
     // TODO X5 = 23.3
-    // TODO X4 = 28.28
-    // TODO X3 = 32.7
+    // TODO X4 = 28.75
+    // TODO X3 = 32.5
     // TODO X2 = 34.5
     // TODO X1 = 37
     public static double leftAfterPropX = 16;
@@ -66,7 +68,8 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
     public static double rightAfterPropY = 3;
     public static double rightBeforeGateX = 52.8;
     public static double markerY = -77;
-
+    public static double markerX = 30.0;
+    public static ElevatorStates state = ElevatorStates.AUTO;
     private VisionPortal portal;
     private RedPropThresholdFar redPropThresholdFar = new RedPropThresholdFar();
 
@@ -99,19 +102,43 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(centerAfterConeX, centerAfterConeY ,startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(centerGateX , centerGateY ,startPose.getHeading()))
                 .turn(Math.toRadians(-90))
-                .waitSeconds(5)
+                .waitSeconds(0)
                 .lineToLinearHeading(new Pose2d(centerGateX + 3, centerGateY , Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(boardPos34, markerY,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(markerX, markerY,Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
-                    Elevator.operateAutonomous(ElevatorStates.AUTO, telemetry);
+                   redPropThresholdFar.initYellowPixel();
+                })
+                .waitSeconds(3)
+                .addTemporalMarker(()->{
+                    if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITLEFT) {
+                        boardPos34 = 28.75;
+                        state = ElevatorStates.AUTO;
+                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+                        boardPos34 = 32.6;
+                        state = ElevatorStates.AUTO;
+                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.MISSLEFT){
+                        boardPos34 = 28.75;
+                        state = ElevatorStates.MIN;
+                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
+                        boardPos34 = 32.6;
+                        state = ElevatorStates.MIN;
+                    }else {
+                        boardPos34 = 28.75;
+                        state = ElevatorStates.MIN;
+                    }
+                    telemetry.addData("YellowP", redPropThresholdFar.getYellowPixelPos());
+                    telemetry.update();
+                })
+                .addTemporalMarker(() -> {
+                    Elevator.operateAutonomous(state,  telemetry);
                 })
                 .addTemporalMarker(() -> {
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
                 .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(boardPos34 , boardY , Math.toRadians(-90)))
-                .waitSeconds(1)
+                .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })

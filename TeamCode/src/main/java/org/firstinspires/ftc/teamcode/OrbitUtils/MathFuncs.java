@@ -6,8 +6,12 @@ public final class MathFuncs {
 
     public static Double max(Object... objectList) {
         double biggest =0;
-        for(double i : (Double[]) objectList ) {
-            if (biggest < i) {
+        double[] doubleList = new double[objectList.length];
+        for(int i=0 ; i < objectList.length ; i++ ) {
+            doubleList[i] = (double) objectList[i];
+        }
+        for(double i : doubleList) {
+            if (i > biggest) {
                 biggest = i;
             }
         }

@@ -12,7 +12,7 @@ public class ElementDetectBox {
     public PropColorEnum elementColor = PropColorEnum.YELLOW;
     public Rect elementBox;
     public double box;
-    public double averagedBox;
+    public double averagedBox = 0;
 
     public ElementDetectBox(YellowPixelPosEnum place, Rect rect, Mat mat) {
         this.place = place;
@@ -29,12 +29,16 @@ public class ElementDetectBox {
         ElementDetectBox highestScoreBox = null;
 
         for (ElementDetectBox eBox: boxList) {
-            if ( (highestScoreBox == null) ||
-                 (eBox.averagedBox > highestScoreBox.averagedBox) ||
-                 (eBox.averagedBox == highestScoreBox.averagedBox) && (eBox.box > highestScoreBox.box) ) {
+            if (highestScoreBox == null) {
+                highestScoreBox = eBox;
+            }
+            else {
+                if (eBox.averagedBox > highestScoreBox.averagedBox ||
+                        (eBox.averagedBox == highestScoreBox.averagedBox) && (eBox.box > highestScoreBox.box)) {
                     highestScoreBox = eBox;
                 }
             }
+        }
 
         return highestScoreBox;
     }
