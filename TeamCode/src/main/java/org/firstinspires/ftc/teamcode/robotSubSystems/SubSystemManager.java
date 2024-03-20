@@ -204,6 +204,7 @@ public class SubSystemManager {
             elevatorState = ElevatorStates.OVERRIDE;
             ElevatorToggleButton = true;
         }
+        if (gamepad1.dpad_up) fourbarState = FourbarState.REVERSE;
 
         Intake.operate(intakeState);
         Outtake.operate(outtakeState);

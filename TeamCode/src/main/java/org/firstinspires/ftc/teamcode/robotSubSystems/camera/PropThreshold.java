@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.teamcode.OrbitUtils.MathFuncs;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -62,8 +63,7 @@ public abstract class PropThreshold implements VisionProcessor {
     public YellowPixelPosEnum yellowPixelPos = YellowPixelPosEnum.NOPIXEL;
     public double yellowThreshold = 0.015;
     HashSet<ElementDetectBox> yellowBoxesHash;
-    //HashMap yellowBoxesHash = new HashMap();
-    //double[] yellowValue;
+    //HashMap<Double, Object> yellowBoxesHash = new HashMap();
 
 
 
@@ -157,14 +157,10 @@ public abstract class PropThreshold implements VisionProcessor {
             add(new ElementDetectBox(MISSLEFT, rectMissL, finalMat));
             add(new ElementDetectBox(MISSRIGHT, rectMissR, finalMat));
         }};
-        //double[] values = {Core.sumElems(finalMat.submat(rectHitL)).val[0] / rectHitL.area() / 255,
-        //        Core.sumElems(finalMat.submat(rectHitR)).val[0] / rectHitR.area() / 255,
-        //        Core.sumElems(finalMat.submat(rectMissL)).val[0] / rectMissL.area() / 255,
-        //        Core.sumElems(finalMat.submat(rectMissR)).val[0] / rectMissR.area() / 255};
-        //yellowBoxesHash.put(values[0], HITLEFT);
-        //yellowBoxesHash.put(values[1], HITRIGHT);
-        //yellowBoxesHash.put(values[2], MISSLEFT);
-        //yellowBoxesHash.put(values[3], MISSRIGHT);
+        //yellowBoxesHash.put(finalMat.submat(rectHitL)).val[0] / rectHitL.area() / 255, HITLEFT);
+        //yellowBoxesHash.put(finalMat.submat(rectHitR)).val[0] / rectHitR.area() / 255, HITRIGHT);
+        //yellowBoxesHash.put(finalMat.submat(rectMissL)).val[0] / rectMissL.area() / 255, MISSLEFT);
+        //yellowBoxesHash.put(finalMat.submat(rectMissR)).val[0] / rectMissR.area() / 255, MISSRIGHT);
     }
 
 
@@ -193,7 +189,13 @@ public abstract class PropThreshold implements VisionProcessor {
 //            yellowBoxesHash.put(MISSLEFT,new ElementDetectBox(MISSLEFT, rectMissL, finalMat));
 //            yellowBoxesHash.put(MISSRIGHT,new ElementDetectBox(MISSRIGHT, rectMissR, finalMat));
 
-            //double biggest = MathFuncs.max(values);
+            //double biggest = MathFuncs.max(yellowBoxesHash.keySet());
+            //if (biggest < yellowThreshold) {
+            //  yellowPixelPos = NOPIXEL;
+            // }
+            //else {
+            //    yellowPixelPos = yellowBoxesHash.get(biggest);
+            //}
             for (ElementDetectBox eBox: yellowBoxesHash) {
                 eBox.boxAverageUpdate(finalMat);
             }
