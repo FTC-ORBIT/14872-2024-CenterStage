@@ -3,7 +3,15 @@ package org.firstinspires.ftc.teamcode.OrbitUtils;
 import org.firstinspires.ftc.teamcode.robotData.Constants;
 
 public final class MathFuncs {
-
+    public static Double max(double... doubleList) {
+        double biggest =0;
+        for(double i : doubleList) {
+            if (i > biggest) {
+                biggest = i;
+            }
+        }
+        return biggest;
+    }
     public static Double max(Object... objectList) {
         double biggest =0;
         double[] doubleList = new double[objectList.length];

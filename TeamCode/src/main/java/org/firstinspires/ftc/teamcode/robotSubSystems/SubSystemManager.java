@@ -225,8 +225,6 @@ public class SubSystemManager {
         telemetry.addData("elevator", Elevator.elevatorMotor.getCurrentPosition());
         telemetry.addData("elevator2", Elevator.elevatorMotor2.getCurrentPosition());
         telemetry.addData("fourBar", Fourbar.servo.getPosition());
-//        telemetry.addData("fixPixel-Servo_1" , Fixpixel.servo.getPosition());
-//        telemetry.addData("fixPixel-Servo_2" , Fixpixel.servo2.getPosition());
         telemetry.addData("outtake", Outtake.servo.getPosition());
         telemetry.addData("plane", Plane.planeServo.getPosition());
         telemetry.addData("time for deplete in travel", elapsedTime);

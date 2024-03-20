@@ -44,17 +44,25 @@ public class Drivetrain {
 
     }
 
-    public static void operate(final Vector velocity_W, float omega , Telemetry telemetry, Gamepad gamepad) {
+    public static void operate(final Vector velocity_W, float omega , Telemetry telemetry, Gamepad gamepad1) {
         final float robotAngle = (float) Math.toRadians(OrbitGyro.getAngle());
         final Vector velocity_RobotCS_W = velocity_W.rotate(-robotAngle);
-        if(velocity_RobotCS_W.norm() <= Math.sqrt(0.005) && Math.abs(omega) == 0) stop();
-        else drive(velocity_RobotCS_W, omega);
-        if (SubSystemManager.elevatorState == ElevatorStates.MIN || SubSystemManager.elevatorState == ElevatorStates.LOW || SubSystemManager.elevatorState == ElevatorStates.MID){
+        if (SubSystemManager.elevatorState == ElevatorStates.MIN || SubSystemManager.elevatorState == ElevatorStates.LOW ){
+            if (omega > 0) omega = DrivetrainConstants.MaxOmegaSlow;
+            else if (omega <0)omega =  -DrivetrainConstants.MaxOmegaSlow;
+            else omega = 0;
             driveFactor = DrivetrainConstants.slowPower;
-        }else{
+        }else if (SubSystemManager.elevatorState == ElevatorStates.MID){
+            driveFactor = DrivetrainConstants.superSlowPower;
+            if (omega > 0) omega = DrivetrainConstants.MaxOmegaSlowMid;
+            else if (omega < 0) omega = -DrivetrainConstants.MaxOmegaSlowMid;
+            else omega = 0;
+        }else {
             driveFactor = DrivetrainConstants.power;
         }
 
+        if(velocity_RobotCS_W.norm() <= Math.sqrt(0.005) && Math.abs(omega) == 0) stop();
+        else drive(velocity_RobotCS_W, omega);
 
 
 
