@@ -45,7 +45,7 @@ public class Fixpixel {
         }else if (gamepad.dpad_right && !lastRT){
             pos -= 0.001;
             if (pos < 0){
-                pos = 0;
+                  pos = 0;
             }
         }
         servo.setPosition(pos);
