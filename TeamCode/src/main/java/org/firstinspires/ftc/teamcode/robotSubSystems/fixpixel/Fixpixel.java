@@ -8,7 +8,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Fixpixel {
     public static Servo servo;
-    public static Servo servo2;
     public static float pos;
     public static boolean lastLeft = false;
     public static boolean lastRight = false;
@@ -23,12 +22,14 @@ public class Fixpixel {
             case CLOSE:
                 pos = FixpixelConstants.close;
                 break;
-            case OPEN:
-                pos = FixpixelConstants.open;
+            case MID:
+                pos = FixpixelConstants.mid;
                 break;
+            case MIN:
+            default:
+                pos = FixpixelConstants.min;
         }
         servo.setPosition(pos);
-        servo2.setPosition(pos);
     }
     public static void test(Gamepad gamepad , Telemetry telemetry){
 
