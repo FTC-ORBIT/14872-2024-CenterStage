@@ -36,7 +36,7 @@ public class Test extends LinearOpMode {
 
         ElapsedTime robotTime = new ElapsedTime();
         robotTime.reset();
-//           Fixpixel.init(hardwareMap);
+        Fixpixel.init(hardwareMap);
         Drivetrain.init(hardwareMap);
         OrbitGyro.init(hardwareMap);
         Elevator.init(hardwareMap);
@@ -64,6 +64,9 @@ public class Test extends LinearOpMode {
         waitForStart();
 
         while (!isStopRequested()) {
+            Vector leftStick = new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y);
+            float omega = gamepad1.right_trigger - gamepad1.left_trigger;
+            Drivetrain.operate(leftStick,  omega , telemetry , gamepad1);
                 Fixpixel.test(gamepad1 , telemetry);
                 telemetry.addData("pos" , Plane.planeServo.getPosition());
                 telemetry.update();

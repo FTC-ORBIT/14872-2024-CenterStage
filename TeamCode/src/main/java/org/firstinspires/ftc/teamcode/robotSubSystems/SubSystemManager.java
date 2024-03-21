@@ -41,6 +41,7 @@ public class SubSystemManager {
     private static boolean lastLeftBumper = false;
     private static int outtakeCounter = 0;
 
+
     private static RobotState getState(Gamepad gamepad) {
         if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back || gamepad.dpad_up) {
             ElevatorToggleButton = false;
@@ -205,7 +206,6 @@ public class SubSystemManager {
             ElevatorToggleButton = true;
         }
         if (gamepad1.dpad_up) fourbarState = FourbarState.REVERSE;
-
         Intake.operate(intakeState);
         Outtake.operate(outtakeState);
         Elevator.operateTeleop(elevatorState, gamepad1, telemetry);
@@ -213,7 +213,7 @@ public class SubSystemManager {
         //       Fixpixel.operate(fixpixelState , gamepad1 , telemetry);
 
         lastState = wanted;
-        if (gamepad2.a || gamepad1.dpad_down) OrbitGyro.resetGyro();
+        if (gamepad2.a || gamepad1.dpad_left) OrbitGyro.resetGyro();
         if (gamepad2.back) Plane.operate(PlaneState.THROW);
     }
 

@@ -17,17 +17,25 @@ public class Fixpixel {
         servo = hardwareMap.get(Servo.class, "fixPixelServo");
         pos = FixpixelConstants.close;
     }
-    public static void operate(FixpixelState state , Gamepad gamepad , Telemetry telemetry){
+    public static void operate(FixpixelState state , Gamepad gamepad1 , Telemetry telemetry){
         switch (state){
             case CLOSE:
+            default:
                 pos = FixpixelConstants.close;
                 break;
             case MID:
-                pos = FixpixelConstants.mid;
+                pos = FixpixelConstants.low;
                 break;
             case MIN:
-            default:
                 pos = FixpixelConstants.min;
+                break;
+            case OVERRIDE:
+                if (gamepad1.dpad_up){
+                    pos += 0.01;
+                }else if (gamepad1.dpad_down){
+                    pos -= 0.01;
+                }
+                break;
         }
         servo.setPosition(pos);
     }
@@ -60,7 +68,7 @@ public class Fixpixel {
         lastRight = gamepad.right_bumper;
         lastlT = gamepad.dpad_left;
         lastRT = gamepad.dpad_right;
-        telemetry.addData("pos" , pos);
+        telemetry.addData("pos" , servo.getPosition());
         telemetry.update();
     }
 
