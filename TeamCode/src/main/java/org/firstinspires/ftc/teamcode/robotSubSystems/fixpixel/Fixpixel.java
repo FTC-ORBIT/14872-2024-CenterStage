@@ -1,5 +1,11 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class Fixpixel {
     public static Servo servo;
     public static Servo servo2;
