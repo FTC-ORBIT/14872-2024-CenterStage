@@ -544,11 +544,12 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
             switch (redPropThresholdFar.EnumGetPropPos()) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
-                    if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITLEFT){
+                    redPropThresholdFar.getYellowPixelPos();
+                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
                         drive.followTrajectorySequence(leftConeHitL);
-                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
                         drive.followTrajectorySequence(leftConeHitR);
-                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
+                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
                         drive.followTrajectorySequence(leftConeMissR);
                     }else {
                         drive.followTrajectorySequence(leftConeNopPixel);
@@ -580,11 +581,12 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                     break;
                 case RIGHT:
                     drive.followTrajectorySequence(rightCone);
-                    if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITLEFT){
+                    redPropThresholdFar.getYellowPixelPos();
+                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
                         drive.followTrajectorySequence(rightConeHitL);
-                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
                         drive.followTrajectorySequence(rightConeHitR);
-                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.MISSLEFT){
+                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
                         drive.followTrajectorySequence(rightConeMissL);
                     }else {
                         drive.followTrajectorySequence(rightConeNopPixel);
@@ -596,13 +598,14 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                     break;
                 case NONE:
                     drive.followTrajectorySequence(centerCone);
-                    if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITLEFT) {
+                    redPropThresholdFar.getYellowPixelPos();
+                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT) {
                         drive.followTrajectorySequence(centerConeHitL);
-                    } else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+                    } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
                         drive.followTrajectorySequence(centerConeHitR);
-                    } else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.MISSLEFT){
+                    } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
                         drive.followTrajectorySequence(centerConeMissL);
-                    } else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
+                    } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
                         drive.followTrajectorySequence(centerConeMissR);
                     } else {
                         drive.followTrajectorySequence(centerConeNopPixel);
