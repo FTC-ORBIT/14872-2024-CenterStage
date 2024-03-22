@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel.Fixpixel;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
@@ -40,7 +41,7 @@ public class Robot extends LinearOpMode {
 
         ElapsedTime robotTime = new ElapsedTime();
         robotTime.reset();
-        //   Fixpixel.init(hardwareMap);
+        Fixpixel.init(hardwareMap);
         Drivetrain.init(hardwareMap);
         OrbitGyro.init(hardwareMap);
         Elevator.init(hardwareMap);
@@ -69,7 +70,6 @@ public class Robot extends LinearOpMode {
         GlobalData.robotState = RobotState.TRAVEL;
 
         while (!isStopRequested()) {
-           if (gamepad2.right_bumper) OrbitGyro.resetGyro();
           GlobalData.currentTime = (float) robotTime.seconds();
 //          final boolean placing = SubSystemManager.wanted.equals(RobotState.MIN) || SubSystemManager.wanted.equals(RobotState.LOW) || SubSystemManager.wanted.equals(RobotState.MID);
           Vector leftStick = new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y);
