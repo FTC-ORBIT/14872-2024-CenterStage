@@ -47,10 +47,11 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
         telemetry.update();
     }
-            redPropThreshold.initYellowPixel();
+//            redPropThreshold.initYellowPixel();
 
 
             while (!isStopRequested()) {
+                redPropThreshold.test(gamepad1, telemetry);
                 telemetry.addData("the pixel is in:", redPropThreshold.getYellowPixelPos());
 //                telemetry.addData("Prop Position", redPropThreshold.GetPropPosition());
                 telemetry.addData("Prop Position", redPropThreshold.EnumGetPropPos());
@@ -62,7 +63,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
                 telemetry.addData("Averaged Right Box:", redPropThreshold.averagedRightBox);
 
 
-                redPropThreshold.test(gamepad1, telemetry);
+
                 telemetry.update();
             }
         }

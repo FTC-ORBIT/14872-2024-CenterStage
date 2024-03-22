@@ -61,7 +61,7 @@ public abstract class PropThreshold implements VisionProcessor {
     public double averagedRightBox;
 
     public YellowPixelPosEnum yellowPixelPos = YellowPixelPosEnum.NOPIXEL;
-    public double yellowThreshold = 0.015;
+    public double yellowThreshold = 0.01;
     HashSet<ElementDetectBox> yellowBoxesHash;
     //HashMap<Double, Object> yellowBoxesHash = new HashMap();
 
