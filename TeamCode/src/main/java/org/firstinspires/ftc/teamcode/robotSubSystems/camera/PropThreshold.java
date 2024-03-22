@@ -44,8 +44,8 @@ public abstract class PropThreshold implements VisionProcessor {
     Scalar HSVYellowLower = new Scalar(10, 49, 0);
     Scalar HSVYellowUpper = new Scalar(40, 255, 255);
 
-    public static String OutStr = "none"; //Set a default value in case vision does not work
     public PropPosEnum PropPos = PropPosEnum.NONE;
+    public PropPosEnum sampledPropPos = PropPos;
     public PropColorEnum PropColor = PropColorEnum.RED;
     public PropColorEnum AllianceColor = PropColorEnum.RED;
     public Rect activeLeftRect;
@@ -59,12 +59,15 @@ public abstract class PropThreshold implements VisionProcessor {
     public double averagedLeftBox;
     public double averagedMiddleBox;
     public double averagedRightBox;
+    public boolean completedPropPos = false;
 
     public YellowPixelPosEnum yellowPixelPos = YellowPixelPosEnum.NOPIXEL;
+    public YellowPixelPosEnum sampledYellowPixelPos = yellowPixelPos;
+
     public double yellowThreshold = 0.01;
     HashSet<ElementDetectBox> yellowBoxesHash;
-    //HashMap<Double, Object> yellowBoxesHash = new HashMap();
-
+    //HashMap<Double, YellowPixelPosEnum> yellowBoxesHash = new HashMap();
+    public ElementDetectBox biggest;
 
 
 
@@ -130,7 +133,7 @@ public abstract class PropThreshold implements VisionProcessor {
     public void initYellowPixel() {
         PropColor = PropColorEnum.YELLOW;
 
-        switch (PropPos) {
+        switch (EnumGetPropPos()) {
             case LEFT:
                 rectHitL  = leftRectHitL ;
                 rectHitR  = leftRectHitR ;
@@ -152,15 +155,15 @@ public abstract class PropThreshold implements VisionProcessor {
                 break;
         }
         yellowBoxesHash = new HashSet<ElementDetectBox>() {{
-            add(new ElementDetectBox(HITLEFT, rectHitL, finalMat));
-            add(new ElementDetectBox(HITRIGHT, rectHitR, finalMat));
-            add(new ElementDetectBox(MISSLEFT, rectMissL, finalMat));
-            add(new ElementDetectBox(MISSRIGHT, rectMissR, finalMat));
+            add(new ElementDetectBox(HITLEFT, rectHitL));
+            add(new ElementDetectBox(HITRIGHT, rectHitR));
+            add(new ElementDetectBox(MISSLEFT, rectMissL));
+            add(new ElementDetectBox(MISSRIGHT, rectMissR));
         }};
-        //yellowBoxesHash.put(finalMat.submat(rectHitL)).val[0] / rectHitL.area() / 255, HITLEFT);
-        //yellowBoxesHash.put(finalMat.submat(rectHitR)).val[0] / rectHitR.area() / 255, HITRIGHT);
-        //yellowBoxesHash.put(finalMat.submat(rectMissL)).val[0] / rectMissL.area() / 255, MISSLEFT);
-        //yellowBoxesHash.put(finalMat.submat(rectMissR)).val[0] / rectMissR.area() / 255, MISSRIGHT);
+//        yellowBoxesHash.put(finalMat.submat(rectHitL)).val[0] / rectHitL.area() / 255, HITLEFT);
+//        yellowBoxesHash.put( (finalMat.submat(rectHitR)).val[0]) / rectHitR.area() / 255 , HITRIGHT);
+//        yellowBoxesHash.put(finalMat.submat(rectMissL)).val[0] / rectMissL.area() / 255, MISSLEFT);
+//        yellowBoxesHash.put(finalMat.submat(rectMissR)).val[0] / rectMissR.area() / 255, MISSRIGHT);
     }
 
 
@@ -199,7 +202,7 @@ public abstract class PropThreshold implements VisionProcessor {
             for (ElementDetectBox eBox: yellowBoxesHash) {
                 eBox.boxAverageUpdate(finalMat);
             }
-            ElementDetectBox biggest = ElementDetectBox.max(yellowBoxesHash);
+            biggest = ElementDetectBox.max(yellowBoxesHash);
             if (biggest.averagedBox < yellowThreshold) {
                 yellowPixelPos = NOPIXEL;
             } else {
@@ -218,15 +221,13 @@ public abstract class PropThreshold implements VisionProcessor {
 
 
             if (averagedLeftBox > Threshold && averagedLeftBox > averagedMiddleBox) {        //Must Tune Red Threshold
-                OutStr = "Left";
                 PropPos = PropPosEnum.LEFT;
             } else if (averagedMiddleBox > Threshold && averagedRightBox < averagedMiddleBox) {
-                OutStr = "Center";
                 PropPos = PropPosEnum.CENTER;
             } else if (averagedRightBox > Threshold) {
-                OutStr = "Right";
                 PropPos = PropPosEnum.RIGHT;
             }
+            completedPropPos = true;
         }
 
 
@@ -243,6 +244,10 @@ public abstract class PropThreshold implements VisionProcessor {
                 new Scalar(0, 255, 0), 10);
 
         if (test_mode) {
+            if (showFinalMat) {
+                finalMat.copyTo(frame, finalMat);
+            }
+
             Imgproc.rectangle(
                     frame,
                     rectHitL.tl(),
@@ -289,15 +294,13 @@ public abstract class PropThreshold implements VisionProcessor {
 
     }
 
-    public String GetPropPosition() {
-        return OutStr;
-    }
-
     public PropPosEnum EnumGetPropPos() {
-        return PropPos;
+        sampledPropPos = PropPos;
+        return sampledPropPos;
     }
     public YellowPixelPosEnum getYellowPixelPos() {
-        return yellowPixelPos;
+        sampledYellowPixelPos = yellowPixelPos;
+        return sampledYellowPixelPos;
     }
 
 
@@ -311,12 +314,18 @@ public abstract class PropThreshold implements VisionProcessor {
     public int rectStep = 20;
     public Gamepad lastGamepad = new Gamepad();
     boolean test_mode = false;
+    boolean showFinalMat = false;
 
     public void test(Gamepad gamepad, Telemetry telemetry) {
 
         test_mode = true;
 
         if (activeRect == null) activeRect = activeLeftRect;
+
+        if (gamepad.start && !lastGamepad.start) {
+            showFinalMat = !showFinalMat;
+        }
+
         if (gamepad.share && !lastGamepad.share) {
             activeRectIndx++;
             if (activeRectIndx > 3)

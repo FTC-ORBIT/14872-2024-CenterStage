@@ -109,43 +109,13 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .waitSeconds(5)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(markerX, markerY,Math.toRadians(-90)))
-                .addTemporalMarker(() ->{
-                    redPropThresholdFar.initYellowPixel();
-                })
+//                .addTemporalMarker(() ->{
+//                    redPropThresholdFar.initYellowPixel();
+//                })
                 .waitSeconds(1)
                 .build();
 
         TrajectorySequence centerConeHitL = drive.trajectorySequenceBuilder(centerCone.end())
-                .addTemporalMarker(() -> {
-                    Elevator.operateAutonomous(ElevatorStates.AUTO,  telemetry);
-                })
-                .addTemporalMarker(() -> {
-                    Fourbar.operateAutonomous(FourbarState.MOVE);
-                })
-                .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(boardPos3, boardY , Math.toRadians(-90)))
-                .waitSeconds(0.2)
-                .addTemporalMarker(() -> {
-                    Outtake.operate(OuttakeState.TOWOUT);
-                })
-                .waitSeconds(0.3)
-                .resetConstraints()
-                .lineToLinearHeading(new Pose2d(boardPos3, markerY,Math.toRadians(-90)))
-
-                .addTemporalMarker(() -> {
-                    Outtake.operate(OuttakeState.CLOSED);
-                })
-                .addTemporalMarker(() -> {
-                    Fourbar.operateTeleop(FourbarState.REVERSE);
-                })
-                .waitSeconds(1)
-                .addTemporalMarker(() -> {
-                    Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
-                })
-                .turn(startPose.getHeading())
-                .lineToLinearHeading(new Pose2d(parkingX, parkingY , startPose.getHeading()))
-                .build();
-        TrajectorySequence centerConeHitR = drive.trajectorySequenceBuilder(centerCone.end())
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.AUTO,  telemetry);
                 })
@@ -161,6 +131,37 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .waitSeconds(0.3)
                 .resetConstraints()
                 .lineToLinearHeading(new Pose2d(boardPos4, markerY,Math.toRadians(-90)))
+
+                .addTemporalMarker(() -> {
+                    Outtake.operate(OuttakeState.CLOSED);
+                })
+                .addTemporalMarker(() -> {
+                    Fourbar.operateTeleop(FourbarState.REVERSE);
+                })
+                .waitSeconds(1)
+                .addTemporalMarker(() -> {
+                    Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
+                })
+                .turn(startPose.getHeading())
+                .lineToLinearHeading(new Pose2d(parkingX, parkingY , startPose.getHeading()))
+                .build();
+        
+        TrajectorySequence centerConeHitR = drive.trajectorySequenceBuilder(centerCone.end())
+                .addTemporalMarker(() -> {
+                    Elevator.operateAutonomous(ElevatorStates.AUTO,  telemetry);
+                })
+                .addTemporalMarker(() -> {
+                    Fourbar.operateAutonomous(FourbarState.MOVE);
+                })
+                .setConstraints(velConstraintDrop, accConstraintDrop)
+                .lineToLinearHeading(new Pose2d(boardPos3, boardY , Math.toRadians(-90)))
+                .waitSeconds(0.2)
+                .addTemporalMarker(() -> {
+                    Outtake.operate(OuttakeState.TOWOUT);
+                })
+                .waitSeconds(0.3)
+                .resetConstraints()
+                .lineToLinearHeading(new Pose2d(boardPos3, markerY,Math.toRadians(-90)))
 
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
@@ -209,8 +210,8 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
 
         TrajectorySequence centerConeMissR = drive.trajectorySequenceBuilder(centerCone.end())
                 .addTemporalMarker(() -> {
-            Elevator.operateAutonomous(ElevatorStates.AUTO,  telemetry);
-        })
+                    Elevator.operateAutonomous(ElevatorStates.AUTO,  telemetry);
+                })
                 .addTemporalMarker(() -> {
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
@@ -279,9 +280,9 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .waitSeconds(2)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(boardPos5, markerY,Math.toRadians(-90)))
-                .addTemporalMarker(() -> {
-                    redPropThresholdFar.initYellowPixel();
-                })
+//                .addTemporalMarker(() -> {
+//                    redPropThresholdFar.initYellowPixel();
+//                })
                 .waitSeconds(1)
                 .build();
 
@@ -412,9 +413,9 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .waitSeconds(5)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(markerX, markerY,Math.toRadians(-90)))
-                .addTemporalMarker(() ->{
-                    redPropThresholdFar.initYellowPixel();
-                })
+//                .addTemporalMarker(() ->{
+//                    redPropThresholdFar.initYellowPixel();
+//                })
                 .waitSeconds(1)
                 .build();
 
@@ -533,8 +534,13 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(parkingX, parkingY , startPose.getHeading()))
                 .build();
         waitForStart();
-
+        while (!redPropThresholdFar.completedPropPos){
+            telemetry.addLine("waiting for camera to start");
+            telemetry.update();
+            sleep(10);
+        }
         if (!isStopRequested()) {
+            redPropThresholdFar.initYellowPixel();
             switch (redPropThresholdFar.EnumGetPropPos()) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
@@ -548,26 +554,29 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                         drive.followTrajectorySequence(leftConeNopPixel);
                     }
                     telemetry.addLine("left");
-                    telemetry.addData("yellow pixel:", redPropThresholdFar.yellowPixelPos);
-                    telemetry.update();
+//                    telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
+//                    telemetry.addData("biggest:", redPropThresholdFar.biggest.averagedBox);
+//                    telemetry.update();
                     break;
                 case CENTER:
                 default:
                     drive.followTrajectorySequence(centerCone);
-                    if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITLEFT) {
+                    redPropThresholdFar.getYellowPixelPos();
+                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT) {
                         drive.followTrajectorySequence(centerConeHitL);
-                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
                         drive.followTrajectorySequence(centerConeHitR);
-                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.MISSLEFT){
+                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
                         drive.followTrajectorySequence(centerConeMissL);
-                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
+                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
                         drive.followTrajectorySequence(centerConeMissR);
                     }else {
                         drive.followTrajectorySequence(centerConeNopPixel);
                     }
                     telemetry.addLine("center");
-                    telemetry.addData("yellow pixel:", redPropThresholdFar.yellowPixelPos);
-                    telemetry.update();
+//                    telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
+//                    telemetry.addData("biggest:", redPropThresholdFar.biggest.averagedBox);
+//                    telemetry.update();
                     break;
                 case RIGHT:
                     drive.followTrajectorySequence(rightCone);
@@ -581,8 +590,9 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                         drive.followTrajectorySequence(rightConeNopPixel);
                     }
                     telemetry.addLine("right");
-                    telemetry.addData("yellow pixel:", redPropThresholdFar.yellowPixelPos);
-                    telemetry.update();
+//                    telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
+//                    telemetry.addData("biggest:", redPropThresholdFar.biggest.averagedBox);
+//                    telemetry.update();
                     break;
                 case NONE:
                     drive.followTrajectorySequence(centerCone);
@@ -598,11 +608,15 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                         drive.followTrajectorySequence(centerConeNopPixel);
                     }
                     telemetry.addLine("Doesn't see prop");
-                    telemetry.addData("yellow pixel:", redPropThresholdFar.yellowPixelPos);
-                    telemetry.update();
+//                    telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
+//                    telemetry.addData("biggest:", redPropThresholdFar.biggest.averagedBox);
+//                    telemetry.update();
                     break;
             }
+            telemetry.addData("prop pos:", redPropThresholdFar.EnumGetPropPos());
+            telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
+            telemetry.addData("biggest:", redPropThresholdFar.biggest.averagedBox);
+            telemetry.update();
         }
     }
 }
-

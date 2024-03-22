@@ -29,9 +29,9 @@ public class RedPropThresholdFar extends PropThreshold {
 //        centerRectHitR  = new Rect(405, 0, 65, 180);
 //        centerRectMissL = new Rect(120, 0, 165, 180);
 //        centerRectMissR = new Rect(480, 0, 120, 180);
-        centerRectHitL  = new Rect(340, 0, 90, 180);
+        centerRectHitL  = new Rect(360, 0, 70, 180);
         centerRectHitR  = new Rect(415, 0, 80, 180);
-        centerRectMissL = new Rect(260, 0, 80, 180);
+        centerRectMissL = new Rect(260, 0, 90, 180);
         centerRectMissR = new Rect(519, 0, 80, 180);
 
         rightRectHitL  = new Rect(380, 0, 95, 185);

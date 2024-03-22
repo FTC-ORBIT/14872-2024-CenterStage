@@ -14,10 +14,9 @@ public class ElementDetectBox {
     public double box;
     public double averagedBox = 0;
 
-    public ElementDetectBox(YellowPixelPosEnum place, Rect rect, Mat mat) {
+    public ElementDetectBox(YellowPixelPosEnum place, Rect rect) {
         this.place = place;
         this.elementBox = rect;
-        boxAverageUpdate(mat);
     }
     public void boxAverageUpdate(Mat mat) {
         this.box = Core.sumElems(mat.submat(this.elementBox)).val[0];

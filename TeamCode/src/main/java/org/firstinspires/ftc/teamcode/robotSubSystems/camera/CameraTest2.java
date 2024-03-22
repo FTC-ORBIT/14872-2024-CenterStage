@@ -28,8 +28,10 @@ import org.firstinspires.ftc.vision.VisionPortal;
         robotTime.reset();
         redPropThreshold.initProp();
         redPropThreshold.PropPos = PropPosEnum.LEFT;
+        redPropThreshold.initYellowPixel();
 
-            portal = new VisionPortal.Builder()
+
+        portal = new VisionPortal.Builder()
                     .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                     .setCameraResolution(new Size(640, 480))
 //                    .setCameraResolution(new Size(640, 360))
