@@ -49,7 +49,6 @@ public class RedCloseToTheBoard extends LinearOpMode {
 
     public static double endTangent = 120;
     public static double leftConeX = 30;
-
     public static double leftConeY = 0.5;
     public static double prepareToPixelDropX = 22;
     public static double prepareToPixelDropY = 1.4;

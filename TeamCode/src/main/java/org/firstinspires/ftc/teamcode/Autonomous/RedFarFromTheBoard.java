@@ -282,8 +282,9 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 .turn(startPose.getHeading())
                 .lineToLinearHeading(new Pose2d(parkingX, parkingY , startPose.getHeading()))
                 .build();
+
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(rightConeX, prepareToPropY, Math.toRadians(-90)), Math.toRadians(-30))
+                .splineToLinearHeading(new Pose2d(rightConeX, prepareToPropY, Math.toRadians(-90)), Math.toRadians(120))
                 .splineToLinearHeading(new Pose2d(rightConeX, rightConeY, Math.toRadians(-90)), Math.toRadians(-30))
                 .lineToLinearHeading(new Pose2d(rightConeX, rightAfterPropY, rightConeAngle))
                 .lineToLinearHeading(new Pose2d(rightBeforeGateX, rightAfterPropY , rightConeAngle))

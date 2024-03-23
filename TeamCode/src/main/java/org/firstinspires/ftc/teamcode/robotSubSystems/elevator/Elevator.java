@@ -18,6 +18,7 @@ public class Elevator {
     public static final PID elevatorPID = new PID(ElevatorConstants.elevatorKp, ElevatorConstants.elevatorKi, ElevatorConstants.elevatorKd, ElevatorConstants.elevatorKf, ElevatorConstants.elevatorIzone);
     public static final PID encoderPID = new PID(ElevatorConstants.encoderKp, ElevatorConstants.encoderKi, ElevatorConstants.encoderKd, ElevatorConstants.encoderKf, ElevatorConstants.encoderIzone);
 
+
     public static void init(HardwareMap hardwareMap) {
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevatorMotor");
         elevatorMotor2 = hardwareMap.get(DcMotor.class, "elevatorMotor2");
@@ -100,7 +101,6 @@ public class Elevator {
             currentPos = elevatorMotor.getCurrentPosition();
             currentPos2 = elevatorMotor2.getCurrentPosition();
             if (pos == ElevatorConstants.autoHeight || pos == ElevatorConstants.autoHeightFar) {
-                while (Elevator.currentPos <= Elevator.pos || Elevator.currentPos2 <= Elevator.pos) {
                     currentPos = elevatorMotor.getCurrentPosition();
                     currentPos2 = elevatorMotor2.getCurrentPosition();
                     elevatorPID.setWanted(pos);
@@ -109,9 +109,7 @@ public class Elevator {
                     elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
                     telemetry.addData("pos", currentPos);
                     telemetry.addData("pos2", currentPos2);
-                }
             } else {
-                while (currentPos > pos && currentPos2 > pos) {
                     currentPos = elevatorMotor.getCurrentPosition();
                     currentPos2 = elevatorMotor2.getCurrentPosition();
                     elevatorPID.setWanted(pos);
@@ -122,14 +120,18 @@ public class Elevator {
                     telemetry.addData("pos", currentPos);
                     telemetry.addData("pos2", currentPos2);
                     telemetry.update();
-                }
             }
-        elevatorMotor.setPower(0);
-        elevatorMotor2.setPower(0);
     }
 
     public static double getPos(){
         return currentPos;
+    }
+
+    public static boolean reachedHeight (double currentHeight){
+        return currentHeight + ElevatorConstants.reachedHeightDiff > pos && currentHeight - ElevatorConstants.reachedHeightDiff < pos;
+    }
+    public static boolean canOpenFourBar (double currentHeight){
+        return currentHeight + ElevatorConstants.reachedHeightDiff > ElevatorConstants.canOpenFourbar && currentHeight - ElevatorConstants.reachedHeightDiff < ElevatorConstants.canOpenFourbar;
     }
 
     public static void test(Gamepad gamepad, Telemetry telemetry){
