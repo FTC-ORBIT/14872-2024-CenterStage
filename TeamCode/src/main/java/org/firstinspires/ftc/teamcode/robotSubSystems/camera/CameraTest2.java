@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
 
 import android.util.Size;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -11,7 +13,10 @@ import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-@Autonomous(name="Vision Test Red")
+@Disabled
+@Autonomous  (name ="Vision Test Red")
+@Config
+
     public class CameraTest2 extends LinearOpMode {
 
         private VisionPortal portal;
@@ -19,6 +24,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 
         private Delay delayCV = new Delay(3);
+        public static double propPos = 0;
 
 
 
@@ -27,7 +33,17 @@ import org.firstinspires.ftc.vision.VisionPortal;
         ElapsedTime robotTime = new ElapsedTime();
         robotTime.reset();
         redPropThreshold.initProp();
-        redPropThreshold.PropPos = PropPosEnum.LEFT;
+        switch ((int) propPos) {
+            case 0:
+                redPropThreshold.PropPos = PropPosEnum.LEFT;
+            break;
+            case 1:
+                redPropThreshold.PropPos = PropPosEnum.CENTER;
+                break;
+            case 2:
+                redPropThreshold.PropPos = PropPosEnum.RIGHT;
+                break;
+        }
         redPropThreshold.initYellowPixel();
 
 

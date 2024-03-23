@@ -3,11 +3,13 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
 import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 
+@Disabled
 @Autonomous(name="Vision Test Blue")
 public class CameraTest extends LinearOpMode {
     private VisionPortal portal;

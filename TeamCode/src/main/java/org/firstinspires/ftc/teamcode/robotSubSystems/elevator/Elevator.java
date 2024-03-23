@@ -100,7 +100,7 @@ public class Elevator {
             currentPos = elevatorMotor.getCurrentPosition();
             currentPos2 = elevatorMotor2.getCurrentPosition();
             if (pos == ElevatorConstants.autoHeight || pos == ElevatorConstants.autoHeightFar) {
-                while (currentPos <= pos || currentPos2 <= pos) {
+                while (Elevator.currentPos <= Elevator.pos || Elevator.currentPos2 <= Elevator.pos) {
                     currentPos = elevatorMotor.getCurrentPosition();
                     currentPos2 = elevatorMotor2.getCurrentPosition();
                     elevatorPID.setWanted(pos);
