@@ -91,10 +91,10 @@ public class Elevator {
                     pos = ElevatorConstants.climbHeight;
                     break;
                 case MIN:
-                    pos = ElevatorConstants.autoHeight;
+                    pos = (float) ElevatorConstants.autoHeight;
                     break;
                 case AUTO:
-                    pos = ElevatorConstants.autoHeightFar;
+                    pos = (float) ElevatorConstants.autoHeightFar;
                     break;
             }
             currentPos = elevatorMotor.getCurrentPosition();

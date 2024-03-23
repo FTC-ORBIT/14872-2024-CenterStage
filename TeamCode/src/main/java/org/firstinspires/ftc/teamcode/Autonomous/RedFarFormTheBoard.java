@@ -35,10 +35,10 @@ public class RedFarFormTheBoard extends  LinearOpMode{
     public static double delay = 3000;
     public static double parkingY = -88;
     public static double boardY = -84;
-    public static double rightDriveX = 27;
-    public static double rightConeX = 29.06;
+    public static double prepareToPropY = -1;
+    public static double rightConeX = 31;
 
-    public static double rightConeY = -5.2;
+    public static double rightConeY = -4.5;
 
     public static double rightConeAngle =5.05;
     public static double leftConeX = 22.5;
@@ -71,12 +71,19 @@ public class RedFarFormTheBoard extends  LinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException{
-        OrbitGyro.init(hardwareMap);
+
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        Pose2d startPose = new Pose2d(0, 0, 0);
+
+        drive.setPoseEstimate(startPose);
+
         Elevator.init(hardwareMap);
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Fourbar.init(hardwareMap);
         Plane.init(hardwareMap);
+
 
         redPropThresholdFar.initProp();
         portal = new VisionPortal.Builder()
@@ -85,16 +92,10 @@ public class RedFarFormTheBoard extends  LinearOpMode{
                 .addProcessor(redPropThresholdFar)
                 .build();
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
-        Pose2d startPose = new Pose2d(0, 0, 0);
-
-        drive.setPoseEstimate(startPose);
 
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(centerConeX, startPose.getY(), startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(centerConeX - 4, startPose.getY(), startPose.getHeading()))
+//TODO
                 .lineToLinearHeading(new Pose2d(centerAfterConeX, centerAfterConeY ,startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(centerGateX , centerGateY ,startPose.getHeading()))
                 .turn(Math.toRadians(-90))
@@ -129,11 +130,8 @@ public class RedFarFormTheBoard extends  LinearOpMode{
                 .build();
 
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
-                .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(rightDriveX, startPose.getY(), startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(rightConeX , rightConeY , rightConeAngle))
-                .lineToLinearHeading(new Pose2d(rightConeX , startPose.getY() , rightConeAngle))
-                .resetConstraints()
+                .splineToLinearHeading(new Pose2d(rightConeX, prepareToPropY, Math.toRadians(-90)), Math.toRadians(-30))
+                .splineToLinearHeading(new Pose2d(rightConeX, rightConeY, Math.toRadians(-90)), Math.toRadians(-30))
                 .lineToLinearHeading(new Pose2d(rightConeX, rightAfterPropY, rightConeAngle))
                 .lineToLinearHeading(new Pose2d(rightBeforeGateX, rightAfterPropY , rightConeAngle))
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))

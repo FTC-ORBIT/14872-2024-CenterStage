@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
+import static org.firstinspires.ftc.teamcode.Autonomous.RedFarFormTheBoard.prepareToPropY;
+
 import android.util.Size;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -10,10 +12,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.ElementDetectBox;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.RedPropThresholdFar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
@@ -33,15 +33,14 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
     public static double maxVeloDrop = 6.5;
     public static TrajectoryVelocityConstraint velConstraintDrop = SampleMecanumDrive.getVelocityConstraint(maxVeloDrop, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     public static TrajectoryAccelerationConstraint accConstraintDrop = SampleMecanumDrive.getAccelerationConstraint(maxVeloDrop);
-    public static double centerConeX = 28.7;
+    public static double centerConeX = 29.7;
     public static double delay = 5000;
     public static double parkingY = -83;
     public static double parkingX = 46.19;
-    public static double boardY = -86;
-    public static double rightDriveX = 27;
-    public static double rightConeX = 29.06;
+    public static double boardY = -85;
+    public static double rightConeX = 31;
 
-    public static double rightConeY = -5.2;
+    public static double rightConeY = -4.5;
 
     public static double rightConeAngle =5.05;
     public static double leftConeX = 22.5;
@@ -50,13 +49,16 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
     public static double centerAfterConeX = 23;
     public static double centerAfterConeY = 18;
     public static double centerGateX= 49.07;
+
+    public static double centerGateSecondx = 55.07;
     public static double centerGateY = 16.41;
     public static double afterGateX = 55;
     public static double afterGateY = -70.345;
     public static double boardPos1 = 37;
     public static double boardPos2 = 34.7;
-    public static double boardPos3 = 32;
-    public static double boardPos4 = 29.2;
+    public static double boardPos3 = 32.5;
+    public static double boardPos4missRight = 28.7;
+    public static double boardPos4HitLeft = 28.4;
     public static double boardPos5 = 27;
     public static double boardPos6 = 22.5;
     // TODO X6 = 22.5
@@ -72,13 +74,21 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
     public static double rightBeforeGateX = 52.8;
     public static double markerY = -77;
     public static double markerX = 30.0;
+
+    public static double rightEndTangent = -30;
     public static ElevatorStates state = ElevatorStates.AUTO;
     private VisionPortal portal;
     private RedPropThresholdFar redPropThresholdFar = new RedPropThresholdFar();
 
     @Override
     public void runOpMode() throws InterruptedException{
-        OrbitGyro.init(hardwareMap);
+
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        Pose2d startPose = new Pose2d(0, 0, 0);
+
+        drive.setPoseEstimate(startPose);
+
         Elevator.init(hardwareMap);
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
@@ -92,11 +102,6 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .addProcessor(redPropThresholdFar)
                 .build();
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
-        Pose2d startPose = new Pose2d(0, 0, 0);
-
-        drive.setPoseEstimate(startPose);
 
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
@@ -105,8 +110,8 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(centerAfterConeX, centerAfterConeY ,startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(centerGateX , centerGateY ,startPose.getHeading()))
                 .turn(Math.toRadians(-90))
-                .lineToLinearHeading(new Pose2d(centerGateX + 5, centerGateY , Math.toRadians(-90)))
-                .waitSeconds(5)
+                .lineToLinearHeading(new Pose2d(centerGateSecondx, centerGateY , Math.toRadians(-90)))
+                .waitSeconds(2.5)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(markerX, markerY,Math.toRadians(-90)))
 //                .addTemporalMarker(() ->{
@@ -122,15 +127,16 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
+                .waitSeconds(1.5)
                 .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(boardPos4, boardY , Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(boardPos4missRight, boardY , Math.toRadians(-90)))
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .waitSeconds(0.3)
                 .resetConstraints()
-                .lineToLinearHeading(new Pose2d(boardPos4, markerY,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(boardPos4HitLeft, markerY,Math.toRadians(-90)))
 
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
@@ -153,6 +159,7 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
+                .waitSeconds(1.5)
                 .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(boardPos3, boardY , Math.toRadians(-90)))
                 .waitSeconds(0.2)
@@ -184,6 +191,7 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
+                .waitSeconds(1.5)
                 .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(boardPos3, boardY , Math.toRadians(-90)))
                 .waitSeconds(0.2)
@@ -215,15 +223,16 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
+                .waitSeconds(1.5)
                 .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(boardPos4, boardY , Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(boardPos4missRight, boardY , Math.toRadians(-90)))
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .waitSeconds(0.3)
                 .resetConstraints()
-                .lineToLinearHeading(new Pose2d(boardPos4, markerY,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(boardPos4missRight, markerY,Math.toRadians(-90)))
 
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
@@ -246,6 +255,7 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
+                .waitSeconds(1.5)
                 .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(boardPos3, boardY , Math.toRadians(-90)))
                 .waitSeconds(0.2)
@@ -270,16 +280,14 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(parkingX, parkingY , startPose.getHeading()))
                 .build();
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
-                .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(rightDriveX, startPose.getY(), startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(rightConeX , rightConeY , rightConeAngle))
-                .lineToLinearHeading(new Pose2d(rightConeX , startPose.getY() , rightConeAngle))
-                .resetConstraints()
+                .splineToLinearHeading(new Pose2d(rightConeX, prepareToPropY, Math.toRadians(-90)), Math.toRadians(-30))
+                .splineToLinearHeading(new Pose2d(rightConeX, rightConeY, Math.toRadians(-90)), Math.toRadians(-30))
                 .lineToLinearHeading(new Pose2d(rightConeX, rightAfterPropY, rightConeAngle))
                 .lineToLinearHeading(new Pose2d(rightBeforeGateX, rightAfterPropY , rightConeAngle))
                 .waitSeconds(2)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(boardPos5, markerY,Math.toRadians(-90)))
+//                .splineToLinearHeading(new Pose2d(boardPos5, markerY, Math.toRadians(-90)), Math.toRadians(rightEndTangent))
 //                .addTemporalMarker(() -> {
 //                    redPropThresholdFar.initYellowPixel();
 //                })
@@ -544,11 +552,12 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
             switch (redPropThresholdFar.EnumGetPropPos()) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
-                    if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITLEFT){
+                    redPropThresholdFar.getYellowPixelPos();
+                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
                         drive.followTrajectorySequence(leftConeHitL);
-                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
                         drive.followTrajectorySequence(leftConeHitR);
-                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
+                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
                         drive.followTrajectorySequence(leftConeMissR);
                     }else {
                         drive.followTrajectorySequence(leftConeNopPixel);
@@ -580,11 +589,12 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                     break;
                 case RIGHT:
                     drive.followTrajectorySequence(rightCone);
-                    if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITLEFT){
+                    redPropThresholdFar.getYellowPixelPos();
+                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
                         drive.followTrajectorySequence(rightConeHitL);
-                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
                         drive.followTrajectorySequence(rightConeHitR);
-                    }else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.MISSLEFT){
+                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
                         drive.followTrajectorySequence(rightConeMissL);
                     }else {
                         drive.followTrajectorySequence(rightConeNopPixel);
@@ -596,13 +606,14 @@ public class RedFarFromTheBoardFarFromTheWall extends  LinearOpMode{
                     break;
                 case NONE:
                     drive.followTrajectorySequence(centerCone);
-                    if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITLEFT) {
+                    redPropThresholdFar.getYellowPixelPos();
+                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT) {
                         drive.followTrajectorySequence(centerConeHitL);
-                    } else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+                    } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
                         drive.followTrajectorySequence(centerConeHitR);
-                    } else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.MISSLEFT){
+                    } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
                         drive.followTrajectorySequence(centerConeMissL);
-                    } else if (redPropThresholdFar.yellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
+                    } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
                         drive.followTrajectorySequence(centerConeMissR);
                     } else {
                         drive.followTrajectorySequence(centerConeNopPixel);
