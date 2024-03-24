@@ -102,12 +102,13 @@ public abstract class PropThreshold implements VisionProcessor {
             new Point(639, 479)
     );
 
-    public Size rSize = new Size(70, 180);
-    public double rYOffset = 40.0;
-    public Rect rectHitL  = new Rect(new Point(-1*rSize.width, rYOffset), rSize);
-    public Rect rectHitR  = new Rect(new Point( 0*rSize.width, rYOffset), rSize);
-    public Rect rectMissL = new Rect(new Point(-2*rSize.width, rYOffset), rSize);
-    public Rect rectMissR = new Rect(new Point( 1*rSize.width, rYOffset), rSize);
+    public double rXStep = 70;
+    public Size rSize = new Size(rXStep, 180);
+    public double rYOffset = 40;
+    public Rect rectHitL  = new Rect(new Point(-1*rXStep, rYOffset), rSize);
+    public Rect rectHitR  = new Rect(new Point( 0*rXStep, rYOffset), rSize);
+    public Rect rectMissL = new Rect(new Point(-2*rXStep, rYOffset), rSize);
+    public Rect rectMissR = new Rect(new Point( 1*rXStep, rYOffset), rSize);
 
     Rect leftRectHitL ,
          leftRectHitR ,

@@ -13,7 +13,7 @@ public class BluePropThresholdFar extends PropThreshold {
         activeMiddleRect = MIDDLE_RECTANGLE_CLOSE;
         activeRightRect = RIGHT_RECTANGLE_CLOSE;
 
-        initYellowPixelBoxes();
+//        initYellowPixelBoxes();
     }
 
 

@@ -15,7 +15,7 @@ public class RedPropThresholdFar extends PropThreshold {
         activeMiddleRect = MIDDLE_RECTANGLE_FAR;
         activeRightRect = RIGHT_RECTANGLE_FAR;
 
-        initYellowPixelBoxes();
+//        initYellowPixelBoxes();
     }
 
     @Override

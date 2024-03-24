@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
 
+import android.annotation.SuppressLint;
 import android.util.Size;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -38,6 +39,7 @@ import java.util.List;
 
 
 
+    @SuppressLint("DefaultLocale")
     @Override
         public void runOpMode() throws InterruptedException {
             aprilTag = new AprilTagProcessor.Builder()
@@ -143,9 +145,11 @@ import java.util.List;
 
                 redPropThreshold.initYellowPixelAT();
                 portal.setProcessorEnabled(redPropThreshold, true);
+                telemetry.addLine("Yellow Pixel Detection Processor is DISABLED - See PropThreshod Code !!!!!");
                 for (ElementDetectBox eBox : redPropThreshold.yellowBoxesHash) {
                     telemetry.addLine(String.format("\n==== %s %s", eBox.place.toString(), eBox.elementBox.toString()));
                 }
+
                 // Step through the list of detections and display info for each one.
                 for (AprilTagDetection detection : currentDetections) {
                     if (detection.metadata != null) {
