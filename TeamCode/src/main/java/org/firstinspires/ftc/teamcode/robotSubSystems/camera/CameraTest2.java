@@ -82,8 +82,8 @@ import java.util.List;
                     .setCameraResolution(new Size(640, 480))
 //                    .setCameraResolution(new Size(640, 360))
 //                    .setCamera(BuiltinCameraDirection.BACK)
-                    .addProcessor(redPropThreshold)
                     .addProcessor(aprilTag)
+                    .addProcessor(redPropThreshold)
                     .build();
 
             portal.setProcessorEnabled(redPropThreshold, false);
@@ -102,6 +102,8 @@ import java.util.List;
 
             boolean toggle = false;
             boolean sttogle = false;
+            List<AprilTagDetection> currentDetections = null;
+
 
             while (!isStopRequested()) {
                 if(gamepad2.a && !lastGamepad.a) {
@@ -127,7 +129,6 @@ import java.util.List;
                 telemetry.addData("Prop Position", redPropThreshold.EnumGetPropPos());
                 telemetry.addLine("");
 
-                List<AprilTagDetection> currentDetections = null;
 
                 while(aprilTagCenter == null){
                     currentDetections = aprilTag.getDetections();
@@ -140,15 +141,19 @@ import java.util.List;
                             }
                         }
                     }
+                    telemetry.update();
+                    sleep(5*1000);
                 }
-                redPropThreshold.aprilTagCenter = aprilTagCenter;
 
+                redPropThreshold.aprilTagCenter = aprilTagCenter;
+                sleep(500);
                 redPropThreshold.initYellowPixelAT();
                 portal.setProcessorEnabled(redPropThreshold, true);
                 telemetry.addLine("Yellow Pixel Detection Processor is DISABLED - See PropThreshod Code !!!!!");
                 for (ElementDetectBox eBox : redPropThreshold.yellowBoxesHash) {
                     telemetry.addLine(String.format("\n==== %s %s", eBox.place.toString(), eBox.elementBox.toString()));
                 }
+                currentDetections = aprilTag.getDetections();
 
                 // Step through the list of detections and display info for each one.
                 for (AprilTagDetection detection : currentDetections) {
@@ -158,6 +163,9 @@ import java.util.List;
                         telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
                         telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
                         telemetry.addLine(String.format("corner[0] (%6.1f %6.1f)  Center (%6.1f %6.1f)  ()", detection.corners[0].x, detection.corners[0].y, detection.center.x, detection.center.y));
+                        if (detection.id == 5) { //TODO set id based on propcolor and position
+                            aprilTagCenter = detection.center;
+                        }
                     } else {
                         telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
                         telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
