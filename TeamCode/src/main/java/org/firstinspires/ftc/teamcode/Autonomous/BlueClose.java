@@ -78,17 +78,15 @@ if (isStopRequested()) return;
                     telemetry.addData("PREPARETODROPPIXEL", null);
                     if (!drive.isBusy()){
                         currentState = AutonomousSteps.OPENSYSTEMS;
+                        markerBoard(telemetry);
                     }
                     break;
                 case OPENSYSTEMS:
-                    Elevator.operateAutonomous(ElevatorStates.MIN, telemetry);
-                    if (Elevator.canOpenFourBar(Elevator.getPos())){
-                        Fourbar.operateAutonomous(FourbarState.MOVE);
-                    }
-                    if (Elevator.reachedHeight(Elevator.getPos())){
-                        currentState = AutonomousSteps.GOTOBOARD;
-                        dropYellowPixel23(position, color);
-                    }
+                        if (!drive.isBusy()){
+                            dropYellowPixel23(position, color);
+                            currentState = AutonomousSteps.GOTOBOARD;
+                        }
+
                     break;
                 case GOTOBOARD:
                     if (!drive.isBusy()){

@@ -101,6 +101,7 @@ public class Elevator {
             currentPos = elevatorMotor.getCurrentPosition();
             currentPos2 = elevatorMotor2.getCurrentPosition();
             if (pos == ElevatorConstants.autoHeight || pos == ElevatorConstants.autoHeightFar) {
+                while (currentPos < pos || currentPos2 < pos)
                     currentPos = elevatorMotor.getCurrentPosition();
                     currentPos2 = elevatorMotor2.getCurrentPosition();
                     elevatorPID.setWanted(pos);
@@ -110,6 +111,7 @@ public class Elevator {
                     telemetry.addData("pos", currentPos);
                     telemetry.addData("pos2", currentPos2);
             } else {
+                while (currentPos > pos || currentPos2 > pos)
                     currentPos = elevatorMotor.getCurrentPosition();
                     currentPos2 = elevatorMotor2.getCurrentPosition();
                     elevatorPID.setWanted(pos);
