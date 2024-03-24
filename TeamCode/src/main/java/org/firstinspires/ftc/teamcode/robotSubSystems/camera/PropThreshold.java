@@ -104,11 +104,15 @@ public abstract class PropThreshold implements VisionProcessor {
 
     public double rXStep = 70;
     public Size rSize = new Size(rXStep, 180);
-    public double rYOffset = 40;
-    public Rect rectHitL  = new Rect(new Point(-1*rXStep, rYOffset), rSize);
-    public Rect rectHitR  = new Rect(new Point( 0*rXStep, rYOffset), rSize);
-    public Rect rectMissL = new Rect(new Point(-2*rXStep, rYOffset), rSize);
-    public Rect rectMissR = new Rect(new Point( 1*rXStep, rYOffset), rSize);
+    public double rYOffset = -40 - (int) rSize.height;
+    public Rect relRectHitL  = new Rect(new Point(-1*rXStep, rYOffset), rSize);
+    public Rect relRectHitR  = new Rect(new Point( 0*rXStep, rYOffset), rSize);
+    public Rect relRectMissL = new Rect(new Point(-2*rXStep, rYOffset), rSize);
+    public Rect relRectMissR = new Rect(new Point( 1*rXStep, rYOffset), rSize);
+    public Rect rectHitL  = relRectHitL .clone();
+    public Rect rectHitR  = relRectHitR .clone();
+    public Rect rectMissL = relRectMissL.clone();
+    public Rect rectMissR = relRectMissR.clone();
 
     Rect leftRectHitL ,
          leftRectHitR ,
@@ -139,14 +143,14 @@ public abstract class PropThreshold implements VisionProcessor {
     public void initYellowPixelAT() {
         PropColor = PropColorEnum.YELLOW;
 
-        rectHitL.x  += (int) aprilTagCenter.x;
-        rectHitL.y  += (int) aprilTagCenter.y;
-        rectHitR.x  += (int) aprilTagCenter.x;
-        rectHitR.y  += (int) aprilTagCenter.y;
-        rectMissR.x += (int) aprilTagCenter.x;
-        rectMissL.y += (int) aprilTagCenter.y;
-        rectMissR.x += (int) aprilTagCenter.x;
-        rectMissR.y += (int) aprilTagCenter.y;
+        rectHitL.x  = (int) aprilTagCenter.x + relRectHitL.x ;
+        rectHitL.y  = (int) aprilTagCenter.y + relRectHitL.y ;
+        rectHitR.x  = (int) aprilTagCenter.x + relRectHitR.x ;
+        rectHitR.y  = (int) aprilTagCenter.y + relRectHitR.y ;
+        rectMissL.x = (int) aprilTagCenter.x + relRectMissL.x;
+        rectMissL.y = (int) aprilTagCenter.y + relRectMissL.y;
+        rectMissR.x = (int) aprilTagCenter.x + relRectMissR.x;
+        rectMissR.y = (int) aprilTagCenter.y + relRectMissR.y;
 
         yellowBoxesHash = new HashSet<ElementDetectBox>() {{
             add(new ElementDetectBox(HITLEFT, rectHitL));
@@ -229,8 +233,8 @@ public abstract class PropThreshold implements VisionProcessor {
             //else {
             //    yellowPixelPos = yellowBoxesHash.get(biggest);
             //}
-            if (false){     // TODO: Remove this line and uncomment next line to re-enable finding biggest
-//            if(yellowBoxesHash != null) {
+//            if (false){     // TODO: Remove this line and uncomment next line to re-enable finding biggest
+            if(yellowBoxesHash != null) {
                 for (ElementDetectBox eBox : yellowBoxesHash) {
                     eBox.boxAverageUpdate(finalMat);
                 }
@@ -271,11 +275,11 @@ public abstract class PropThreshold implements VisionProcessor {
 //                new Scalar(255, 0, 0), 10);
 
         if (test_mode) {
-            Imgproc.rectangle(
-                    frame,
-                    activeMiddleRect.tl(),
-                    activeMiddleRect.br(),
-                    new Scalar(0, 255, 0), 10);
+//            Imgproc.rectangle(
+//                    frame,
+//                    activeMiddleRect.tl(),
+//                    activeMiddleRect.br(),
+//                    new Scalar(0, 255, 0), 10);
 
             if (showFinalMat) {
                 finalMat.copyTo(frame, finalMat);

@@ -19,7 +19,11 @@ public class ElementDetectBox {
         this.elementBox = rect;
     }
     public void boxAverageUpdate(Mat mat) {
-        this.box = Core.sumElems(mat.submat(this.elementBox)).val[0];
+        try {
+            this.box = Core.sumElems(mat.submat(this.elementBox)).val[0];
+        } catch (Exception e) {
+            this.box = 0;
+        }
 
         this.averagedBox = this.box / this.elementBox.area() / 255;
     }
