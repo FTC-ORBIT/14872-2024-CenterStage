@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel.FixpixelState;
 
 public class Drivetrain {
 
@@ -47,7 +48,7 @@ public class Drivetrain {
     public static void operate(final Vector velocity_W, float omega , Telemetry telemetry, Gamepad gamepad1) {
         final float robotAngle = (float) Math.toRadians(OrbitGyro.getAngle());
         final Vector velocity_RobotCS_W = velocity_W.rotate(-robotAngle);
-        if (SubSystemManager.elevatorState == ElevatorStates.MIN || SubSystemManager.elevatorState == ElevatorStates.LOW ){
+        if (SubSystemManager.elevatorState == ElevatorStates.MIN || SubSystemManager.elevatorState == ElevatorStates.LOW  || SubSystemManager.fixpixelState != FixpixelState.CLOSE){
             if (omega > 0) omega = DrivetrainConstants.MaxOmegaSlow;
             else if (omega <0)omega =  -DrivetrainConstants.MaxOmegaSlow;
             else omega = 0;

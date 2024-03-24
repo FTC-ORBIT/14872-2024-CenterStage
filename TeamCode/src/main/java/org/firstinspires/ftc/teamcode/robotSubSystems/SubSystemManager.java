@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel.Fixpixel;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel.FixpixelState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.FourbarState;
@@ -30,16 +31,18 @@ public class SubSystemManager {
     public static ElevatorStates elevatorState = ElevatorStates.INTAKE;
     private static OuttakeState outtakeState = OuttakeState.CLOSED;
     private static FourbarState fourbarState = FourbarState.REVERSE;
-    private static FixpixelState fixpixelState = FixpixelState.CLOSE;
+    public static FixpixelState fixpixelState = FixpixelState.CLOSE;
     private static PlaneState planeState = PlaneState.STOP;
     private static Delay delayElevator = new Delay(0.75f);
     private static Delay intakeDelay = new Delay(1f);
     private static boolean toggleButton = true;
+    private static boolean FixPixelToggleButton = false;
     private static ElapsedTime elapsedTime = new ElapsedTime();
     private static boolean ElevatorToggleButton = false;
     public static RobotState wanted = RobotState.TRAVEL;
     private static boolean lastLeftBumper = false;
     private static int outtakeCounter = 0;
+
 
     private static RobotState getState(Gamepad gamepad) {
         if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back || gamepad.dpad_up) {
@@ -108,7 +111,6 @@ public class SubSystemManager {
                 if (delayElevator.isDelayPassed() && !ElevatorToggleButton) {
                     elevatorState = ElevatorStates.INTAKE;
                 }
-                fixpixelState = FixpixelState.CLOSE;
                 break;
             case INTAKE:
                 intakeState = IntakeState.COLLECT;
@@ -199,21 +201,31 @@ public class SubSystemManager {
             fourbarState = FourbarState.REVERSE;
             elevatorState = ElevatorStates.CLIMB;
         }
+        if (gamepad2.x || gamepad2.y || gamepad2.dpad_down) FixPixelToggleButton =false;
+        if (gamepad2.x && FixPixelToggleButton == false){
+            fixpixelState =FixpixelState.MIN;
+        }else if (gamepad2.y && FixPixelToggleButton == false){
+            fixpixelState = FixpixelState.LOW;
+        } else if (gamepad2.dpad_down && FixPixelToggleButton == false) {
+            fixpixelState = FixpixelState.CLOSE;
+        } else if (gamepad2.left_stick_y != 0) {
+            FixPixelToggleButton = true;
+            fixpixelState = FixpixelState.OVERRIDE;
+        }
 
         if (gamepad1.right_stick_y != 0) {
             elevatorState = ElevatorStates.OVERRIDE;
             ElevatorToggleButton = true;
         }
         if (gamepad1.dpad_up) fourbarState = FourbarState.REVERSE;
-
         Intake.operate(intakeState);
         Outtake.operate(outtakeState);
         Elevator.operateTeleop(elevatorState, gamepad1, telemetry);
         Fourbar.operateTeleop(fourbarState);
-        //       Fixpixel.operate(fixpixelState , gamepad1 , telemetry);
+        Fixpixel.operate(fixpixelState , gamepad2 , telemetry);
 
         lastState = wanted;
-        if (gamepad2.a || gamepad1.dpad_down) OrbitGyro.resetGyro();
+        if (gamepad2.a || gamepad1.dpad_left) OrbitGyro.resetGyro();
         if (gamepad2.back) Plane.operate(PlaneState.THROW);
     }
 

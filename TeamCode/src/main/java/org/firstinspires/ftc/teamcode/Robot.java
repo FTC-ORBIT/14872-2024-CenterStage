@@ -20,6 +20,8 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel.Fixpixel;
+
 
 @Config
 @TeleOp(name = "main")
@@ -40,13 +42,13 @@ public class Robot extends LinearOpMode {
 
         ElapsedTime robotTime = new ElapsedTime();
         robotTime.reset();
-        //   Fixpixel.init(hardwareMap);
+        Fixpixel.init(hardwareMap);
         Drivetrain.init(hardwareMap);
         OrbitGyro.init(hardwareMap);
         Elevator.init(hardwareMap);
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
-         Fourbar.init(hardwareMap);
+        Fourbar.init(hardwareMap);
         Plane.init(hardwareMap);
 //         OrbitLED.init(hardwareMap);
 
