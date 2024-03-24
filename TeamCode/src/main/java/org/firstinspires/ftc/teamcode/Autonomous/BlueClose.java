@@ -87,10 +87,10 @@ if (isStopRequested()) return;
                     }
                     if (Elevator.reachedHeight(Elevator.getPos())){
                         currentState = AutonomousSteps.GOTOBOARD;
+                        dropYellowPixel23(position, color);
                     }
                     break;
                 case GOTOBOARD:
-                    dropYellowPixel23(position, color);
                     if (!drive.isBusy()){
                         currentState = AutonomousSteps.DROPPIXEL;
                         time.reset();
@@ -100,10 +100,10 @@ if (isStopRequested()) return;
                     Outtake.operate(OuttakeState.TOWOUT);
                     if (time.seconds() > dropYellowPixelDelay){
                         currentState = AutonomousSteps.FARFROMTHEBOARD;
+                        prepareToPixelDrop23(position, color);
                     }
                     break;
                 case FARFROMTHEBOARD:
-                    prepareToPixelDrop23(position, color);
                     if (!drive.isBusy()){
                         currentState = AutonomousSteps.CLOSESYSTEMS;
                         time.reset();
@@ -115,11 +115,12 @@ if (isStopRequested()) return;
                         Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
                         if (Elevator.reachedHeight(Elevator.getPos())){
                             currentState = AutonomousSteps.GOTOPARKING;
+                            parking(position, parkingPos);
                         }
                     }
                     break;
                 case GOTOPARKING:
-                    parking(position, parkingPos);
+                  telemetry.addData("parked", null);
             }
             drive.update();
             telemetry.update();
