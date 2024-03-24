@@ -8,35 +8,31 @@ import org.firstinspires.ftc.teamcode.robotData.Constants;
 
 public class OrbitColorSensor {
 
-    private final ColorSensor colorSensor;
-
-    public OrbitColorSensor(HardwareMap hardwareMap, String name) {
-        colorSensor = hardwareMap.get(ColorSensor.class, name);
+    public final ColorSensor colorSensor;
+    public OrbitColorSensor(HardwareMap hardwareMap) {
+        colorSensor = hardwareMap.get(ColorSensor.class, "ColorSensor");
     }
 
 
-    public boolean hasGamePiece() {
-            int colorControlRedCone = 0;
-            int colorControlBlueCone = 0;
-            float[] currentColors = {colorSensor.red(), colorSensor.green(), colorSensor.blue()};
-            for (int i = 0; i < 3; i++){
-                if ((currentColors[i] < Constants.blueCone[i] + Constants.colorRange) && (currentColors[i] > Constants.blueCone[i] - Constants.colorRange)){
-                    colorControlBlueCone ++;
-                }
+    public int hasGamePiece() {
+            int color = 0;
+            if (colorSensor.red() == 255 && colorSensor.blue() == 255 && colorSensor.green() == 255){
+                color = 1;// when white pixel
+            } else if (colorSensor.red() == 255 && colorSensor.green() == 255 && colorSensor.blue() == 0) {
+                color = 2; // when yellow pixel
+            } else if (colorSensor.red() == 50 && colorSensor.green() == 205 && colorSensor.blue() == 50) {
+                color = 3; // when green pixel
+            } else if (colorSensor.red() == 238 && colorSensor.green() == 130 && colorSensor.blue() == 238) {
+                color = 4;
             }
-
-            for (int i = 0; i < 3; i++){
-                if ((currentColors[i] < Constants.redCone[i] + Constants.colorRange) && (currentColors[i] > Constants.redCone[i] - Constants.colorRange)){
-                    colorControlRedCone++;
-                }
-            }
-            return (colorControlBlueCone ==3 || colorControlRedCone == 3);
+        return color;
     }
 
     public void printRGB (Telemetry telemetry){
         telemetry.addData("red", colorSensor.red());
         telemetry.addData("green", colorSensor.green());
         telemetry.addData("blue", colorSensor.blue());
+        telemetry.addData("alpha", colorSensor.alpha());
     }
 
 }

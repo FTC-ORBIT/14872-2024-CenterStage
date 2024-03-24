@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.util.Size;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThresholdClose;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
+import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorConstants;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.FourbarState;
@@ -14,6 +16,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 import org.firstinspires.ftc.vision.VisionPortal;
 
+@Config
 @Autonomous (name = "blue close")
 public class BlueClose extends AutonomousGenaral{
 
@@ -22,6 +25,12 @@ public class BlueClose extends AutonomousGenaral{
     int position = 1;
 
     boolean color = false;
+
+    public static double forbardelay = 0.5;
+
+    ElevatorStates elevatorStates = ElevatorStates.INTAKE;
+
+    FourbarState fourbarState = FourbarState.REVERSE;
 
     String parkingPos = "close";
     AutonomousSteps currentState;
@@ -57,7 +66,7 @@ if (isStopRequested()) return;
                 telemetry.addLine("right");
                 break;
             case NONE:
-                position = 1;
+                position = 2;
                 telemetry.addLine("none");
                 break;
         }
@@ -78,14 +87,21 @@ if (isStopRequested()) return;
                     telemetry.addData("PREPARETODROPPIXEL", null);
                     if (!drive.isBusy()){
                         currentState = AutonomousSteps.OPENSYSTEMS;
-                        markerBoard(telemetry);
+                        time.reset();
+                        time.startTime();
                     }
                     break;
                 case OPENSYSTEMS:
-                        if (!drive.isBusy()){
+                    elevatorStates = ElevatorStates.MIN;
+                    telemetry.addData("forbarstate", fourbarState);
+                    telemetry.addData("poselevator", Elevator.getPos());
+                    if (time.seconds() > forbardelay){
+                        if (Elevator.reachedHeight(ElevatorConstants.autoHeight)){
                             dropYellowPixel23(position, color);
                             currentState = AutonomousSteps.GOTOBOARD;
                         }
+                        fourbarState = FourbarState.MOVE;
+                    }
 
                     break;
                 case GOTOBOARD:
@@ -98,19 +114,19 @@ if (isStopRequested()) return;
                     Outtake.operate(OuttakeState.TOWOUT);
                     if (time.seconds() > dropYellowPixelDelay){
                         currentState = AutonomousSteps.FARFROMTHEBOARD;
-                        prepareToPixelDrop23(position, color);
-                    }
-                    break;
-                case FARFROMTHEBOARD:
-                    if (!drive.isBusy()){
-                        currentState = AutonomousSteps.CLOSESYSTEMS;
                         time.reset();
+                        afterBoard23(position, color);
                     }
+                case FARFROMTHEBOARD:
+                    currentState = AutonomousSteps.CLOSESYSTEMS;
                     break;
                 case CLOSESYSTEMS:
-                    Fourbar.operateAutonomous(FourbarState.REVERSE);
+                    Outtake.operate(OuttakeState.CLOSED);
+                    if (!drive.isBusy()){
+                        Fourbar.operateAutonomous(FourbarState.REVERSE);
+                    }
                     if (time.seconds() > elevatorClosingDelay) {
-                        Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
+                        elevatorStates = ElevatorStates.INTAKE;
                         if (Elevator.reachedHeight(Elevator.getPos())){
                             currentState = AutonomousSteps.GOTOPARKING;
                             parking(position, parkingPos);
@@ -120,6 +136,8 @@ if (isStopRequested()) return;
                 case GOTOPARKING:
                   telemetry.addData("parked", null);
             }
+            Elevator.operateAutonomous(elevatorStates, telemetry);
+            Fourbar.operateTeleop(fourbarState);
             drive.update();
             telemetry.update();
         }

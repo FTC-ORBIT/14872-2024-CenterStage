@@ -29,12 +29,11 @@ public class Fixpixel {
             case MIN:
                 pos = FixpixelConstants.min;
                 break;
+            case THIRD:
+                pos = FixpixelConstants.third;
+                break;
             case OVERRIDE:
-                if (gamepad2.right_bumper){
-                    pos -=0.01;
-                } else if (gamepad2.left_bumper) {
-                    pos += 0.01;
-                }
+                pos = -gamepad2.left_stick_y * FixpixelConstants.overrideFactor;
                 break;
         }
         servo.setPosition(pos);

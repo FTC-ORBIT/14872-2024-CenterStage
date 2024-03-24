@@ -44,9 +44,9 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
     public static double rightConeY = 5.2;
 
     public static double rightConeAngle =-5.05;
-    public static double leftConeX = 22.5;
+    public static double leftConeX = 30;
 
-    public static double leftConeY = -8;
+    public static double leftConeY = -0.5;
     public static double centerAfterConeX = 23;
     public static double centerAfterConeY = -18;
     public static double centerGateX= 49.07;
@@ -55,7 +55,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
     public static double afterGateY = 70.345;
     public static double boardPos12 = 33.9;
     public static double boardPos34 = 28.19;
-    public static double boardPos56 = 23.2;
+    public static double boardPos56 = 29.95;
     // TODO "MUST READ: in the BLUE autonomous the 1-6 is from right to left!!"
     // TODO X6 = 22.5
     // TODO X5 = 23.2
@@ -102,6 +102,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(centerAfterConeX, centerAfterConeY ,startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(centerGateX , centerGateY ,startPose.getHeading()))
                 .turn(Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(centerConeX +3, centerGateY , Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(boardPos34, markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
@@ -134,7 +135,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .build();
 
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(leftConeX, leftConeY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(rightConeX, rightConeY, startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(startPose.getX() + 3, leftConeY , startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(leftAfterPropX, leftAfterPropY, startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(leftBeforeGateX, leftAfterPropY , startPose.getHeading()))
@@ -171,6 +172,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
                 .splineToLinearHeading(new Pose2d(leftConeX, leftConeY, Math.toRadians(90)), Math.toRadians(endTangent))
+                .lineToLinearHeading(new Pose2d(leftConeX,leftConeY - 2.5,Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(rightConeX, rightAfterPropY, Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(rightBeforeGateX, rightAfterPropY , Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(90)))

@@ -60,15 +60,15 @@ public abstract class AutonomousGenaral extends LinearOpMode {
 
     public static double boardX6Blue = 37;
     public static double boardX5Blue = 34.7;
-    public static double boardX4Blue = 32;
+    public static double boardX4Blue = 29;
     public static double boardX3Blue = 29.2;
     public static double boardX2Blue = 27;
     public static double boardX1Blue = 22.5;
     public static double prepareToDropPixelY = 24;
-    public static double boardPosY = 34;
+    public static double boardPosY = 29;
+    public static double afterYellowPixelY4Blue = 10;
     public static double dropYellowPixelDelay = 1;
     public static double elevatorClosingDelay = 1; // so there wonwt be any problem with the fourbar
-    public static boolean parkingPos = true; // true = close to the wall
     public static double parkingY23 = 39; // when 2 = -39
     public static double parkingY14 = 83; // when 1 = -83
     public static double parkingX1234FarFromTheWall = 46;
@@ -98,6 +98,13 @@ public abstract class AutonomousGenaral extends LinearOpMode {
     public static Pose2d dropYellowPixel1PosBlue = new Pose2d(boardX1Blue, boardPosY, turnAfterProp);
     public static Pose2d dropYellowPixel4PosBlue = new Pose2d(boardX4Blue,boardPosY, turnAfterProp);
     public static Pose2d dropYellowPixel6PosBlue = new Pose2d(boardX6Blue,boardPosY,turnAfterProp);
+
+    public static Pose2d afterDropYellowPixel23Blue4 = new Pose2d(boardX4Blue, afterYellowPixelY4Blue, turnAfterProp);
+    public static Pose2d afterDropYellowPixel23Red4 = new Pose2d(boardX4Red, -afterYellowPixelY4Blue, turnAfterProp);
+    public static Pose2d afterDropYellowPixel23Blue1 = new Pose2d(boardX1Blue, -afterYellowPixelY4Blue, turnAfterProp);
+    public static Pose2d afterDropYellowPixel23Red1 = new Pose2d(boardX1Red, -afterYellowPixelY4Blue, turnAfterProp);
+    public static Pose2d afterDropYellowPixel23Red6 = new Pose2d(boardX6Red, -afterYellowPixelY4Blue, turnAfterProp);
+    public static Pose2d afterDropYellowPixel23Blue6 = new Pose2d(boardX6Blue, -afterYellowPixelY4Blue, turnAfterProp);
     public static Pose2d parking1CloseToTheWall = new Pose2d(parkingX1234CloseToTheWall, -parkingY14, startPos.getHeading());
     public static Pose2d parking1FarFromTheWall = new Pose2d(parkingX1234FarFromTheWall, -parkingY14, startPos.getHeading());
     public static Pose2d parking2CloseToTheWall = new Pose2d(parkingX1234CloseToTheWall, -parkingY23, startPos.getHeading());
@@ -242,18 +249,47 @@ public abstract class AutonomousGenaral extends LinearOpMode {
          drive.followTrajectorySequenceAsync(prepareToPixelDropRight);
      }
     }
-    public static void markerBoard(Telemetry telemetry ){
-        TrajectorySequence Marker = drive.trajectorySequenceBuilder(lastTrajectoryPos)
-                .addTemporalMarker(() -> {
-                    Elevator.operateAutonomous(ElevatorStates.AUTO,telemetry);
-                })
-                .addTemporalMarker(() -> {
-                    Fourbar.operateAutonomous(FourbarState.MOVE);
-                })
-                .build();
-        lastTrajectoryPos = Marker.end();
-        drive.followTrajectorySequenceAsync(Marker);
+
+    public static void afterBoard23(int position, boolean color){
+        if (position == 1 && color){
+            TrajectorySequence afterBoard = drive.trajectorySequenceBuilder(lastTrajectoryPos)
+                    .lineToLinearHeading(afterDropYellowPixel23Red1)
+                    .build();
+            lastTrajectoryPos = afterBoard.end();
+            drive.followTrajectorySequenceAsync(afterBoard);
+        }else if (position == 1){
+            TrajectorySequence afterBoard = drive.trajectorySequenceBuilder(lastTrajectoryPos)
+                    .lineToLinearHeading(afterDropYellowPixel23Blue1)
+                    .build();
+            lastTrajectoryPos = afterBoard.end();
+            drive.followTrajectorySequenceAsync(afterBoard);
+        } else if (position == 2 && color) {
+            TrajectorySequence afterBoard = drive.trajectorySequenceBuilder(lastTrajectoryPos)
+                    .lineToLinearHeading(afterDropYellowPixel23Red4)
+                    .build();
+            lastTrajectoryPos = afterBoard.end();
+            drive.followTrajectorySequenceAsync(afterBoard);
+        } else if (position == 2) {
+            TrajectorySequence afterBoard = drive.trajectorySequenceBuilder(lastTrajectoryPos)
+                    .lineToLinearHeading(afterDropYellowPixel23Blue4)
+                    .build();
+            lastTrajectoryPos = afterBoard.end();
+            drive.followTrajectorySequenceAsync(afterBoard);
+        } else if (position == 3 && color) {
+            TrajectorySequence afterBoard = drive.trajectorySequenceBuilder(lastTrajectoryPos)
+                    .lineToLinearHeading(afterDropYellowPixel23Red6)
+                    .build();
+            lastTrajectoryPos = afterBoard.end();
+            drive.followTrajectorySequenceAsync(afterBoard);
+        } else if (position == 3) {
+            TrajectorySequence afterBoard = drive.trajectorySequenceBuilder(lastTrajectoryPos)
+                    .lineToLinearHeading(afterDropYellowPixel23Blue6)
+                    .build();
+            lastTrajectoryPos = afterBoard.end();
+            drive.followTrajectorySequenceAsync(afterBoard);
+        }
     }
+
     //true = red
     // false = blue
     //the position of the prop is defined like this:

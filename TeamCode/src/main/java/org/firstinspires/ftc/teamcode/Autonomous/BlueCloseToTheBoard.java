@@ -39,16 +39,16 @@ public class BlueCloseToTheBoard extends LinearOpMode {
     public static double rightConeX = 31;
     public static double rightConeY = -4.5;
     public static double leftConeX = 22;
-    public static double leftConeY = 7;
+    public static double leftConeY = 8;
     public static double prepareToPixelDropX = 25;
     public static double prepareToPixelDropY = -1.4;
-    public static double boardPosY = 30;
+    public static double boardPosY = 32;
     public static double boardPos12X = 35.8;
     public static double boardPos34X = 28;
-    public static double boardPos56X = 18;
+    public static double boardPos56X = 20.2;
     public static double rightAfterConeX = 1.0;
     public static double rightAfterConeY=18.73;
-    public static double rightPreBoardY = 23.0;
+    public static double rightPreBoardY = 19;
     public static double beforePixelBoardCenterY = 21.84;
 
     private VisionPortal portal;
@@ -144,20 +144,20 @@ public class BlueCloseToTheBoard extends LinearOpMode {
 
         TrajectorySequence leftCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(leftConeX , leftConeY , startPose.getHeading()))
-                .lineToLinearHeading(new Pose2d(leftConeX - 5,rightAfterConeY, startPose.getHeading()))
+                .lineToLinearHeading(new Pose2d(rightAfterConeX,rightAfterConeY, startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(boardPos56X, rightPreBoardY , startPose.getHeading()))
-                .turn(Math.toRadians(80))
+                .turn(Math.toRadians(90))
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.MIN, telemetry);
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
                 .waitSeconds(1)
-                .lineToLinearHeading(new Pose2d(boardPos56X, boardPosY , Math.toRadians(80)))
+                .lineToLinearHeading(new Pose2d(boardPos56X, boardPosY , Math.toRadians(90)))
                 .waitSeconds(1.5)
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
-                .lineToLinearHeading(new Pose2d(boardPos56X, rightPreBoardY , Math.toRadians(85)))  .addTemporalMarker(() -> {
+                .lineToLinearHeading(new Pose2d(boardPos56X, rightPreBoardY , Math.toRadians(90)))  .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
                 .addTemporalMarker(() -> {

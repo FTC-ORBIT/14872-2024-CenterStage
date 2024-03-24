@@ -92,14 +92,12 @@ public class Elevator {
                 pos = ElevatorConstants.climbHeight;
                 break;
             case MIN:
-                pos = (float) ElevatorConstants.autoHeight;
+                pos =(float) ElevatorConstants.autoHeight;
                 break;
             case AUTO:
-                pos = (float) ElevatorConstants.autoHeightFar;
+                pos =(float) ElevatorConstants.autoHeightFar;
                 break;
         }
-        currentPos = elevatorMotor.getCurrentPosition();
-        currentPos2 = elevatorMotor2.getCurrentPosition();
         if (pos == ElevatorConstants.autoHeight || pos == ElevatorConstants.autoHeightFar) {
             while (currentPos <= pos || currentPos2 <= pos) {
                 currentPos = elevatorMotor.getCurrentPosition();
@@ -111,7 +109,7 @@ public class Elevator {
                 telemetry.addData("pos", currentPos);
                 telemetry.addData("pos2", currentPos2);
             }
-        } else {
+        }else {
             while (currentPos > pos && currentPos2 > pos) {
                 currentPos = elevatorMotor.getCurrentPosition();
                 currentPos2 = elevatorMotor2.getCurrentPosition();
@@ -129,8 +127,9 @@ public class Elevator {
         elevatorMotor2.setPower(0);
     }
 
+
     public static double getPos(){
-        return currentPos;
+        return (currentPos + currentPos2)/2;
     }
 
     public static boolean reachedHeight (double currentHeight){

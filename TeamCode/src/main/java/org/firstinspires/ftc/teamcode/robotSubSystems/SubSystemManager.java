@@ -202,13 +202,15 @@ public class SubSystemManager {
             elevatorState = ElevatorStates.CLIMB;
         }
         if (gamepad2.x || gamepad2.y || gamepad2.dpad_down) FixPixelToggleButton =false;
-        if (gamepad2.x && FixPixelToggleButton == false){
+        if (gamepad2.x && !FixPixelToggleButton){
             fixpixelState =FixpixelState.MIN;
-        }else if (gamepad2.y && FixPixelToggleButton == false){
+        }else if (gamepad2.y && !FixPixelToggleButton){
             fixpixelState = FixpixelState.LOW;
-        } else if (gamepad2.dpad_down && FixPixelToggleButton == false) {
+        } else if (gamepad2.dpad_down && !FixPixelToggleButton) {
             fixpixelState = FixpixelState.CLOSE;
-        } else if (gamepad2.left_stick_y != 0) {
+        } else  if (gamepad2.right_bumper){
+            fixpixelState = FixpixelState.THIRD;
+        }else if (gamepad2.left_stick_y != 0) {
             FixPixelToggleButton = true;
             fixpixelState = FixpixelState.OVERRIDE;
         }
@@ -225,7 +227,7 @@ public class SubSystemManager {
         Fixpixel.operate(fixpixelState , gamepad2 , telemetry);
 
         lastState = wanted;
-        if (gamepad2.a || gamepad1.dpad_down) OrbitGyro.resetGyro();
+        if (gamepad1.dpad_down) OrbitGyro.resetGyro();
         if (gamepad2.back) Plane.operate(PlaneState.THROW);
     }
 
