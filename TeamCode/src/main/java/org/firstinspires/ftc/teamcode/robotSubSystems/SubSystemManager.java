@@ -225,7 +225,7 @@ public class SubSystemManager {
         Fixpixel.operate(fixpixelState , gamepad2 , telemetry);
 
         lastState = wanted;
-        if (gamepad2.a || gamepad1.dpad_left) OrbitGyro.resetGyro();
+        if (gamepad2.a || gamepad1.dpad_down) OrbitGyro.resetGyro();
         if (gamepad2.back) Plane.operate(PlaneState.THROW);
     }
 

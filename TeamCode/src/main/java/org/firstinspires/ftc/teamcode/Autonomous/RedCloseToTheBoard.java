@@ -54,7 +54,7 @@ public class RedCloseToTheBoard extends LinearOpMode {
     public static double prepareToPixelDropY = 1.4;
     public static double boardPosY = -34;
     public static double boardPos12X = 35.5;
-    public static double boardPos34X = 29;
+    public static double boardPos34X = 31;
     public static double boardPos56X = 18;
     public static double rightAfterConeX = 1.0;
     public static double rightAfterConeY=-18.73;
@@ -93,14 +93,14 @@ public class RedCloseToTheBoard extends LinearOpMode {
                         Elevator.operateAutonomous(ElevatorStates.MIN, telemetry);
                         Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
-                .waitSeconds(2.5)
+                .waitSeconds(1)
                 .setConstraints(velConstraintDrop, accConstraintDrop)
                 .lineToLinearHeading(new Pose2d(boardPos34X, boardPosY, Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .waitSeconds(delay)
-                .resetVelConstraint()
+                .resetConstraints()
                 .lineToLinearHeading(new Pose2d(boardPos34X, boardPosY + 8, Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
@@ -167,7 +167,7 @@ public class RedCloseToTheBoard extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     Fourbar.operateTeleop(FourbarState.REVERSE);
                 })
-                .waitSeconds(1)
+                .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
                 })
@@ -203,7 +203,7 @@ public class RedCloseToTheBoard extends LinearOpMode {
                     break;
             }
             TrajectorySequence parkCloseTheWall = drive.trajectorySequenceBuilder(endPose)
-                    .lineToLinearHeading(new Pose2d(goToParkingX, goToParkingY, Math.toRadians (-90)))
+                    .lineToLinearHeading(new Pose2d(goToParkingX-3, goToParkingY + 5, Math.toRadians (-90)))
                     .turn(Math.toRadians(90))
                             .build();
 

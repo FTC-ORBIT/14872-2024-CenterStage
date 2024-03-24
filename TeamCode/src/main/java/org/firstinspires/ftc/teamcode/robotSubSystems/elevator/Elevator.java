@@ -77,52 +77,56 @@ public class Elevator {
     }
 
     public static void operateAutonomous (ElevatorStates state, Telemetry telemetry) {
-            switch (state) {
-                case LOW:
-                    pos = ElevatorConstants.lowHeight;
-                    break;
-                case MID:
-                    pos = ElevatorConstants.midHeight;
-                    break;
-                case INTAKE:
-                default:
-                    pos = ElevatorConstants.intakeHeight;
-                    break;
-                case CLIMB:
-                    pos = ElevatorConstants.climbHeight;
-                    break;
-                case MIN:
-                    pos = (float) ElevatorConstants.autoHeight;
-                    break;
-                case AUTO:
-                    pos = (float) ElevatorConstants.autoHeightFar;
-                    break;
+        switch (state) {
+            case LOW:
+                pos = ElevatorConstants.lowHeight;
+                break;
+            case MID:
+                pos = ElevatorConstants.midHeight;
+                break;
+            case INTAKE:
+            default:
+                pos = ElevatorConstants.intakeHeight;
+                break;
+            case CLIMB:
+                pos = ElevatorConstants.climbHeight;
+                break;
+            case MIN:
+                pos = (float) ElevatorConstants.autoHeight;
+                break;
+            case AUTO:
+                pos = (float) ElevatorConstants.autoHeightFar;
+                break;
+        }
+        currentPos = elevatorMotor.getCurrentPosition();
+        currentPos2 = elevatorMotor2.getCurrentPosition();
+        if (pos == ElevatorConstants.autoHeight || pos == ElevatorConstants.autoHeightFar) {
+            while (currentPos <= pos || currentPos2 <= pos) {
+                currentPos = elevatorMotor.getCurrentPosition();
+                currentPos2 = elevatorMotor2.getCurrentPosition();
+                elevatorPID.setWanted(pos);
+                encoderPID.setWanted(0);
+                elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
+                elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
+                telemetry.addData("pos", currentPos);
+                telemetry.addData("pos2", currentPos2);
             }
-            currentPos = elevatorMotor.getCurrentPosition();
-            currentPos2 = elevatorMotor2.getCurrentPosition();
-            if (pos == ElevatorConstants.autoHeight || pos == ElevatorConstants.autoHeightFar) {
-                while (currentPos < pos || currentPos2 < pos)
-                    currentPos = elevatorMotor.getCurrentPosition();
-                    currentPos2 = elevatorMotor2.getCurrentPosition();
-                    elevatorPID.setWanted(pos);
-                    encoderPID.setWanted(0);
-                    elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
-                    elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
-                    telemetry.addData("pos", currentPos);
-                    telemetry.addData("pos2", currentPos2);
-            } else {
-                while (currentPos > pos || currentPos2 > pos)
-                    currentPos = elevatorMotor.getCurrentPosition();
-                    currentPos2 = elevatorMotor2.getCurrentPosition();
-                    elevatorPID.setWanted(pos);
-                    encoderPID.setWanted(0);
-                    elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
-                    elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
+        } else {
+            while (currentPos > pos && currentPos2 > pos) {
+                currentPos = elevatorMotor.getCurrentPosition();
+                currentPos2 = elevatorMotor2.getCurrentPosition();
+                elevatorPID.setWanted(pos);
+                encoderPID.setWanted(0);
+                elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
+                elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
 
-                    telemetry.addData("pos", currentPos);
-                    telemetry.addData("pos2", currentPos2);
-                    telemetry.update();
+                telemetry.addData("pos", currentPos);
+                telemetry.addData("pos2", currentPos2);
+                telemetry.update();
             }
+        }
+        elevatorMotor.setPower(0);
+        elevatorMotor2.setPower(0);
     }
 
     public static double getPos(){

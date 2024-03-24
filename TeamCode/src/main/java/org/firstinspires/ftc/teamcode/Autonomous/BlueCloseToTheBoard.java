@@ -103,7 +103,7 @@ public class BlueCloseToTheBoard extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
                 })
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 3, goToParkingY, Math.toRadians (startPose.getHeading() + 90)))
+                .lineToLinearHeading(new Pose2d(startPose.getX() , goToParkingY, Math.toRadians (startPose.getHeading() + 90)))
                 .turn(Math.toRadians(-90))
                 .build();
 
@@ -137,7 +137,7 @@ public class BlueCloseToTheBoard extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
                 })
-                .lineToLinearHeading(new Pose2d(startPose.getX() + 5, goToParkingY , Math.toRadians(startPose.getHeading() + 90)))
+                .lineToLinearHeading(new Pose2d(startPose.getX()+3 , goToParkingY , Math.toRadians(startPose.getHeading() + 90)))
                 .turn(Math.toRadians(-90))
                 .lineToLinearHeading(new Pose2d(startPose.getX()  , goToParkingY, Math.toRadians (startPose.getHeading())))
                 .build();
@@ -157,10 +157,7 @@ public class BlueCloseToTheBoard extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
-                .lineToLinearHeading(new Pose2d(boardPos56X, rightPreBoardY , Math.toRadians(85)))
-                .turn(startPose.getHeading())
-                .lineToLinearHeading(new Pose2d(startPose.getX() +1  , goToParkingY, startPose.getHeading()))
-                .addTemporalMarker(() -> {
+                .lineToLinearHeading(new Pose2d(boardPos56X, rightPreBoardY , Math.toRadians(85)))  .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
                 .addTemporalMarker(() -> {
@@ -170,6 +167,9 @@ public class BlueCloseToTheBoard extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.INTAKE, telemetry);
                 })
+
+                .turn(startPose.getHeading())
+                .lineToLinearHeading(new Pose2d(startPose.getX()   , goToParkingY, startPose.getHeading()))
                 .build();
 
         waitForStart();
