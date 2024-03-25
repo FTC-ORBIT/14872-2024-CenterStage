@@ -135,6 +135,7 @@ if (isStopRequested()) return;
                     break;
                 case GOTOPARKING:
                   telemetry.addData("parked", null);
+                  break;
             }
             Elevator.operateAutonomous(elevatorStates, telemetry);
             Fourbar.operateTeleop(fourbarState);

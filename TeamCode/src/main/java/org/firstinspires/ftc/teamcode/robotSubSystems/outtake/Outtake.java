@@ -41,7 +41,7 @@ public class Outtake {
                 break;
             case TOWOUT:
                 pos = OuttakeConstants.outPos;
-                pos2 = OuttakeConstants.outPos;
+                pos2 = OuttakeConstants.openPos2;
                 break;
         }
         servo.setPosition(pos);
@@ -50,39 +50,41 @@ public class Outtake {
 
     public static void test(Gamepad gamepad, Telemetry telemetry) {
 
-        if (gamepad.left_bumper) {
-            pos = OuttakeConstants.closedPos;
-        } else if (gamepad.right_bumper) {
-            pos = OuttakeConstants.openPos;
+//        if (gamepad.left_bumper) {
+//            pos = OuttakeConstants.closedPos;
+//            pos2 = OuttakeConstants.closedPos2;
+//        } else if (gamepad.right_bumper) {
+//            pos = OuttakeConstants.openPos;
+//            pos2 = OuttakeConstants.openPos2;
+//        }
+        if (gamepad.dpad_left &&  !lastLeft){
+            pos2 += 0.05;
+            if (pos2 > 1){
+                pos2 = 1;
+            }
+        }else if (gamepad.dpad_right && !lastRight){
+            pos2 -= 0.05;
+            if (pos2 < 0){
+                pos2 = 0;
+            }
         }
-//        if (gamepad.dpad_left &&  !lastLeft){
-//            pos += 0.05;
-//            if (pos > 1){
-//                pos = 1;
-//            }
-//        }else if (gamepad.dpad_right && !lastRight){
-//            pos -= 0.05;
-//            if (pos < 0){
-//                pos = 0;
-//            }
-//        }
-//        if (gamepad.left_bumper && !lastlT){
-//            pos += 0.001;
-//            if (pos > 1){
-//                pos = 1;
-//            }
-//        }else if (gamepad.right_bumper && !lastRT){
-//            pos -= 0.001;
-//            if (pos < 0){
-//                pos = 0;
-//            }
-//        }
-        servo.setPosition(pos);
+        if (gamepad.left_bumper && !lastlT){
+            pos2 += 0.001;
+            if (pos2 > 1){
+                pos2 = 1;
+            }
+        }else if (gamepad.right_bumper && !lastRT){
+            pos2 -= 0.001;
+            if (pos2 < 0){
+                pos2 = 0;
+            }
+        }
+        servo2.setPosition(pos2);
         lastLeft = gamepad.left_bumper;
         lastRight = gamepad.right_bumper;
         lastlT = gamepad.dpad_left;
         lastRT = gamepad.dpad_right;
-        telemetry.addData("Outtake pos" , pos);
+        telemetry.addData("Outtake pos" , pos2);
         telemetry.update();
         }
 
