@@ -57,10 +57,12 @@ public class Elevator {
         //TODO - elevator max = 3254 , 3244
         if (currentPos > 3240 || currentPos2 > 3240) pos -= 100;
         //TODO - elevator min = 0!
-        if (0 > currentPos || 0 > currentPos2){
-            pos += 10;
-            telemetry.addLine("elevator below 0");
-            telemetry.update();
+        if (state == ElevatorStates.OVERRIDE) {
+            if (0 > currentPos || 0 > currentPos2) {
+                pos += 10;
+                telemetry.addLine("elevator below 0");
+                telemetry.update();
+            }
         }
         lastPos = pos;
         currentPos = elevatorMotor.getCurrentPosition();

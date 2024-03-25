@@ -8,23 +8,23 @@ import org.firstinspires.ftc.teamcode.robotData.Constants;
 
 public class OrbitColorSensor {
 
-    public final ColorSensor colorSensor;
-    public OrbitColorSensor(HardwareMap hardwareMap) {
+    public static ColorSensor colorSensor;
+    public  static String color = "none";
+    public static void  init(HardwareMap hardwareMap) {
         colorSensor = hardwareMap.get(ColorSensor.class, "ColorSensor");
     }
 
 
-    public int hasGamePiece() {
-            int color = 0;
-            if (colorSensor.red() == 255 && colorSensor.blue() == 255 && colorSensor.green() == 255){
-                color = 1;// when white pixel
-            } else if (colorSensor.red() == 255 && colorSensor.green() == 255 && colorSensor.blue() == 0) {
-                color = 2; // when yellow pixel
-            } else if (colorSensor.red() == 50 && colorSensor.green() == 205 && colorSensor.blue() == 50) {
-                color = 3; // when green pixel
-            } else if (colorSensor.red() == 238 && colorSensor.green() == 130 && colorSensor.blue() == 238) {
-                color = 4;
-            }
+    public static String hasGamePiece() {
+        if (colorSensor.argb() == -15985647){
+            color = "white";// when white pixel
+        } else if (colorSensor.argb() == -100202238) {
+            color = "yellow"; // when yellow pixel
+        } else if (colorSensor.argb() == -301857278 ) {
+            color = "green"; // when green pixel
+        } else if (colorSensor.argb() == -66779382 || colorSensor.argb() == -66779126) {
+            color = "purple";// when purple pixel
+        }
         return color;
     }
 

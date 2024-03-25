@@ -54,7 +54,7 @@ public class Robot extends LinearOpMode {
         Fourbar.init(hardwareMap);
         Plane.init(hardwareMap);
 //         OrbitLED.init(hardwareMap);
-        new OrbitColorSensor(hardwareMap);
+        OrbitColorSensor.init(hardwareMap);
         OrbitGyro.resetGyroStartTeleop((float) Math.toDegrees(PoseStorage.currentPose.getHeading()));
         telemetry.update();
         telemetry.addData("gyro", Math.toDegrees(PoseStorage.currentPose.getHeading()));
@@ -73,7 +73,7 @@ public class Robot extends LinearOpMode {
         GlobalData.robotState = RobotState.TRAVEL;
 
         while (!isStopRequested()) {
-           if (gamepad2.right_bumper) OrbitGyro.resetGyro();
+//           if (gamepad2.right_bumper) OrbitGyro.resetGyro();
           GlobalData.currentTime = (float) robotTime.seconds();
 //          final boolean placing = SubSystemManager.wanted.equals(RobotState.MIN) || SubSystemManager.wanted.equals(RobotState.LOW) || SubSystemManager.wanted.equals(RobotState.MID);
           Vector leftStick = new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y);

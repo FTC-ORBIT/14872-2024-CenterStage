@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
+import org.firstinspires.ftc.teamcode.Sensors.OrbitColorSensor;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
@@ -243,6 +244,8 @@ public class SubSystemManager {
         telemetry.addData("outtake", Outtake.servo.getPosition());
         telemetry.addData("plane", Plane.planeServo.getPosition());
         telemetry.addData("time for deplete in travel", elapsedTime);
+        telemetry.addData("color" , OrbitColorSensor.color);
+
     }
 }
 

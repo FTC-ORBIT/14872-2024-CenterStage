@@ -40,9 +40,9 @@ public class RedFarFromTheBoard extends  LinearOpMode{
     public static double parkingY = -83;
     public static double parkingX = 46.19;
     public static double boardY = -85;
-    public static double rightConeX = 31;
+    public static double rightConeX = 33;
 
-    public static double rightConeY = -4.5;
+    public static double rightConeY = -3;
 
 
     double prepareToPropY = -1;
@@ -87,10 +87,13 @@ public class RedFarFromTheBoard extends  LinearOpMode{
     private RedPropThresholdFar redPropThresholdFar = new RedPropThresholdFar();
     private AprilTagDetect aprilTag;
 
+    SampleMecanumDrive drive;
+
     @Override
     public void runOpMode() throws InterruptedException{
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+//        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        drive = new SampleMecanumDrive(hardwareMap);
 
         Pose2d startPose = new Pose2d(0, 0, 0);
 
@@ -102,11 +105,8 @@ public class RedFarFromTheBoard extends  LinearOpMode{
         Fourbar.init(hardwareMap);
         Plane.init(hardwareMap);
 
-        aprilTag = (AprilTagDetect) new AprilTagDetect.Builder()
-
-                // The following default settings are available to un-comment and edit as needed.
-                //.setDrawAxes(false)
-                .setDrawCubeProjection(false)
+        aprilTag = new AprilTagDetect();
+        aprilTag.atPrcsr = new AprilTagProcessor.Builder()
                 //.setDrawTagOutline(true)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
@@ -124,10 +124,12 @@ public class RedFarFromTheBoard extends  LinearOpMode{
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
-                .addProcessor(aprilTag)
+                .addProcessor(aprilTag.atPrcsr)
                 .addProcessor(redPropThresholdFar)
                 .build();
-        portal.setProcessorEnabled(aprilTag,false);
+
+        AprilTagDetect.setManualExposure(4,30, portal, this);
+        portal.setProcessorEnabled(aprilTag.atPrcsr,false);
 
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
@@ -307,7 +309,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 .build();
 
         TrajectorySequence rightCone = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(rightConeX, prepareToPropY, Math.toRadians(-90)), Math.toRadians(120))
+                .splineToLinearHeading(new Pose2d(rightConeX, prepareToPropY, Math.toRadians(-90)), Math.toRadians(-30))
                 .splineToLinearHeading(new Pose2d(rightConeX, rightConeY, Math.toRadians(-90)), Math.toRadians(-30))
                 .lineToLinearHeading(new Pose2d(rightConeX, rightAfterPropY, rightConeAngle))
                 .lineToLinearHeading(new Pose2d(rightBeforeGateX, rightAfterPropY , rightConeAngle))
@@ -578,86 +580,135 @@ public class RedFarFromTheBoard extends  LinearOpMode{
 //            redPropThresholdFar.initYellowPixel();
             redPropThresholdFar.EnumGetPropPos();
             portal.stopStreaming();
-            portal.setProcessorEnabled(aprilTag, true);
+            portal.setProcessorEnabled(aprilTag.atPrcsr, true);
             portal.setProcessorEnabled(redPropThresholdFar, false);
 
             switch (redPropThresholdFar.sampledPropPos) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
                     getYellowPixelfromAprilTag();
-                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
-                        drive.followTrajectorySequence(leftConeHitL);
-                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
-                        drive.followTrajectorySequence(leftConeHitR);
-                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
-                        drive.followTrajectorySequence(leftConeMissR);
-                    }else {
-                        drive.followTrajectorySequence(leftConeNopPixel);
+
+                    while(!isStopRequested()) {
+                        telemetry.addData("prop pos:", redPropThresholdFar.EnumGetPropPos());
+                        telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
+                        if (redPropThresholdFar.biggest != null) {
+                            telemetry.addData("yellowThreshold", redPropThresholdFar.biggest.averagedBox);
+                        }
+                        telemetry.addData("wantedID", aprilTag.wantedID);
+                        telemetry.addData("Detect attempts", aprilTag.count);
+                        telemetry.update();
+                        sleep(2000);
+                        getYellowPixelfromAprilTag();
+
                     }
+
+//                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
+//                        drive.followTrajectorySequence(leftConeHitL);
+//                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+//                        drive.followTrajectorySequence(leftConeHitR);
+//                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
+//                        drive.followTrajectorySequence(leftConeMissR);
+//                    }else {
+//                        drive.followTrajectorySequence(leftConeNopPixel);
+//                    }
                     telemetry.addLine("left");
                     break;
                 case CENTER:
                 default:
                     drive.followTrajectorySequence(centerCone);
                     getYellowPixelfromAprilTag();
-                 if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT) {
-                     drive.followTrajectorySequence(centerConeHitL);
-                 }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
-                     drive.followTrajectorySequence(centerConeHitR);
-                 }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
-                     drive.followTrajectorySequence(centerConeMissL);
-                 }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
-                     drive.followTrajectorySequence(centerConeMissR);
-                 }else {
-                     drive.followTrajectorySequence(centerConeNopPixel);
-                 }
-                   telemetry.addLine("center");
+                    chooseDropTraj(centerConeHitL, centerConeHitR, centerConeMissL, centerConeMissR, centerConeNopPixel);
+//                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT) {
+//                     drive.followTrajectorySequence(centerConeHitL);
+//                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+//                     drive.followTrajectorySequence(centerConeHitR);
+//                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
+//                     drive.followTrajectorySequence(centerConeMissL);
+//                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
+//                     drive.followTrajectorySequence(centerConeMissR);
+//                    }else {
+//                     drive.followTrajectorySequence(centerConeNopPixel);
+//                    }
+                    telemetry.addLine("center");
 
                     break;
                 case RIGHT:
                     drive.followTrajectorySequence(rightCone);
                     getYellowPixelfromAprilTag();
-                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
-                        drive.followTrajectorySequence(rightConeHitL);
-                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
-                        drive.followTrajectorySequence(rightConeHitR);
-                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
-                        drive.followTrajectorySequence(rightConeMissL);
-                    }else {
-                        drive.followTrajectorySequence(rightConeNopPixel);
-                    }
+//                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
+//                        drive.followTrajectorySequence(rightConeHitL);
+//                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+//                        drive.followTrajectorySequence(rightConeHitR);
+//                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
+//                        drive.followTrajectorySequence(rightConeMissL);
+//                    }else {
+//                        drive.followTrajectorySequence(rightConeNopPixel);
+//                    }
                     telemetry.addLine("right");
                     break;
                 case NONE:
                     drive.followTrajectorySequence(centerCone);
                     getYellowPixelfromAprilTag();
-                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT) {
-                        drive.followTrajectorySequence(centerConeHitL);
-                    } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
-                        drive.followTrajectorySequence(centerConeHitR);
-                    } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
-                        drive.followTrajectorySequence(centerConeMissL);
-                    } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
-                        drive.followTrajectorySequence(centerConeMissR);
-                    } else {
-                        drive.followTrajectorySequence(centerConeNopPixel);
-                    }
+//                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT) {
+//                        drive.followTrajectorySequence(centerConeHitL);
+//                    } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+//                        drive.followTrajectorySequence(centerConeHitR);
+//                    } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
+//                        drive.followTrajectorySequence(centerConeMissL);
+//                    } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
+//                        drive.followTrajectorySequence(centerConeMissR);
+//                    } else {
+//                        drive.followTrajectorySequence(centerConeNopPixel);
+//                    }
                     telemetry.addLine("Doesn't see prop");
                     break;
             }
-            telemetry.addData("prop pos:", redPropThresholdFar.EnumGetPropPos());
-            telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
-            telemetry.addData("biggest:", redPropThresholdFar.biggest.averagedBox);
-            telemetry.update();
+            while (!isStopRequested()) {
+                telemetry.addData("prop pos:", redPropThresholdFar.EnumGetPropPos());
+                telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
+                if(redPropThresholdFar.biggest != null) {
+                    telemetry.addData("biggest:", redPropThresholdFar.biggest.averagedBox);
+                }
+                telemetry.addData("wantedID", aprilTag.wantedID);
+                telemetry.addData("Detect attempts", aprilTag.count);
+                telemetry.update();
+
+                sleep(1000);
+                redPropThresholdFar.test(gamepad1, telemetry);
+            }
         }
     }
 
     public void getYellowPixelfromAprilTag(){
         portal.resumeStreaming();
+        while (portal.getCameraState() != VisionPortal.CameraState.STREAMING){
+            sleep(5);
+        }
         aprilTag.getAprilTagCords(redPropThresholdFar.sampledPropPos,
                                   redPropThresholdFar.AllianceColor);
         redPropThresholdFar.initYellowPixelAT(aprilTag.aprilTagCords);
+        AprilTagDetect.setDfltExposure(portal,this);
         portal.setProcessorEnabled(redPropThresholdFar, true);
+        sleep(100);
         redPropThresholdFar.getYellowPixelPos();
+    }
+
+    public void chooseDropTraj(TrajectorySequence ConeHitL,
+                               TrajectorySequence ConeHitR,
+                               TrajectorySequence ConeMissL,
+                               TrajectorySequence ConeMissR,
+                               TrajectorySequence ConeNopPixel){
+        if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT) {
+            drive.followTrajectorySequence(ConeHitL);
+        } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+            drive.followTrajectorySequence(ConeHitR);
+        } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
+            drive.followTrajectorySequence(ConeMissL);
+        } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
+            drive.followTrajectorySequence(ConeMissR);
+        } else {
+            drive.followTrajectorySequence(ConeNopPixel);
+        }
+
     }
 }

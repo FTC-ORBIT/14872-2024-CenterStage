@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
 
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.AprilTagDetect.getAprilTagCords;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.AprilTagDetect.wantedID;
+import static org.firstinspires.ftc.vision.VisionPortal.CameraState.STREAMING;
+
 import android.annotation.SuppressLint;
 import android.util.Size;
 
@@ -26,7 +30,9 @@ import java.util.List;
     public class CameraTest2 extends LinearOpMode {
 
         private VisionPortal portal;
+        ExposureControl ec;
         private AprilTagProcessor aprilTag;
+//        private AprilTagDetect aTagDet;
         private Point aprilTagCenter;
         private RedPropThresholdFar redPropThreshold = new RedPropThresholdFar();
 
@@ -35,7 +41,7 @@ import java.util.List;
     public Gamepad lastGamepad = new Gamepad();
     // Create the AprilTag processor.
 
-    public static double propPos = 0;
+    public static double propPos = 2;
 
 
 
@@ -86,6 +92,10 @@ import java.util.List;
                     .addProcessor(redPropThreshold)
                     .build();
 
+//            while(portal.getCameraState() != STREAMING){}
+//            ec = portal.getCameraControl(ExposureControl.class);
+            AprilTagDetect.setManualExposure(4,30, portal, this);
+
             portal.setProcessorEnabled(redPropThreshold, false);
 
 //            delayCV.startAction((float) robotTime.seconds());
@@ -106,16 +116,16 @@ import java.util.List;
 
 
             while (!isStopRequested()) {
-                if(gamepad2.a && !lastGamepad.a) {
+                if (gamepad2.a && !lastGamepad.a) {
                     toggle = !toggle;
                     portal.setProcessorEnabled(aprilTag, toggle);
                 }
-                if(gamepad2.b && !lastGamepad.b) {
-                    if(!sttogle) {
+                if (gamepad2.b && !lastGamepad.b) {
+                    if (!sttogle) {
                         sttogle = true;
                         portal.resumeStreaming();
-                    }
-                    else {
+                        AprilTagDetect.setDfltExposure(portal,this);
+                    } else {
                         sttogle = false;
                         portal.stopStreaming();
                     }
@@ -127,31 +137,30 @@ import java.util.List;
                 telemetry.addData("PropThreshold processor enabled:", portal.getProcessorEnabled(redPropThreshold));
                 telemetry.addData("the pixel is in:", redPropThreshold.getYellowPixelPos());
                 telemetry.addData("Prop Position", redPropThreshold.EnumGetPropPos());
+//                telemetry.addData("Expsre Md", ec.getMode());
                 telemetry.addLine("");
 
 
-                while(aprilTagCenter == null){
+                while (aprilTagCenter == null) {
                     currentDetections = aprilTag.getDetections();
 
                     telemetry.addData("# AprilTags Detected", currentDetections.size());
-                    for(AprilTagDetection i : currentDetections) {
+                    for (AprilTagDetection i : currentDetections) {
                         if (i.metadata != null) {
-                            if (i.id == 5) { //TODO set id based on propcolor and position
+                            if (true || i.id == 5) { //TODO set id based on propcolor and position
                                 aprilTagCenter = i.center;
                             }
                         }
                     }
                     telemetry.update();
-                    sleep(5*1000);
+                    sleep(2 * 1000);
                 }
-                ExposureControl ec = portal.getCameraControl(ExposureControl.class);
-                ec.getMode();
-                ec.setMode(ExposureControl.Mode.Auto);
+//                ec.setMode(ExposureControl.Mode.Auto);
 //                redPropThreshold.aprilTagCords = aprilTagCenter;
-                sleep(500);
+                sleep(300);
                 redPropThreshold.initYellowPixelAT(aprilTagCenter);
                 portal.setProcessorEnabled(redPropThreshold, true);
-                telemetry.addLine("Yellow Pixel Detection Processor is DISABLED - See PropThreshod Code !!!!!");
+                //  telemetry.addLine("Yellow Pixel Detection Processor is DISABLED - See PropThreshod Code !!!!!");
                 for (ElementDetectBox eBox : redPropThreshold.yellowBoxesHash) {
                     telemetry.addLine(String.format("\n==== %s %s", eBox.place.toString(), eBox.elementBox.toString()));
                 }
@@ -165,7 +174,8 @@ import java.util.List;
                         telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
                         telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
                         telemetry.addLine(String.format("corner[0] (%6.1f %6.1f)  Center (%6.1f %6.1f)  ()", detection.corners[0].x, detection.corners[0].y, detection.center.x, detection.center.y));
-                        if (detection.id == 5) { //TODO set id based on propcolor and position
+                        getAprilTagCords(PropPosEnum.RIGHT, PropColorEnum.RED);
+                        if (detection.id == wantedID) { //TODO set id based on propcolor and position
                             aprilTagCenter = detection.center;
                         }
                     } else {
@@ -188,9 +198,9 @@ import java.util.List;
                 telemetry.addData("Averaged Middle Box:", redPropThreshold.averagedMiddleBox);
                 telemetry.addData("Averaged Right Box:", redPropThreshold.averagedRightBox);
 
-
                 redPropThreshold.test(gamepad2, telemetry);
                 telemetry.update();
             }
         }
+
     }

@@ -41,7 +41,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
     public static double rightDriveX = 27;
     public static double rightConeX = 27.7;
 
-    public static double rightConeY = 5.2;
+    public static double rightConeY = -8;
 
     public static double rightConeAngle =-5.05;
     public static double leftConeX = 30;
@@ -55,7 +55,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
     public static double afterGateY = 70.345;
     public static double boardPos12 = 33.9;
     public static double boardPos34 = 28.19;
-    public static double boardPos56 = 29.95;
+    public static double boardPos56 = 23;
     // TODO "MUST READ: in the BLUE autonomous the 1-6 is from right to left!!"
     // TODO X6 = 22.5
     // TODO X5 = 23.2

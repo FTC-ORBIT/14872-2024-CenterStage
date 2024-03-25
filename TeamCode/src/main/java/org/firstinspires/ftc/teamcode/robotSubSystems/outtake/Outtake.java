@@ -41,7 +41,7 @@ public class Outtake {
                 break;
             case TOWOUT:
                 pos = OuttakeConstants.outPos;
-                pos2 = OuttakeConstants.outPos;
+                pos2 = OuttakeConstants.openPos2;
                 break;
         }
         servo.setPosition(pos);
