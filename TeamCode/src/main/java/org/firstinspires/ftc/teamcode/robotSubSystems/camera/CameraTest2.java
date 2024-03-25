@@ -5,16 +5,16 @@ import android.util.Size;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
-import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.opencv.core.Point;
 
@@ -46,16 +46,16 @@ import java.util.List;
 
                     // The following default settings are available to un-comment and edit as needed.
                     //.setDrawAxes(false)
-                    //.setDrawCubeProjection(false)
+//                    .setDrawCubeProjection(false)
                     //.setDrawTagOutline(true)
-                    //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-                    //.setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
+                    .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                    .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
                     //.setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
 
                     // == CAMERA CALIBRATION ==
                     // If you do not manually specify calibration parameters, the SDK will attempt
                     // to load a predefined calibration for your camera.
-                    .setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
+                    .setLensIntrinsics(458.066, 457.626, 337.176, 251.805)
                     // ... these parameters are fx, fy, cx, cy.
 
                     .build();
@@ -144,10 +144,12 @@ import java.util.List;
                     telemetry.update();
                     sleep(5*1000);
                 }
-
-                redPropThreshold.aprilTagCenter = aprilTagCenter;
+                ExposureControl ec = portal.getCameraControl(ExposureControl.class);
+                ec.getMode();
+                ec.setMode(ExposureControl.Mode.Auto);
+//                redPropThreshold.aprilTagCords = aprilTagCenter;
                 sleep(500);
-                redPropThreshold.initYellowPixelAT();
+                redPropThreshold.initYellowPixelAT(aprilTagCenter);
                 portal.setProcessorEnabled(redPropThreshold, true);
                 telemetry.addLine("Yellow Pixel Detection Processor is DISABLED - See PropThreshod Code !!!!!");
                 for (ElementDetectBox eBox : redPropThreshold.yellowBoxesHash) {

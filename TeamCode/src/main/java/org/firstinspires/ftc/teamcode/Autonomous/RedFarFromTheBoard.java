@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.AprilTagDetect;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.RedPropThresholdFar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
@@ -25,6 +26,8 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @Autonomous(name = "Red Far Far Wall")
 @Config
@@ -82,6 +85,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
     public static ElevatorStates state = ElevatorStates.AUTO;
     private VisionPortal portal;
     private RedPropThresholdFar redPropThresholdFar = new RedPropThresholdFar();
+    private AprilTagDetect aprilTag;
 
     @Override
     public void runOpMode() throws InterruptedException{
@@ -98,13 +102,32 @@ public class RedFarFromTheBoard extends  LinearOpMode{
         Fourbar.init(hardwareMap);
         Plane.init(hardwareMap);
 
+        aprilTag = (AprilTagDetect) new AprilTagDetect.Builder()
+
+                // The following default settings are available to un-comment and edit as needed.
+                //.setDrawAxes(false)
+                .setDrawCubeProjection(false)
+                //.setDrawTagOutline(true)
+                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
+                //.setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+
+                // == CAMERA CALIBRATION ==
+                // If you do not manually specify calibration parameters, the SDK will attempt
+                // to load a predefined calibration for your camera.
+                .setLensIntrinsics(458.066, 457.626, 337.176, 251.805)
+                // ... these parameters are fx, fy, cx, cy.
+
+                .build();
+
         redPropThresholdFar.initProp();
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
+                .addProcessor(aprilTag)
                 .addProcessor(redPropThresholdFar)
                 .build();
-
+        portal.setProcessorEnabled(aprilTag,false);
 
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
@@ -552,11 +575,16 @@ public class RedFarFromTheBoard extends  LinearOpMode{
             sleep(10);
         }
         if (!isStopRequested()) {
-            redPropThresholdFar.initYellowPixel();
-            switch (redPropThresholdFar.EnumGetPropPos()) {
+//            redPropThresholdFar.initYellowPixel();
+            redPropThresholdFar.EnumGetPropPos();
+            portal.stopStreaming();
+            portal.setProcessorEnabled(aprilTag, true);
+            portal.setProcessorEnabled(redPropThresholdFar, false);
+
+            switch (redPropThresholdFar.sampledPropPos) {
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
-                    redPropThresholdFar.getYellowPixelPos();
+                    getYellowPixelfromAprilTag();
                     if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
                         drive.followTrajectorySequence(leftConeHitL);
                     }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
@@ -567,14 +595,11 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                         drive.followTrajectorySequence(leftConeNopPixel);
                     }
                     telemetry.addLine("left");
-//                    telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
-//                    telemetry.addData("biggest:", redPropThresholdFar.biggest.averagedBox);
-//                    telemetry.update();
                     break;
                 case CENTER:
                 default:
                     drive.followTrajectorySequence(centerCone);
-                    redPropThresholdFar.getYellowPixelPos();
+                    getYellowPixelfromAprilTag();
                  if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT) {
                      drive.followTrajectorySequence(centerConeHitL);
                  }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
@@ -591,7 +616,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                     break;
                 case RIGHT:
                     drive.followTrajectorySequence(rightCone);
-                    redPropThresholdFar.getYellowPixelPos();
+                    getYellowPixelfromAprilTag();
                     if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
                         drive.followTrajectorySequence(rightConeHitL);
                     }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
@@ -605,7 +630,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                     break;
                 case NONE:
                     drive.followTrajectorySequence(centerCone);
-                    redPropThresholdFar.getYellowPixelPos();
+                    getYellowPixelfromAprilTag();
                     if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT) {
                         drive.followTrajectorySequence(centerConeHitL);
                     } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
@@ -625,5 +650,14 @@ public class RedFarFromTheBoard extends  LinearOpMode{
             telemetry.addData("biggest:", redPropThresholdFar.biggest.averagedBox);
             telemetry.update();
         }
+    }
+
+    public void getYellowPixelfromAprilTag(){
+        portal.resumeStreaming();
+        aprilTag.getAprilTagCords(redPropThresholdFar.sampledPropPos,
+                                  redPropThresholdFar.AllianceColor);
+        redPropThresholdFar.initYellowPixelAT(aprilTag.aprilTagCords);
+        portal.setProcessorEnabled(redPropThresholdFar, true);
+        redPropThresholdFar.getYellowPixelPos();
     }
 }

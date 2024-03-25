@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.teamcode.OrbitUtils.MathFuncs;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -22,7 +21,6 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-import java.util.HashMap;
 import java.util.HashSet;
 
 
@@ -69,7 +67,7 @@ public abstract class PropThreshold implements VisionProcessor {
     HashSet<ElementDetectBox> yellowBoxesHash;
     //HashMap<Double, YellowPixelPosEnum> yellowBoxesHash = new HashMap();
     public ElementDetectBox biggest;
-    public Point aprilTagCenter;
+    public Point aprilTagCords;
 
 
 
@@ -140,17 +138,21 @@ public abstract class PropThreshold implements VisionProcessor {
 
     public void initYellowPixelBoxes(){}
 
-    public void initYellowPixelAT() {
+    public void initYellowPixelAT(Point argAprilTagCords) {
         PropColor = PropColorEnum.YELLOW;
 
-        rectHitL.x  = (int) aprilTagCenter.x + relRectHitL.x ;
-        rectHitL.y  = (int) aprilTagCenter.y + relRectHitL.y ;
-        rectHitR.x  = (int) aprilTagCenter.x + relRectHitR.x ;
-        rectHitR.y  = (int) aprilTagCenter.y + relRectHitR.y ;
-        rectMissL.x = (int) aprilTagCenter.x + relRectMissL.x;
-        rectMissL.y = (int) aprilTagCenter.y + relRectMissL.y;
-        rectMissR.x = (int) aprilTagCenter.x + relRectMissR.x;
-        rectMissR.y = (int) aprilTagCenter.y + relRectMissR.y;
+        aprilTagCords = argAprilTagCords.clone();
+
+        rectHitL.x  = (int) aprilTagCords.x + relRectHitL.x ;
+        rectHitL.y  = (int) aprilTagCords.y + relRectHitL.y ;
+        rectHitR.x  = (int) aprilTagCords.x + relRectHitR.x ;
+        rectHitR.y  = (int) aprilTagCords.y + relRectHitR.y ;
+        rectMissL.x = (int) aprilTagCords.x + relRectMissL.x;
+        rectMissL.y = (int) aprilTagCords.y + relRectMissL.y;
+        rectMissR.x = (int) aprilTagCords.x + relRectMissR.x;
+        rectMissR.y = (int) aprilTagCords.y + relRectMissR.y;
+
+
 
         yellowBoxesHash = new HashSet<ElementDetectBox>() {{
             add(new ElementDetectBox(HITLEFT, rectHitL));
