@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
@@ -26,7 +27,11 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Config
 public abstract class AutonomousGenaral extends LinearOpMode {
 
+    //TODO: in the red side, the y is minus
+
     public static ElapsedTime time = new ElapsedTime();
+
+    boolean finishedAutonomous = false;
 
     public static SampleMecanumDrive drive;
     public static Pose2d startPos = new Pose2d(0,0,0);
@@ -35,41 +40,61 @@ public abstract class AutonomousGenaral extends LinearOpMode {
     public static TrajectoryAccelerationConstraint accConstraintDrop = SampleMecanumDrive.getAccelerationConstraint(maxVeloDrop);
 
     public static Pose2d lastTrajectoryPos = new Pose2d();
+    public static float forbarDelayTime = 1f;
+
+    public static double dropYellowPixelDelayTime = 2;
+
+    public static double elevatorClosingDelayTime = 1; // so there wonwt be any problem with the fourbar
+
+    public static double encoderDelayTime = 5;
+
+    Delay forbarDelay = new Delay(forbarDelayTime);
+
+    Delay dropYellowPixelDelay = new Delay((float) dropYellowPixelDelayTime);
+    Delay elevatorClosingDelay = new Delay((float) elevatorClosingDelayTime);
+
+    Delay encoderDelay = new Delay((float) encoderDelayTime);
 
     // this is were i defined my variables
     public static double farFromTrasXDrop = 22.5;
 
-    public static double farFromTrasYDropAndAfterProp = 9;
+    public static double farFromTrasYDropAndAfterProp = 8;
 
     public static double farFromTrasXAfterProp = 3;
     public static double centerXDrop = 29.7;
-    public static double centerXAfterProp = 25.7;
-    public static double splineXProp = 31;
-    public static double splineYProp = 0.5;
+    public static double centerXAfterProp = 23.7;
+    public static double splineXProp = 30;
+    public static double splineYProp = 3;
     public static double splineEndAngle = Math.toRadians(-90);
     public static double splineEndTangent = Math.toRadians(120);
     public static double splineAfterPropY = 4;
     public static double turnAfterProp = Math.toRadians(90);
-
+    public static double prepareToPixelDropFarCenterBeforeGateY = 18;
+    public static double prepareToPixelDropFarCenterBeforeGateX = 55.07;
+    public static double prepareToPixelDropFarCenterAfterGateY = 70.345;
+    public static double prepareToPixelDropFarCloseToTrasBeforeGateY = 18;
+    public static double prepareToPixelDropFarCloseToTrasBeforeGateX = 55.07;
+    public static double prepareToPixelDropFarCloseToTrasAfterGateY = 70.345;
+    public static double prepareToPixelDropFarFromTrasBeforeGateY = 18;
+    public static double prepareToPixelDropFarFromTrasBeforeGateX = 55.07;
+    public static double prepareToPixelDropFarFromTrasAfterGateY = 70.345;
     public static double boardX1Red = 37;
     public static double boardX2Red = 34.7;
     public static double boardX3Red = 32;
-    public static double boardX4Red = 29.2;
+    public static double boardX4Red = 28.5;
     public static double boardX5Red = 27;
     public static double boardX6Red = 22.5;
 
-    public static double boardX6Blue = 37;
+    public static double boardX6Blue = 35.5;
     public static double boardX5Blue = 34.7;
-    public static double boardX4Blue = 29;
+    public static double boardX4Blue = 28.5;
     public static double boardX3Blue = 29.2;
     public static double boardX2Blue = 27;
-    public static double boardX1Blue = 22.5;
+    public static double boardX1Blue = 20;
     public static double prepareToDropPixelY = 24;
-    public static double boardPosY = 29;
+    public static double boardPosY = 34;
     public static double afterYellowPixelY4Blue = 10;
-    public static double dropYellowPixelDelay = 1;
-    public static double elevatorClosingDelay = 1; // so there wonwt be any problem with the fourbar
-    public static double parkingY23 = 39; // when 2 = -39
+    public static double parkingY23 = 36; // when 2 = -39
     public static double parkingY14 = 83; // when 1 = -83
     public static double parkingX1234FarFromTheWall = 46;
     public static double parkingX1234CloseToTheWall = 3;
@@ -78,32 +103,38 @@ public abstract class AutonomousGenaral extends LinearOpMode {
     public static Pose2d farFromTrasPosAfterProp13 = new Pose2d(farFromTrasXAfterProp, farFromTrasYDropAndAfterProp, startPos.getHeading());
     public static Pose2d centerPropPose = new Pose2d(centerXDrop, startPos.getY(), startPos.getHeading());
     public static Pose2d centerPosAfterProp = new Pose2d(centerXAfterProp, startPos.getY(),startPos.getHeading());
-    public static Pose2d splinePropPos13 = new Pose2d(splineXProp, splineYProp, splineEndAngle);
-    public static Pose2d closeTrasPosAfterProp13 = new Pose2d(splineXProp, -splineAfterPropY, splineEndAngle);
+    public static Pose2d splinePropPos13 = new Pose2d(splineXProp, -splineYProp, splineEndAngle);
+    public static Pose2d closeTrasPosAfterProp13 = new Pose2d(splineXProp, splineAfterPropY, splineEndAngle);
     public static Pose2d farFromTrasDropPose24 = new Pose2d(farFromTrasXDrop, -farFromTrasYDropAndAfterProp, startPos.getHeading());
     public static Pose2d farFromTrasPosAfterProp24 = new Pose2d(farFromTrasXAfterProp, -farFromTrasYDropAndAfterProp, startPos.getHeading());
-    public static Pose2d splinePropPos24 = new Pose2d(splineXProp, splineYProp, splineEndAngle);
-    public static Pose2d closeTrasPosAfterProp24 = new Pose2d(splineXProp, splineAfterPropY, splineEndAngle);
+    public static Pose2d splinePropPos24 = new Pose2d(splineXProp, splineYProp, -splineEndAngle);
+    public static Pose2d closeTrasPosAfterProp24 = new Pose2d(splineXProp, -splineAfterPropY, -splineEndAngle);
 
-    public static Pose2d prepareToDropPixelPos1Red = new Pose2d(boardX1Red, -prepareToDropPixelY, turnAfterProp);
-    public static Pose2d prepareToDropPixelPos4Red = new Pose2d(boardX4Red, -prepareToDropPixelY, turnAfterProp);
-    public static Pose2d prepareToDropPixelPos6Red = new Pose2d(boardX6Red, -prepareToDropPixelY, turnAfterProp);
+    public static Pose2d prepareToDropPixelPos1Red = new Pose2d(boardX1Red, -prepareToDropPixelY, -turnAfterProp);
+    public static Pose2d prepareToDropPixelPos4Red = new Pose2d(boardX4Red, -prepareToDropPixelY, -turnAfterProp);
+    public static Pose2d prepareToDropPixelPos6Red = new Pose2d(boardX6Red, -prepareToDropPixelY, -turnAfterProp);
 
     public static Pose2d prepareToDropPixelPos1Blue = new Pose2d(boardX1Blue, prepareToDropPixelY, turnAfterProp);
     public static Pose2d prepareToDropPixelPos4Blue = new Pose2d(boardX4Blue, prepareToDropPixelY, turnAfterProp);
     public static Pose2d prepareToDropPixelPos6Blue = new Pose2d(boardX6Blue, prepareToDropPixelY, turnAfterProp);
-    public static Pose2d dropYellowPixel1PosRed = new Pose2d(boardX1Red, -boardPosY , turnAfterProp);
-    public static Pose2d dropYellowPixel4PosRed = new Pose2d(boardX4Red, -boardPosY, turnAfterProp);
-    public static Pose2d dropYellowPixel6PosRed = new Pose2d(boardX6Red, -boardPosY, turnAfterProp);
+    public static Pose2d prepareToDropPixelPos1RedLeftMovement = new Pose2d(farFromTrasXAfterProp, prepareToPixelDropFarFromTrasBeforeGateY, turnAfterProp);
+    public static Pose2d prepareToDropPixelPos1RedForwardMovement = new Pose2d(boardX1Red, prepareToPixelDropFarFromTrasBeforeGateY, turnAfterProp);
+    public static Pose2d prepareToDropPixelPos1RedRightMovement = new Pose2d(prepareToPixelDropFarFromTrasBeforeGateX, -prepareToDropPixelY, turnAfterProp);
+    public static Pose2d prepareToDropPixelPos1BlueRightMovement = new Pose2d(boardX1Red, -prepareToDropPixelY, turnAfterProp);
+    public static Pose2d prepareToDropPixelPos1BlueForwardMovement = new Pose2d(boardX1Red, -prepareToDropPixelY, turnAfterProp);
+    public static Pose2d prepareToDropPixelPos1BlueLeftMovement = new Pose2d(boardX1Red, -prepareToDropPixelY, turnAfterProp);
+    public static Pose2d dropYellowPixel1PosRed = new Pose2d(boardX1Red, -boardPosY , -turnAfterProp);
+    public static Pose2d dropYellowPixel4PosRed = new Pose2d(boardX4Red, -boardPosY, -turnAfterProp);
+    public static Pose2d dropYellowPixel6PosRed = new Pose2d(boardX6Red, -boardPosY, -turnAfterProp);
     public static Pose2d dropYellowPixel1PosBlue = new Pose2d(boardX1Blue, boardPosY, turnAfterProp);
     public static Pose2d dropYellowPixel4PosBlue = new Pose2d(boardX4Blue,boardPosY, turnAfterProp);
     public static Pose2d dropYellowPixel6PosBlue = new Pose2d(boardX6Blue,boardPosY,turnAfterProp);
 
-    public static Pose2d afterDropYellowPixel23Blue4 = new Pose2d(boardX4Blue, afterYellowPixelY4Blue, turnAfterProp);
-    public static Pose2d afterDropYellowPixel23Red4 = new Pose2d(boardX4Red, -afterYellowPixelY4Blue, turnAfterProp);
+    public static Pose2d afterDropYellowPixel23Blue4 = new Pose2d(boardX4Blue, -afterYellowPixelY4Blue, turnAfterProp);
+    public static Pose2d afterDropYellowPixel23Red4 = new Pose2d(boardX4Red, afterYellowPixelY4Blue, turnAfterProp);
     public static Pose2d afterDropYellowPixel23Blue1 = new Pose2d(boardX1Blue, -afterYellowPixelY4Blue, turnAfterProp);
-    public static Pose2d afterDropYellowPixel23Red1 = new Pose2d(boardX1Red, -afterYellowPixelY4Blue, turnAfterProp);
-    public static Pose2d afterDropYellowPixel23Red6 = new Pose2d(boardX6Red, -afterYellowPixelY4Blue, turnAfterProp);
+    public static Pose2d afterDropYellowPixel23Red1 = new Pose2d(boardX1Red, afterYellowPixelY4Blue, turnAfterProp);
+    public static Pose2d afterDropYellowPixel23Red6 = new Pose2d(boardX6Red, afterYellowPixelY4Blue, turnAfterProp);
     public static Pose2d afterDropYellowPixel23Blue6 = new Pose2d(boardX6Blue, -afterYellowPixelY4Blue, turnAfterProp);
     public static Pose2d parking1CloseToTheWall = new Pose2d(parkingX1234CloseToTheWall, -parkingY14, startPos.getHeading());
     public static Pose2d parking1FarFromTheWall = new Pose2d(parkingX1234FarFromTheWall, -parkingY14, startPos.getHeading());
@@ -150,7 +181,7 @@ public abstract class AutonomousGenaral extends LinearOpMode {
             drive.followTrajectorySequenceAsync(purplePixelDropCenter);
         } else if (position == 3) {
             TrajectorySequence purplePixelDropCloseToTras = drive.trajectorySequenceBuilder(startPos)
-                    .splineToLinearHeading(splinePropPos13, splineEndTangent)
+                    .splineToLinearHeading(splinePropPos13, -splineEndTangent)
                     .lineToLinearHeading(closeTrasPosAfterProp13)
                     .turn(turnAfterProp)
                     .build();
@@ -195,11 +226,13 @@ public abstract class AutonomousGenaral extends LinearOpMode {
     //true = blue
     // false = red
     //the position of the prop is defined like this:
-    // 1 = left
+    // 1 = right
     // 2 = center
-    // 3 = right
-    public static void prepareToPixelDrop14(){
+    // 3 = left
+    public static void prepareToPixelDrop14(int position, boolean color){
+        if (position == 1 && color){
 
+        }
     }
 
     //true = red
@@ -250,45 +283,6 @@ public abstract class AutonomousGenaral extends LinearOpMode {
      }
     }
 
-    public static void afterBoard23(int position, boolean color){
-        if (position == 1 && color){
-            TrajectorySequence afterBoard = drive.trajectorySequenceBuilder(lastTrajectoryPos)
-                    .lineToLinearHeading(afterDropYellowPixel23Red1)
-                    .build();
-            lastTrajectoryPos = afterBoard.end();
-            drive.followTrajectorySequenceAsync(afterBoard);
-        }else if (position == 1){
-            TrajectorySequence afterBoard = drive.trajectorySequenceBuilder(lastTrajectoryPos)
-                    .lineToLinearHeading(afterDropYellowPixel23Blue1)
-                    .build();
-            lastTrajectoryPos = afterBoard.end();
-            drive.followTrajectorySequenceAsync(afterBoard);
-        } else if (position == 2 && color) {
-            TrajectorySequence afterBoard = drive.trajectorySequenceBuilder(lastTrajectoryPos)
-                    .lineToLinearHeading(afterDropYellowPixel23Red4)
-                    .build();
-            lastTrajectoryPos = afterBoard.end();
-            drive.followTrajectorySequenceAsync(afterBoard);
-        } else if (position == 2) {
-            TrajectorySequence afterBoard = drive.trajectorySequenceBuilder(lastTrajectoryPos)
-                    .lineToLinearHeading(afterDropYellowPixel23Blue4)
-                    .build();
-            lastTrajectoryPos = afterBoard.end();
-            drive.followTrajectorySequenceAsync(afterBoard);
-        } else if (position == 3 && color) {
-            TrajectorySequence afterBoard = drive.trajectorySequenceBuilder(lastTrajectoryPos)
-                    .lineToLinearHeading(afterDropYellowPixel23Red6)
-                    .build();
-            lastTrajectoryPos = afterBoard.end();
-            drive.followTrajectorySequenceAsync(afterBoard);
-        } else if (position == 3) {
-            TrajectorySequence afterBoard = drive.trajectorySequenceBuilder(lastTrajectoryPos)
-                    .lineToLinearHeading(afterDropYellowPixel23Blue6)
-                    .build();
-            lastTrajectoryPos = afterBoard.end();
-            drive.followTrajectorySequenceAsync(afterBoard);
-        }
-    }
 
     //true = red
     // false = blue

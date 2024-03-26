@@ -75,15 +75,15 @@ public class RedCloseToTheBoard extends LinearOpMode {
 
         redPropThresholdClose.initProp();
 
-        Elevator.init(hardwareMap);
-        Fourbar.init(hardwareMap);
-        Outtake.init(hardwareMap);
-
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
                 .addProcessor(redPropThresholdClose)
                 .build();
+
+        Elevator.init(hardwareMap);
+        Fourbar.init(hardwareMap);
+        Outtake.init(hardwareMap);
 
         TrajectorySequence centerCone = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(driveToConeX, startPose.getY(), startPose.getHeading()))

@@ -34,7 +34,7 @@ public class BlueCloseToTheBoard extends LinearOpMode {
     public static TrajectoryAccelerationConstraint accConstraintLeft = SampleMecanumDrive.getAccelerationConstraint(15);
     public static double driveToConeX = 29;
     public static double goToParkingY = 27;
-    public static double prepareToPropY = -1;
+    public static double prepareToPropY = -3;
     public static double delay = 1;
     public static double rightConeX = 31;
     public static double rightConeY = -4.5;

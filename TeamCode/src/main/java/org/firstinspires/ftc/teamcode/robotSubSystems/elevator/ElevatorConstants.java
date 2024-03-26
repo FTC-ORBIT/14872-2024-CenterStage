@@ -8,8 +8,8 @@ public class ElevatorConstants {
     public static double reachedHeightDiff = 100;
 
     public static double canOpenFourbar = 200;
-    public static double autoHeight = 900;
-    public static final double autoHeightFar = 1020;
+    public static  final  float autoHeight = 900;
+    public static  final float autoHeightFar = 1020;
     public static final float minHeight = 1300;
     public static final float lowHeight = 2017;
     public static final float midHeight =  3100;
@@ -20,7 +20,7 @@ public class ElevatorConstants {
     public static final float elevatorKi = 0.0001f;
     public static final float elevatorKd = 0.001f;
     public static final float elevatorKf = 0f;
-    public static final float elevatorIzone = 100f;
+    public static final float elevatorIzone = 50f;
 
     public static final float encoderKp = 0f;
     public static final float encoderKi = 0f;

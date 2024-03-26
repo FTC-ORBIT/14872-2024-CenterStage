@@ -2,13 +2,11 @@
 //
 //import android.util.Size;
 //
-//import com.acmerobotics.dashboard.config.Config;
-//import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //import com.qualcomm.robotcore.util.ElapsedTime;
 //
 //import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 //import org.firstinspires.ftc.teamcode.robotData.GlobalData;
-//import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThresholdClose;
+//import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThresholdFar;
 //import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 //import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorConstants;
 //import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
@@ -18,19 +16,16 @@
 //import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 //import org.firstinspires.ftc.vision.VisionPortal;
 //
-//@Config
-//@Autonomous (name = "blue close")
-//public class BlueClose extends AutonomousGenaral{
+//public class BlueFar extends AutonomousGenaral {
 //
 //    private VisionPortal portal;
-//    private final BluePropThresholdClose bluePropThresholdClose = new BluePropThresholdClose();
+//    private final BluePropThresholdFar bluePropThresholdFar = new BluePropThresholdFar();
 //    ElapsedTime time = new ElapsedTime();
-//    int propPosition = 1;
-//    int robotPosition = 3;
+//    int position = 1;
 //
 //    boolean color = false;
 //
-//    String parkingPos = "close";
+//    String parkingPos = "far";
 //    AutonomousSteps currentState;
 //
 //    ElevatorStates elevatorStates = ElevatorStates.INTAKE;
@@ -41,51 +36,51 @@
 //
 //    @Override
 //    public void runOpMode() throws InterruptedException {
-//        bluePropThresholdClose.initProp();
+//        bluePropThresholdFar.initProp();
 //
 //        portal = new VisionPortal.Builder()
 //                .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
 //                .setCameraResolution(new Size(640, 480))
-//                .addProcessor(bluePropThresholdClose)
+//                .addProcessor(bluePropThresholdFar)
 //                .build();
 //
 //        init(hardwareMap);
 //
 //        waitForStart();
-//if (isStopRequested()) return;
-//time.reset();
+//        if (isStopRequested()) return;
+//        time.reset();
 //
 //        currentState = AutonomousSteps.PROP;
 //
 //        telemetry.update();
-//        switch (bluePropThresholdClose.EnumGetPropPos()) {
+//        switch (bluePropThresholdFar.EnumGetPropPos()) {
 //            case LEFT:
-//                propPosition = 1;
+//                position = 3;
 //                telemetry.addLine("left");
 //                break;
 //            case CENTER:
-//                propPosition = 2;
+//                position = 2;
 //                telemetry.addLine("center");
 //                break;
 //            case RIGHT:
-//                propPosition = 3;
+//                position = 1;
 //                telemetry.addLine("right");
 //                break;
 //            case NONE:
-//                propPosition = 2;
+//                position = 2;
 //                telemetry.addLine("none");
 //                break;
 //        }
 //
-//        purplePixelDrop13(propPosition);
+//        purplePixelProp24(position);
 //
-//        while (opModeIsActive() && !isStopRequested() && !finishedAutonomous){
+//        while (opModeIsActive() && !isStopRequested()){
 //
 //            switch (currentState){
 //                case PROP:
 //                    if (!drive.isBusy()){
 //                        currentState = AutonomousSteps.PREPARETODROPPIXEL;
-//                        prepareToPixelDrop23(propPosition, color);
+////                        prepareToPixelDrop14(position, color);
 //                    }
 //                    telemetry.addData("prop", null);
 //                    break;
@@ -94,7 +89,6 @@
 //                    if (!drive.isBusy()){
 //                        currentState = AutonomousSteps.OPENSYSTEMS;
 //                        forbarDelay.startAction(GlobalData.currentTime);
-//                        encoderDelay.startAction(GlobalData.currentTime);
 //                    }
 //                    break;
 //                case OPENSYSTEMS:
@@ -102,8 +96,8 @@
 //                    telemetry.addData("forbarstate", fourbarState);
 //                    telemetry.addData("poselevator", Elevator.getPos());
 //                    if (forbarDelay.isDelayPassed()){
-//                        if (Elevator.reachedHeight(ElevatorConstants.autoHeight) || encoderDelay.isDelayPassed()){
-//                            dropYellowPixel23(propPosition, color);
+//                        if (Elevator.reachedHeight(ElevatorConstants.autoHeight)){
+//                            dropYellowPixel23(position, color);
 //                            currentState = AutonomousSteps.GOTOBOARD;
 //                        }
 //                        fourbarState = FourbarState.MOVE;
@@ -120,36 +114,32 @@
 //                    outtakeState = OuttakeState.TOWOUT;
 //                    if (dropYellowPixelDelay.isDelayPassed()){
 //                        currentState = AutonomousSteps.FARFROMTHEBOARD;
-//                        prepareToPixelDrop23(propPosition, color);
+//                        time.reset();
+//                        prepareToPixelDrop23(position, color);
 //                    }
-//                    break;
 //                case FARFROMTHEBOARD:
-//                    if (!drive.isBusy()) {
-//                        currentState = AutonomousSteps.CLOSESYSTEMS;
-//                        elevatorClosingDelay.startAction(GlobalData.currentTime);
-//                        encoderDelay.isDelayPassed();
-//                    }
+//                    currentState = AutonomousSteps.CLOSESYSTEMS;
 //                    break;
 //                case CLOSESYSTEMS:
 //                    outtakeState = OuttakeState.CLOSED;
-//                    fourbarState = FourbarState.REVERSE;
+//                    if (!drive.isBusy()){
+//                        fourbarState = FourbarState.REVERSE;
+//                        elevatorClosingDelay.startAction(GlobalData.currentTime);
+//                    }
 //                    if (elevatorClosingDelay.isDelayPassed()) {
 //                        elevatorStates = ElevatorStates.INTAKE;
-//                        if (Elevator.reachedHeight(Elevator.getPos()) || encoderDelay.isDelayPassed()){
+////                        if (Elevator.reachedHeight(Elevator.getPos())){
 //                            currentState = AutonomousSteps.GOTOPARKING;
-//                            parking(robotPosition, parkingPos);
+//                            parking(position, parkingPos);
 //                        }
 //                    }
 //                    break;
 //                case GOTOPARKING:
-//                    if (!drive.isBusy()){
-//                        finishedAutonomous = true;
-//                    }
-//                  telemetry.addData("parked", null);
-//                  break;
+//                    telemetry.addData("parked", null);
+//                    break;
 //            }
 //            GlobalData.currentTime = (float) time.seconds();
-////            Elevator.operateAutonomousNoMarker(elevatorStates, telemetry);
+//            Elevator.operateAutonomousNoMarker(elevatorStates, telemetry);
 //            Fourbar.operateTeleop(fourbarState);
 //            Outtake.operate(outtakeState);
 //            drive.update();
