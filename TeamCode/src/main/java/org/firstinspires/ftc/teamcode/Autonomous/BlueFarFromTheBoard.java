@@ -39,7 +39,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
     public static double parkingX = 46.19;
     public static double boardY = 84;
     public static double rightDriveX = 27;
-    public static double rightConeX = 27.7;
+    public static double rightConeX = 24;
 
     public static double rightConeY = -8;
 
@@ -53,16 +53,16 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
     public static double centerGateY = -16.41;
     public static double afterGateX = 53;
     public static double afterGateY = 70.345;
-    public static double boardPos12 = 33.9;
-    public static double boardPos34 = 28.19;
-    public static double boardPos56 = 23;
+    public static double boardPos12 = 35;
+    public static double boardPos34 = 27.9;
+    public static double boardPos56 = 22.5;
     // TODO "MUST READ: in the BLUE autonomous the 1-6 is from right to left!!"
     // TODO X6 = 22.5
-    // TODO X5 = 23.2
+    // TODO X5 = 22.9
     // TODO X4 = 27.86
-    // TODO X3 = 29.7
+    // TODO X3 = 28.19
     // TODO X2 = 33.7
-    // TODO X1 = 33.9
+    // TODO X1 = 35
     public static double leftAfterPropX = 16;
     public static double leftAfterPropY = 3.5;
     public static double leftBeforeGateX =48;
@@ -102,7 +102,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(centerAfterConeX, centerAfterConeY ,startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(centerGateX , centerGateY ,startPose.getHeading()))
                 .turn(Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(centerConeX +3, centerGateY , Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(centerGateX +3, centerGateY , Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(boardPos34, markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
@@ -140,6 +140,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(leftAfterPropX, leftAfterPropY, startPose.getHeading()))
                 .lineToLinearHeading(new Pose2d(leftBeforeGateX, leftAfterPropY , startPose.getHeading()))
                 .turn(Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(leftBeforeGateX + 5, leftAfterPropY , Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(boardPos12, markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
@@ -205,6 +206,12 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .turn(startPose.getHeading())
                 .lineToLinearHeading(new Pose2d(parkingX, parkingY-2 , startPose.getHeading()))
                 .build();
+
+        TrajectorySequence elevatorCheck = drive.trajectorySequenceBuilder(startPose)
+                .addTemporalMarker(() ->{
+                    Elevator.operateAutonomous(ElevatorStates.MIN, telemetry);
+                })
+                        .build();
 
         waitForStart();
 
