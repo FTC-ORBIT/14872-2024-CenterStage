@@ -223,7 +223,7 @@ public class SubSystemManager {
         if (gamepad1.dpad_up) fourbarState = FourbarState.REVERSE;
         Intake.operate(intakeState);
         Outtake.operate(outtakeState);
-        Elevator.operateTeleop(elevatorState, gamepad1, telemetry);
+        Elevator.operateTeleop(elevatorState, gamepad1, telemetry, gamepad2);
         Fourbar.operateTeleop(fourbarState);
         Fixpixel.operate(fixpixelState , gamepad2 , telemetry);
 
@@ -244,7 +244,7 @@ public class SubSystemManager {
         telemetry.addData("outtake", Outtake.servo.getPosition());
         telemetry.addData("plane", Plane.planeServo.getPosition());
         telemetry.addData("time for deplete in travel", elapsedTime);
-        telemetry.addData("color" , OrbitColorSensor.color);
+//        telemetry.addData("color" , OrbitColorSensor.color);
     }
 }
 

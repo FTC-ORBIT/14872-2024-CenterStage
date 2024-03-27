@@ -9,21 +9,21 @@ import org.firstinspires.ftc.teamcode.robotData.Constants;
 public class OrbitColorSensor {
 
     public static ColorSensor colorSensor;
-    public  static String color = "none";
+    public  static int color = 0;
     public static void  init(HardwareMap hardwareMap) {
         colorSensor = hardwareMap.get(ColorSensor.class, "ColorSensor");
     }
 
 
-    public static String hasGamePiece() {
+    public static int hasGamePiece() {
             if (colorSensor.argb() == -15985647){
-                color = "white";// when white pixel
+                color = 1;// when white pixel
             } else if (colorSensor.argb() == -100202238) {
-                color = "yellow"; // when yellow pixel
+                color = 2; // when yellow pixel
             } else if (colorSensor.argb() == -301857278 ) {
-                color = "green"; // when green pixel
+                color = 3; // when green pixel
             } else if (colorSensor.argb() == -66779382 || colorSensor.argb() == -66779126) {
-                color = "purple";// when purple pixel
+                color = 4;// when purple pixel
             }
         return color;
     }

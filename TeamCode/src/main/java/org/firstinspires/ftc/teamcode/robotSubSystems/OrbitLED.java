@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.robotSubSystems;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+import org.firstinspires.ftc.teamcode.Sensors.OrbitColorSensor;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
 public class OrbitLED {
@@ -11,32 +11,21 @@ public class OrbitLED {
     private static RevBlinkinLedDriver blinkin;
     private static RevBlinkinLedDriver.BlinkinPattern pattern;
     private static ElapsedTime elapsedTime = new ElapsedTime();
-
     public static void init(HardwareMap hardwareMap) {
         blinkin = hardwareMap.get(RevBlinkinLedDriver.class,"LED");
-        elapsedTime.reset();
     }
 
-    public static void operate() {
-        if (GlobalData.hasGamePiece){
-            if (elapsedTime.milliseconds() < 500){
-                pattern = RevBlinkinLedDriver.BlinkinPattern.SHOT_WHITE;
-            } else {
-                pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_WHITE;
-            }
+    public static void operate(int color) {
+        if (color == 1){
+            pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
+        }else if (color == 2){
+            pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
+        } else if (color == 3) {
+            pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+        } else if (color == 4) {
+            pattern = RevBlinkinLedDriver.BlinkinPattern.HOT_PINK;
         } else {
-            elapsedTime.reset();
-            switch (GlobalData.robotState){
-                case TRAVEL:
-                    pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE;
-                    break;
-                case LOW:
-                    pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
-                    break;
-                case  INTAKE:
-                    pattern = RevBlinkinLedDriver.BlinkinPattern.HOT_PINK;
-                    break;
-            }
+            pattern = RevBlinkinLedDriver.BlinkinPattern.AQUA;
         }
 
         blinkin.setPattern(pattern);
