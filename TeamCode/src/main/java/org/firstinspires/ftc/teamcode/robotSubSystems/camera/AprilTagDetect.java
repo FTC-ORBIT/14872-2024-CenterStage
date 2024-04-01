@@ -61,6 +61,7 @@ public class AprilTagDetect {
     public static Point getAprilTagCords(PropPosEnum pos, PropColorEnum allianceColor) {
         getIDfromPosAndColor(pos, allianceColor);
         count = 0;
+        aprilTagCords = null;
 
         if (atPrcsr != null) {
             while (count < tries && aprilTagCords == null) {

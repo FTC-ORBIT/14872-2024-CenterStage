@@ -315,7 +315,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(rightBeforeGateX, rightAfterPropY , rightConeAngle))
                 .waitSeconds(4)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(boardPos5, markerY,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(boardPos6-5, markerY,Math.toRadians(-90)))
 //                .splineToLinearHeading(new Pose2d(boardPos5, markerY, Math.toRadians(-90)), Math.toRadians(rightEndTangent))
 //                .addTemporalMarker(() -> {
 //                    redPropThresholdFar.initYellowPixel();
@@ -362,7 +362,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 })
                 .waitSeconds(1)
                 .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(boardPos5, boardY , Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(boardPos5-0.7, boardY , Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
@@ -633,17 +633,24 @@ public class RedFarFromTheBoard extends  LinearOpMode{
 
                     break;
                 case RIGHT:
+                    if (AprilTagDetect.aprilTagCords!=null) {
+                        telemetry.addData("aprilTagCords:  ", AprilTagDetect.aprilTagCords);
+                    } else{
+                        telemetry.addLine("aprilTagCords:  Null");
+                    }
+                    telemetry.update();
                     drive.followTrajectorySequence(rightCone);
                     getYellowPixelfromAprilTag();
-//                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
-//                        drive.followTrajectorySequence(rightConeHitL);
-//                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
-//                        drive.followTrajectorySequence(rightConeHitR);
-//                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
-//                        drive.followTrajectorySequence(rightConeMissL);
-//                    }else {
-//                        drive.followTrajectorySequence(rightConeNopPixel);
-//                    }
+                    print_tele(100, false);
+                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
+                        drive.followTrajectorySequence(rightConeHitL);
+                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+                        drive.followTrajectorySequence(rightConeHitR);
+                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
+                        drive.followTrajectorySequence(rightConeMissL);
+                    }else {
+                        drive.followTrajectorySequence(rightConeNopPixel);
+                    }
                     telemetry.addLine("right");
                     break;
                 case NONE:
@@ -664,18 +671,29 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                     break;
             }
             while (!isStopRequested()) {
-                telemetry.addData("prop pos:", redPropThresholdFar.EnumGetPropPos());
-                telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
-                if(redPropThresholdFar.biggest != null) {
-                    telemetry.addData("biggest:", redPropThresholdFar.biggest.averagedBox);
-                }
-                telemetry.addData("wantedID", aprilTag.wantedID);
-                telemetry.addData("Detect attempts", aprilTag.count);
-                telemetry.update();
-
-                sleep(1000);
-                redPropThresholdFar.test(gamepad1, telemetry);
+                print_tele(1000, true);
             }
+        }
+    }
+
+    public void print_tele (long millisec, boolean test){
+        telemetry.addData("prop pos:", redPropThresholdFar.EnumGetPropPos());
+        telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
+        if(redPropThresholdFar.biggest != null) {
+            telemetry.addData("biggest:", redPropThresholdFar.biggest.averagedBox);
+        }
+        telemetry.addData("wantedID", aprilTag.wantedID);
+        telemetry.addData("Detect attempts", aprilTag.count);
+        telemetry.update();
+
+        if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.NOPIXEL){
+            while(!isStopRequested()){
+                sleep(100);
+            }
+        }
+        sleep(millisec);
+        if (test) {
+            redPropThresholdFar.test(gamepad1, telemetry);
         }
     }
 
