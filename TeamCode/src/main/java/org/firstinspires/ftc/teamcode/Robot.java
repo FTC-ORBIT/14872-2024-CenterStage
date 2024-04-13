@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.DriveByAprilTags.Camera;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Vector;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitColorSensor;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
@@ -44,6 +45,7 @@ public class Robot extends LinearOpMode {
 
         ElapsedTime robotTime = new ElapsedTime();
         robotTime.reset();
+        Camera.initAprilTag(hardwareMap, telemetry);
         Fixpixel.init(hardwareMap);
         Drivetrain.init(hardwareMap);
         OrbitGyro.init(hardwareMap);
@@ -80,7 +82,7 @@ public class Robot extends LinearOpMode {
           SubSystemManager.setSubsystemToState(gamepad1 , gamepad2 , telemetry);
 //          OrbitLED.operate(OrbitColorSensor.color);
            GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
-
+            Camera.update();
 
             GlobalData.lastTime = GlobalData.currentTime;
 //            Drivetrain.testMotors(gamepad1, telemetry);

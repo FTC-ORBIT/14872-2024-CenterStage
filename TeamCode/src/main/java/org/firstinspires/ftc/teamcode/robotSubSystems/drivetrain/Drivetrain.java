@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.DriveByAprilTags.Camera;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Vector;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
@@ -45,25 +46,35 @@ public class Drivetrain {
 
     }
 
-    public static void operate(final Vector velocity_W, float omega , Telemetry telemetry, Gamepad gamepad1) {
+    public static void operate(final Vector velocity_W, float omega, Telemetry telemetry, Gamepad gamepad1) {
         final float robotAngle = (float) Math.toRadians(OrbitGyro.getAngle());
         final Vector velocity_RobotCS_W = velocity_W.rotate(-robotAngle);
-        if (SubSystemManager.elevatorState == ElevatorStates.MIN || SubSystemManager.elevatorState == ElevatorStates.LOW  || SubSystemManager.fixpixelState != FixpixelState.CLOSE){
+        if (SubSystemManager.elevatorState == ElevatorStates.MIN || SubSystemManager.elevatorState == ElevatorStates.LOW || SubSystemManager.fixpixelState != FixpixelState.CLOSE) {
             if (omega > 0) omega = DrivetrainConstants.MaxOmegaSlow;
-            else if (omega <0)omega =  -DrivetrainConstants.MaxOmegaSlow;
+            else if (omega < 0) omega = -DrivetrainConstants.MaxOmegaSlow;
             else omega = 0;
             driveFactor = DrivetrainConstants.slowPower;
-        }else if (SubSystemManager.elevatorState == ElevatorStates.MID){
+        } else if (SubSystemManager.elevatorState == ElevatorStates.MID) {
             driveFactor = DrivetrainConstants.superSlowPower;
             if (omega > 0) omega = DrivetrainConstants.MaxOmegaSlowMid;
             else if (omega < 0) omega = -DrivetrainConstants.MaxOmegaSlowMid;
             else omega = 0;
-        }else {
+        } else {
             driveFactor = DrivetrainConstants.power;
         }
 
-        if(velocity_RobotCS_W.norm() <= Math.sqrt(0.005) && Math.abs(omega) == 0) stop();
-        else drive(velocity_RobotCS_W, omega);
+        if (velocity_RobotCS_W.norm() <= Math.sqrt(0.005) && Math.abs(omega) == 0){
+            stop();
+        }
+        else{
+            if (gamepad1.dpad_up){
+                Camera.getAprilTagDetectionOmni();
+            }else {
+                Camera.targetFound = false;
+                drive(velocity_RobotCS_W, omega);
+            }
+         }
+drive(velocity_RobotCS_W, omega);
 
 
 
