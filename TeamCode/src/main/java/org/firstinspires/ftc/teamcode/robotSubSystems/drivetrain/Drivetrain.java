@@ -67,7 +67,7 @@ public class Drivetrain {
             stop();
         }
         else{
-            if (gamepad1.dpad_up){
+            if (gamepad1.dpad_up && !Camera.breakAutoDrive){
                 Camera.getAprilTagDetectionOmni();
             }else {
                 Camera.targetFound = false;

@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems;
 
-import static org.firstinspires.ftc.teamcode.robotData.Constants.MaxHeightForFourbarDelay;
 import static org.firstinspires.ftc.teamcode.robotData.Constants.minHeightToOpenFourbar;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.DriveByAprilTags.Camera;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
-import org.firstinspires.ftc.teamcode.Sensors.OrbitColorSensor;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
@@ -43,7 +42,8 @@ public class SubSystemManager {
     public static RobotState wanted = RobotState.TRAVEL;
     private static boolean lastLeftBumper = false;
     private static int outtakeCounter = 0;
-
+    public static boolean FourbarMoved = false;
+    public static boolean ElevatorMoved = false;
 
     private static RobotState getState(Gamepad gamepad) {
         if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back || gamepad.dpad_up) {
@@ -104,13 +104,24 @@ public class SubSystemManager {
         }
         switch (wanted) {
             case TRAVEL:
-                outtakeState = OuttakeState.CLOSED;
                 if (intakeDelay.isDelayPassed()) {
                     intakeState = IntakeState.STOP;
                 }
-                fourbarState = FourbarState.REVERSE;
-                if (delayElevator.isDelayPassed() && !ElevatorToggleButton) {
-                    elevatorState = ElevatorStates.INTAKE;
+                if (Camera.ElevatorStateAprilTagsSwitch) {
+                    elevatorState = ElevatorStates.MIN;
+                }
+                if (!Camera.FourBarStateAprilTagsSwitch){
+                    fourbarState = FourbarState.REVERSE;
+                }else {
+                    fourbarState = FourbarState.MOVE;
+                }
+                if (delayElevator.isDelayPassed() && !ElevatorToggleButton && !Camera.ElevatorStateAprilTagsSwitch) {
+                 elevatorState = ElevatorStates.INTAKE;
+                }
+                if (!Camera.OuttakeStateAprilTagsSwitch){
+                    outtakeState = OuttakeState.CLOSED;
+                }else {
+                    outtakeState = OuttakeState.TOWOUT;
                 }
                 break;
             case INTAKE:

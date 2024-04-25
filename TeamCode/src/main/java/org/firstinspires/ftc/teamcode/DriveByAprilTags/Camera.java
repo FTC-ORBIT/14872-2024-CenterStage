@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.DriveByAprilTags;
 
 import static org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain.motors;
 
+import android.widget.Switch;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,6 +16,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDir
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
+import org.firstinspires.ftc.teamcode.robotData.GlobalData;
+import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -21,14 +25,16 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
 @Config
 public class Camera {
     public static boolean targetFound     = false;    // Set to true when an AprilTag target is detected
     static double  drive           = 0;        // Desired forward power/speed (-1 to +1)
     static double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
-    static double  turn            = 0;        // Desired turning power/speed (-1 to +1)
+    static double  turn            = 0;// Desired turning power/speed (-1 to +1)
+    public static final double FINAL_DESIRED_DISTANCE = 12;
 
-    public static double DESIRED_DISTANCE = 12; //  this is how close the camera should get to the target (inches)
+    public static double DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE; //  this is how close the camera should get to the target (inches)
 
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
     //  applied to the drive motors to correct the error.
@@ -48,6 +54,18 @@ public class Camera {
     public static double driveTank;
     public static double turnTank;
     public static boolean skippingTagTelemetry = false;
+    public static double  rangeError;
+    public static double  headingError;
+    public static double  yawError;
+    public static boolean ElevatorStateAprilTagsSwitch = false;
+    public static boolean FourBarStateAprilTagsSwitch = false;
+    public static boolean OuttakeStateAprilTagsSwitch = false;
+    public static boolean breakAutoDrive = false;
+    public static boolean resetSystems = false;
+    public static Delay Outtakedelay = new Delay(0.6f);
+    public static Delay autoBreakDelay = new Delay(0.8f);
+   public static CameraEnum currentState;
+   public static boolean driveClose = true;
 
 
     public static void initAprilTag(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -153,9 +171,9 @@ public class Camera {
     public static void getAprilTagDetectionOmni(){
         if(targetFound){
             // Determine heading, range and Yaw (tag image rotation) error so we can use them to control the robot automatically.
-            double  rangeError      = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
-            double  headingError    = desiredTag.ftcPose.bearing;
-            double  yawError        = desiredTag.ftcPose.yaw;
+              rangeError      = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
+              headingError    = desiredTag.ftcPose.bearing;
+              yawError        = desiredTag.ftcPose.yaw;
             // Use the speed and turn "gains" to calculate how we want the robot to move.
             drive  = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
             turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
@@ -168,7 +186,53 @@ public class Camera {
          motors[2].setPower(0);
          motors[3].setPower(0);
         }
-
+        if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78 && !resetSystems) {
+            currentState = CameraEnum.OPENSYSTEMS;
+        }else {
+            breakAutoDrive = false;
+        }
+        switch (currentState){
+            case OPENSYSTEMS:
+                ElevatorStateAprilTagsSwitch = true;
+                FourBarStateAprilTagsSwitch = true;
+                currentState = CameraEnum.DRIVEFORWARD;
+                break;
+            case DRIVEFORWARD:
+                if (driveClose) {
+                    DESIRED_DISTANCE = 7;
+                }
+                if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78){
+                    currentState = CameraEnum.DROP;
+                }
+                break;
+            case DROP:
+                Outtakedelay.startAction(GlobalData.currentTime);
+                OuttakeStateAprilTagsSwitch = true;
+                if (Outtakedelay.isDelayPassed()){
+                    currentState = CameraEnum.DRIVEBACK;
+                }
+                break;
+            case DRIVEBACK:
+                driveClose = false;
+                DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
+                if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78) {
+                    currentState = CameraEnum.CLOSESYSTEMS;
+                }
+                    break;
+            case CLOSESYSTEMS:
+                ElevatorStateAprilTagsSwitch = false;
+                FourBarStateAprilTagsSwitch = false;
+                OuttakeStateAprilTagsSwitch = false;
+                DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
+                currentState = CameraEnum.BREAKAUTODRIVE;
+                break;
+            case BREAKAUTODRIVE:
+                autoBreakDelay.startAction(GlobalData.currentTime);
+                if (autoBreakDelay.isDelayPassed()) {
+                    breakAutoDrive = true;
+                }
+                break;
+        }
     }
     public static void moveRobot(double x, double y, double yaw) {
         // Calculate wheel powers.
@@ -194,35 +258,6 @@ public class Camera {
         motors[1].setPower(rightFrontPower);
         motors[2].setPower(leftBackPower);
         motors[3].setPower(rightBackPower);
-    }
-    public static void getAprilTagDetectionTank(){
-        if(targetFound){
-            double  rangeError   = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
-            double  headingError = desiredTag.ftcPose.bearing;
-
-            driveTank = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
-            turnTank  = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
-            moveRobotTank(driveTank,turnTank);
-        }else {
-            motors[0].setPower(0);
-            motors[1].setPower(0);
-        }
-    }
-    public static void moveRobotTank(double x, double yaw) {
-        // Calculate left and right wheel powers.
-        double leftPower    = x - yaw;
-        double rightPower   = x + yaw;
-
-        // Normalize wheel powers to be less than 1.0
-        double max = Math.max(Math.abs(leftPower), Math.abs(rightPower));
-        if (max >1.0) {
-            leftPower /= max;
-            rightPower /= max;
-        }
-
-        // Send powers to the wheels.
-        motors[0].setPower(leftPower);
-        motors[1].setPower(rightPower);
     }
 }
 
