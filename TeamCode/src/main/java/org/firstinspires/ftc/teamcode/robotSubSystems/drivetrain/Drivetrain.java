@@ -67,7 +67,8 @@ public class Drivetrain {
             stop();
         }
         else{
-            if (gamepad1.dpad_up && !Camera.breakAutoDrive){
+            if (gamepad1.dpad_up){
+                Camera.resetSystems = false;
                 Camera.getAprilTagDetectionOmni();
             }else {
                 Camera.targetFound = false;
@@ -78,10 +79,6 @@ drive(velocity_RobotCS_W, omega);
 
 
 
-        telemetry.addData("lf power" , motors[0].getPower());
-        telemetry.addData("rf power" , motors[1].getPower());
-        telemetry.addData("lb power" , motors[2].getPower());
-        telemetry.addData("rb power" , motors[3].getPower());
     }
     // did field centric
 

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems;
 
 import static org.firstinspires.ftc.teamcode.robotData.Constants.minHeightToOpenFourbar;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain.motors;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.DriveByAprilTags.Camera;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
+import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel.Fixpixel;
@@ -255,6 +257,10 @@ public class SubSystemManager {
         telemetry.addData("outtake", Outtake.servo.getPosition());
         telemetry.addData("plane", Plane.planeServo.getPosition());
         telemetry.addData("time for deplete in travel", elapsedTime);
+        telemetry.addData("lf power" , motors[0].getPower());
+        telemetry.addData("rf power" , motors[1].getPower());
+        telemetry.addData("lb power" , motors[2].getPower());
+        telemetry.addData("rb power" , motors[3].getPower());
 //        telemetry.addData("color" , OrbitColorSensor.color);
     }
 }

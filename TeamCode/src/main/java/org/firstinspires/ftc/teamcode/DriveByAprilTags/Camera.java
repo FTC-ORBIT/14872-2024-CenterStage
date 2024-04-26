@@ -51,8 +51,6 @@ public class Camera {
     private static VisionPortal visionPortal;               // Used to manage the video source.
     private static AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
     public static AprilTagDetection desiredTag = null; // Used to hold the data for a detected AprilTag
-    public static double driveTank;
-    public static double turnTank;
     public static boolean skippingTagTelemetry = false;
     public static double  rangeError;
     public static double  headingError;
@@ -60,11 +58,10 @@ public class Camera {
     public static boolean ElevatorStateAprilTagsSwitch = false;
     public static boolean FourBarStateAprilTagsSwitch = false;
     public static boolean OuttakeStateAprilTagsSwitch = false;
-    public static boolean breakAutoDrive = false;
     public static boolean resetSystems = false;
     public static Delay Outtakedelay = new Delay(0.6f);
-    public static Delay autoBreakDelay = new Delay(0.8f);
    public static CameraEnum currentState;
+   public static CameraEnum lastState;
    public static boolean driveClose = true;
 
 
@@ -188,14 +185,15 @@ public class Camera {
         }
         if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78 && !resetSystems) {
             currentState = CameraEnum.OPENSYSTEMS;
-        }else {
-            breakAutoDrive = false;
         }
         switch (currentState){
             case OPENSYSTEMS:
-                ElevatorStateAprilTagsSwitch = true;
-                FourBarStateAprilTagsSwitch = true;
+                if (driveClose) {
+                    ElevatorStateAprilTagsSwitch = true;
+                    FourBarStateAprilTagsSwitch = true;
+                }
                 currentState = CameraEnum.DRIVEFORWARD;
+                lastState = CameraEnum.OPENSYSTEMS;
                 break;
             case DRIVEFORWARD:
                 if (driveClose) {
@@ -204,13 +202,17 @@ public class Camera {
                 if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78){
                     currentState = CameraEnum.DROP;
                 }
+                lastState = CameraEnum.DRIVEFORWARD;
                 break;
             case DROP:
                 Outtakedelay.startAction(GlobalData.currentTime);
-                OuttakeStateAprilTagsSwitch = true;
+                if (driveClose) {
+                    OuttakeStateAprilTagsSwitch = true;
+                }
                 if (Outtakedelay.isDelayPassed()){
                     currentState = CameraEnum.DRIVEBACK;
                 }
+                lastState = CameraEnum.DROP;
                 break;
             case DRIVEBACK:
                 driveClose = false;
@@ -218,20 +220,37 @@ public class Camera {
                 if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78) {
                     currentState = CameraEnum.CLOSESYSTEMS;
                 }
+                lastState = CameraEnum.DRIVEBACK;
                     break;
             case CLOSESYSTEMS:
+                resetSystems = true;
                 ElevatorStateAprilTagsSwitch = false;
                 FourBarStateAprilTagsSwitch = false;
                 OuttakeStateAprilTagsSwitch = false;
+                driveClose = true;
                 DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
-                currentState = CameraEnum.BREAKAUTODRIVE;
+                if (lastState == CameraEnum.DRIVEBACK){
+                    currentState = CameraEnum.BREAKAUTODRIVE;
+                }
+                lastState = CameraEnum.CLOSESYSTEMS;
                 break;
             case BREAKAUTODRIVE:
-                autoBreakDelay.startAction(GlobalData.currentTime);
-                if (autoBreakDelay.isDelayPassed()) {
-                    breakAutoDrive = true;
-                }
+                motors[0].setPower(0);
+                motors[1].setPower(0);
+                motors[2].setPower(0);
+                motors[3].setPower(0);
                 break;
+            case NONE:
+            default:
+                resetSystems = false;
+                ElevatorStateAprilTagsSwitch = false;
+                FourBarStateAprilTagsSwitch = false;
+                OuttakeStateAprilTagsSwitch = false;
+                driveClose = true;
+                DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
+                break;
+
+
         }
     }
     public static void moveRobot(double x, double y, double yaw) {

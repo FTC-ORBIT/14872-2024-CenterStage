@@ -66,8 +66,6 @@ public class Elevator {
             zeroPos = elevatorMotor.getCurrentPosition();
             zeroPos2 = elevatorMotor2.getCurrentPosition();
         }
-        telemetry.addData("pos", currentPos);
-        telemetry.addData("pos2", currentPos2);
     }
 
     public static void operateAutonomous (ElevatorStates state, Telemetry telemetry) {
