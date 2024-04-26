@@ -182,8 +182,11 @@ public class Camera {
          motors[1].setPower(0);
          motors[2].setPower(0);
          motors[3].setPower(0);
+         rangeError = 0;
+         headingError = 0;
+         yawError = 0;
         }
-        if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78 && !resetSystems) {
+        if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78 && !resetSystems && targetFound) {
             currentState = CameraEnum.OPENSYSTEMS;
         }
         switch (currentState){
@@ -239,6 +242,7 @@ public class Camera {
                 motors[1].setPower(0);
                 motors[2].setPower(0);
                 motors[3].setPower(0);
+                lastState = CameraEnum.BREAKAUTODRIVE;
                 break;
             case NONE:
             default:
@@ -248,6 +252,7 @@ public class Camera {
                 OuttakeStateAprilTagsSwitch = false;
                 driveClose = true;
                 DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
+                lastState = CameraEnum.NONE;
                 break;
 
 

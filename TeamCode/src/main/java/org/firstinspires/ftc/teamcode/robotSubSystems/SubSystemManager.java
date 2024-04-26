@@ -248,6 +248,9 @@ public class SubSystemManager {
     public static void printStates(Telemetry telemetry) {
         telemetry.addData("GlobalData.robotState", wanted);
         telemetry.addData("last state", lastState);
+        telemetry.addData("targetFound?", Camera.targetFound);
+        telemetry.addData("currect Camera state", Camera.currentState);
+        telemetry.addData("last Camera state", Camera.lastState);
         telemetry.addData("intakeState", intakeState);
         telemetry.addData("delayElevator", delayElevator.isDelayPassed());
         telemetry.addData("intakeDelay", intakeDelay.isDelayPassed());
