@@ -185,6 +185,7 @@ public class Camera {
          rangeError = 0;
          headingError = 0;
          yawError = 0;
+         currentState = CameraEnum.NONE;
         }
         if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78 && !resetSystems && targetFound) {
             currentState = CameraEnum.OPENSYSTEMS;
