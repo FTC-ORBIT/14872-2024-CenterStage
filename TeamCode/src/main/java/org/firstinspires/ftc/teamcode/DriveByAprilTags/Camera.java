@@ -62,7 +62,7 @@ public class Camera {
     public static Delay Outtakedelay = new Delay(0.6f);
    public static CameraEnum currentState;
    public static CameraEnum lastState;
-   public static boolean driveClose = true;
+
 
 
     public static void initAprilTag(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -191,17 +191,14 @@ public class Camera {
         }
         switch (currentState){
             case OPENSYSTEMS:
-                if (driveClose) {
-                    ElevatorStateAprilTagsSwitch = true;
-                    FourBarStateAprilTagsSwitch = true;
-                }
+                resetSystems = true;
+                ElevatorStateAprilTagsSwitch = true;
+                FourBarStateAprilTagsSwitch = true;
                 currentState = CameraEnum.DRIVEFORWARD;
                 lastState = CameraEnum.OPENSYSTEMS;
                 break;
             case DRIVEFORWARD:
-                if (driveClose) {
-                    DESIRED_DISTANCE = 7;
-                }
+                DESIRED_DISTANCE = 7;
                 if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78){
                     currentState = CameraEnum.DROP;
                 }
@@ -209,16 +206,13 @@ public class Camera {
                 break;
             case DROP:
                 Outtakedelay.startAction(GlobalData.currentTime);
-                if (driveClose) {
-                    OuttakeStateAprilTagsSwitch = true;
-                }
+                OuttakeStateAprilTagsSwitch = true;
                 if (Outtakedelay.isDelayPassed()){
                     currentState = CameraEnum.DRIVEBACK;
                 }
                 lastState = CameraEnum.DROP;
                 break;
             case DRIVEBACK:
-                driveClose = false;
                 DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
                 if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78) {
                     currentState = CameraEnum.CLOSESYSTEMS;
@@ -226,15 +220,11 @@ public class Camera {
                 lastState = CameraEnum.DRIVEBACK;
                     break;
             case CLOSESYSTEMS:
-                resetSystems = true;
                 ElevatorStateAprilTagsSwitch = false;
                 FourBarStateAprilTagsSwitch = false;
                 OuttakeStateAprilTagsSwitch = false;
-                driveClose = true;
                 DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
-                if (lastState == CameraEnum.DRIVEBACK){
-                    currentState = CameraEnum.BREAKAUTODRIVE;
-                }
+                currentState = CameraEnum.BREAKAUTODRIVE;
                 lastState = CameraEnum.CLOSESYSTEMS;
                 break;
             case BREAKAUTODRIVE:
@@ -250,7 +240,6 @@ public class Camera {
                 ElevatorStateAprilTagsSwitch = false;
                 FourBarStateAprilTagsSwitch = false;
                 OuttakeStateAprilTagsSwitch = false;
-                driveClose = true;
                 DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
                 lastState = CameraEnum.NONE;
                 break;
