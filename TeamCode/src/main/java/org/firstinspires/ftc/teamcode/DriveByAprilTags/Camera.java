@@ -62,6 +62,7 @@ public class Camera {
     public static Delay Outtakedelay = new Delay(0.6f);
    public static CameraEnum currentState;
    public static CameraEnum lastState;
+   public static boolean driveInStatesSwitch = false;
 
 
 
@@ -189,6 +190,7 @@ public class Camera {
         }
         if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78 && !resetSystems && targetFound) {
             currentState = CameraEnum.OPENSYSTEMS;
+            driveInStatesSwitch = false;
         }
         switch (currentState){
             case OPENSYSTEMS:
@@ -200,7 +202,7 @@ public class Camera {
                 break;
             case DRIVEFORWARD:
                 DESIRED_DISTANCE = 7;
-                if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78){
+                if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78 && driveInStatesSwitch){
                     currentState = CameraEnum.DROP;
                 }
                 lastState = CameraEnum.DRIVEFORWARD;
@@ -215,7 +217,7 @@ public class Camera {
                 break;
             case DRIVEBACK:
                 DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
-                if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78) {
+                if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78 && !driveInStatesSwitch) {
                     currentState = CameraEnum.CLOSESYSTEMS;
                 }
                 lastState = CameraEnum.DRIVEBACK;
@@ -246,6 +248,11 @@ public class Camera {
                 break;
 
 
+        }
+        if (lastState == CameraEnum.DRIVEFORWARD){
+            driveInStatesSwitch = true;
+        } else if (lastState == CameraEnum.DRIVEBACK) {
+            driveInStatesSwitch = false;
         }
     }
     public static void moveRobot(double x, double y, double yaw) {
