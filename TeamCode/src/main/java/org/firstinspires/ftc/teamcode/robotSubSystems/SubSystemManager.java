@@ -56,7 +56,7 @@ public class SubSystemManager {
         }
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
-                : gamepad.x ? RobotState.MIN : gamepad.y ? RobotState.LOW :gamepad.start ? RobotState.DEPLETE: gamepad.dpad_up ? RobotState.FIXPIXEL : gamepad.right_bumper ? RobotState.MID: lastState;
+                : gamepad.x ? RobotState.MIN : gamepad.y ? RobotState.LOW :gamepad.start ? RobotState.DEPLETE: gamepad.right_bumper ? RobotState.MID: lastState;
     }
 
     private static RobotState getStateFromWantedAndCurrent(RobotState stateFromDriver) {
@@ -112,18 +112,18 @@ public class SubSystemManager {
                 if (Camera.ElevatorStateAprilTagsSwitch) {
                     elevatorState = ElevatorStates.MIN;
                 }
-                if (!Camera.FourBarStateAprilTagsSwitch){
-                    fourbarState = FourbarState.REVERSE;
-                }else {
+                if (Camera.FourBarStateAprilTagsSwitch){
                     fourbarState = FourbarState.MOVE;
+                }else {
+                    fourbarState = FourbarState.REVERSE;
                 }
                 if (delayElevator.isDelayPassed() && !ElevatorToggleButton && !Camera.ElevatorStateAprilTagsSwitch) {
                  elevatorState = ElevatorStates.INTAKE;
                 }
-                if (!Camera.OuttakeStateAprilTagsSwitch){
-                    outtakeState = OuttakeState.CLOSED;
-                }else {
+                if (Camera.OuttakeStateAprilTagsSwitch){
                     outtakeState = OuttakeState.TOWOUT;
+                }else {
+                    outtakeState = OuttakeState.CLOSED;
                 }
                 break;
             case INTAKE:
@@ -256,6 +256,8 @@ public class SubSystemManager {
         telemetry.addData("intakeDelay", intakeDelay.isDelayPassed());
         telemetry.addData("elevator", Elevator.elevatorMotor.getCurrentPosition());
         telemetry.addData("elevator2", Elevator.elevatorMotor2.getCurrentPosition());
+        telemetry.addData("elevator power", Elevator.elevatorMotor.getPower());
+        telemetry.addData("elevator power2", Elevator.elevatorMotor2.getPower());
         telemetry.addData("fourBar", Fourbar.servo.getPosition());
         telemetry.addData("outtake", Outtake.servo.getPosition());
         telemetry.addData("plane", Plane.planeServo.getPosition());

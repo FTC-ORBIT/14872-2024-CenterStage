@@ -32,20 +32,20 @@ public class Camera {
     static double  drive           = 0;        // Desired forward power/speed (-1 to +1)
     static double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
     static double  turn            = 0;// Desired turning power/speed (-1 to +1)
-    public static final double FINAL_DESIRED_DISTANCE = 12;
+    public static final double FINAL_DESIRED_DISTANCE = 16;
 
     public static double DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE; //  this is how close the camera should get to the target (inches)
 
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
     //  applied to the drive motors to correct the error.
     //  Drive = Error * Gain    Make these values smaller for smoother control, or larger for a more aggressive response.
-    public  static double SPEED_GAIN  =  0.03  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
-    public static double STRAFE_GAIN =  0.03 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
-    public static double TURN_GAIN   =  0.01  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
+    public  static double SPEED_GAIN  =  0.05  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
+    public static double STRAFE_GAIN =  0.05 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
+    public static double TURN_GAIN   =  0.03  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
 
-    public static double MAX_AUTO_SPEED = 0.3;   //  Clip the approach speed to this max value (adjust for your robot)
-    public static double MAX_AUTO_STRAFE= 0.3;   //  Clip the approach speed to this max value (adjust for your robot)
-    public static double MAX_AUTO_TURN  = 0.2;   //  Clip the turn speed to this max value (adjust for your robot)
+    public static double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
+    public static double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
+    public static double MAX_AUTO_TURN  = 0.4;   //  Clip the turn speed to this max value (adjust for your robot)
     private static final boolean USE_WEBCAM = true;  // Set true to use a webcam, or false for a phone camera
     public static final int  DESIRED_TAG_ID = 5;     // Choose the tag you want to approach or set to -1 for ANY tag.
     private static VisionPortal visionPortal;               // Used to manage the video source.
@@ -60,9 +60,8 @@ public class Camera {
     public static boolean OuttakeStateAprilTagsSwitch = false;
     public static boolean resetSystems = false;
     public static Delay Outtakedelay = new Delay(0.6f);
-   public static CameraEnum currentState;
-   public static CameraEnum lastState;
-   public static boolean driveInStatesSwitch = false;
+    public static CameraEnum currentState;
+    public static CameraEnum lastState;
 
 
 
@@ -169,91 +168,81 @@ public class Camera {
     public static void getAprilTagDetectionOmni(){
         if(targetFound){
             // Determine heading, range and Yaw (tag image rotation) error so we can use them to control the robot automatically.
-              rangeError      = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
-              headingError    = desiredTag.ftcPose.bearing;
-              yawError        = desiredTag.ftcPose.yaw;
+          double    rangeError      = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
+          double  headingError    = desiredTag.ftcPose.bearing;
+          double yawError        = desiredTag.ftcPose.yaw;
             // Use the speed and turn "gains" to calculate how we want the robot to move.
             drive  = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
             turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
             strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
-          moveRobot(drive,strafe,turn);
 
+            if (rangeError < 3 && headingError < 3 && yawError < 4.5 && !resetSystems) {
+                currentState = CameraEnum.OPENSYSTEMS;
+            }
+            if (currentState != null) {
+                switch (currentState) {
+                    case OPENSYSTEMS:
+                        resetSystems = true;
+                        ElevatorStateAprilTagsSwitch = true;
+                        FourBarStateAprilTagsSwitch = true;
+                        currentState = CameraEnum.DROP;
+                        lastState = CameraEnum.OPENSYSTEMS;
+                        break;
+                    case DROP:
+                        OuttakeStateAprilTagsSwitch = true;
+                        Outtakedelay.startAction(GlobalData.currentTime);
+                        if (Outtakedelay.isDelayPassed()) {
+                            currentState = CameraEnum.DRIVEBACK;
+                            lastState = CameraEnum.DROP;
+                        }
+                        break;
+                    case DRIVEBACK:
+                        DESIRED_DISTANCE = 18;
+                        if (rangeError < 2 && headingError < 2 && yawError < 3.5 ) {
+                            currentState = CameraEnum.CLOSESYSTEMS;
+                        }
+                        lastState = CameraEnum.DRIVEBACK;
+                        break;
+                    case CLOSESYSTEMS:
+                        ElevatorStateAprilTagsSwitch = false;
+                        FourBarStateAprilTagsSwitch = false;
+                        OuttakeStateAprilTagsSwitch = false;
+                        DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
+                        currentState = CameraEnum.BREAKAUTODRIVE;
+                        lastState = CameraEnum.CLOSESYSTEMS;
+                        break;
+                    case BREAKAUTODRIVE:
+                        motors[0].setPower(0);
+                        motors[1].setPower(0);
+                        motors[2].setPower(0);
+                        motors[3].setPower(0);
+                        lastState = CameraEnum.BREAKAUTODRIVE;
+                        currentState = null;
+                        break;
+                    case NONE:
+                    default:
+                        resetSystems = false;
+                        ElevatorStateAprilTagsSwitch = false;
+                        FourBarStateAprilTagsSwitch = false;
+                        OuttakeStateAprilTagsSwitch = false;
+                        DESIRED_DISTANCE = 16;
+                        lastState = CameraEnum.NONE;
+                        break;
+                }
+            }
+            moveRobot(drive,strafe,turn);
         }else {
-         motors[0].setPower(0);
-         motors[1].setPower(0);
-         motors[2].setPower(0);
-         motors[3].setPower(0);
-         rangeError = 0;
-         headingError = 0;
-         yawError = 0;
-         currentState = CameraEnum.NONE;
+            ElevatorStateAprilTagsSwitch = false;
+            FourBarStateAprilTagsSwitch = false;
+            OuttakeStateAprilTagsSwitch = false;
+            motors[0].setPower(0);
+            motors[1].setPower(0);
+            motors[2].setPower(0);
+            motors[3].setPower(0);
         }
-        if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78 && !resetSystems && targetFound) {
-            currentState = CameraEnum.OPENSYSTEMS;
-            driveInStatesSwitch = false;
-        }
-        switch (currentState){
-            case OPENSYSTEMS:
-                resetSystems = true;
-                ElevatorStateAprilTagsSwitch = true;
-                FourBarStateAprilTagsSwitch = true;
-                currentState = CameraEnum.DRIVEFORWARD;
-                lastState = CameraEnum.OPENSYSTEMS;
-                break;
-            case DRIVEFORWARD:
-                DESIRED_DISTANCE = 7;
-                if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78 && driveInStatesSwitch){
-                    currentState = CameraEnum.DROP;
-                }
-                lastState = CameraEnum.DRIVEFORWARD;
-                break;
-            case DROP:
-                Outtakedelay.startAction(GlobalData.currentTime);
-                OuttakeStateAprilTagsSwitch = true;
-                if (Outtakedelay.isDelayPassed()){
-                    currentState = CameraEnum.DRIVEBACK;
-                }
-                lastState = CameraEnum.DROP;
-                break;
-            case DRIVEBACK:
-                DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
-                if (rangeError < 0.78 && headingError < 1.5 && yawError < 0.78 && !driveInStatesSwitch) {
-                    currentState = CameraEnum.CLOSESYSTEMS;
-                }
-                lastState = CameraEnum.DRIVEBACK;
-                    break;
-            case CLOSESYSTEMS:
-                ElevatorStateAprilTagsSwitch = false;
-                FourBarStateAprilTagsSwitch = false;
-                OuttakeStateAprilTagsSwitch = false;
-                DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
-                currentState = CameraEnum.BREAKAUTODRIVE;
-                lastState = CameraEnum.CLOSESYSTEMS;
-                break;
-            case BREAKAUTODRIVE:
-                motors[0].setPower(0);
-                motors[1].setPower(0);
-                motors[2].setPower(0);
-                motors[3].setPower(0);
-                lastState = CameraEnum.BREAKAUTODRIVE;
-                break;
-            case NONE:
-            default:
-                resetSystems = false;
-                ElevatorStateAprilTagsSwitch = false;
-                FourBarStateAprilTagsSwitch = false;
-                OuttakeStateAprilTagsSwitch = false;
-                DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
-                lastState = CameraEnum.NONE;
-                break;
 
 
-        }
-        if (lastState == CameraEnum.DRIVEFORWARD){
-            driveInStatesSwitch = true;
-        } else if (lastState == CameraEnum.DRIVEBACK) {
-            driveInStatesSwitch = false;
-        }
+
     }
     public static void moveRobot(double x, double y, double yaw) {
         // Calculate wheel powers.

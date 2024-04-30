@@ -63,12 +63,13 @@ public class Drivetrain {
             driveFactor = DrivetrainConstants.power;
         }
 
-        if (velocity_RobotCS_W.norm() <= Math.sqrt(0.005) && Math.abs(omega) == 0){
+        if (velocity_RobotCS_W.norm() <= Math.sqrt(0.005) && Math.abs(omega) == 0 && !gamepad1.left_bumper){
             stop();
         }
         else{
-            if (gamepad1.dpad_up){
+            if (gamepad1.left_bumper && SubSystemManager.wanted == RobotState.TRAVEL){
                 Camera.resetSystems = false;
+                Camera.currentState = null;
                 Camera.getAprilTagDetectionOmni();
             }else {
                 Camera.targetFound = false;
