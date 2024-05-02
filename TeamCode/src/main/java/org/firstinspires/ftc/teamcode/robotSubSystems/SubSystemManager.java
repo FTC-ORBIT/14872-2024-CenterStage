@@ -109,22 +109,11 @@ public class SubSystemManager {
                 if (intakeDelay.isDelayPassed()) {
                     intakeState = IntakeState.STOP;
                 }
-                if (Camera.ElevatorStateAprilTagsSwitch) {
-                    elevatorState = ElevatorStates.MIN;
-                }
-                if (Camera.FourBarStateAprilTagsSwitch){
-                    fourbarState = FourbarState.MOVE;
-                }else {
                     fourbarState = FourbarState.REVERSE;
-                }
-                if (delayElevator.isDelayPassed() && !ElevatorToggleButton && !Camera.ElevatorStateAprilTagsSwitch) {
+                if (delayElevator.isDelayPassed() && !ElevatorToggleButton) {
                  elevatorState = ElevatorStates.INTAKE;
                 }
-                if (Camera.OuttakeStateAprilTagsSwitch){
-                    outtakeState = OuttakeState.TOWOUT;
-                }else {
                     outtakeState = OuttakeState.CLOSED;
-                }
                 break;
             case INTAKE:
                 intakeState = IntakeState.COLLECT;

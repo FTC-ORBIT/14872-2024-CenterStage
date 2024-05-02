@@ -175,66 +175,8 @@ public class Camera {
             drive  = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
             turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
             strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
-
-            if (rangeError < 3 && headingError < 3 && yawError < 4.5 && !resetSystems) {
-                currentState = CameraEnum.OPENSYSTEMS;
-            }
-            if (currentState != null) {
-                switch (currentState) {
-                    case OPENSYSTEMS:
-                        resetSystems = true;
-                        ElevatorStateAprilTagsSwitch = true;
-                        FourBarStateAprilTagsSwitch = true;
-                        currentState = CameraEnum.DROP;
-                        lastState = CameraEnum.OPENSYSTEMS;
-                        break;
-                    case DROP:
-                        OuttakeStateAprilTagsSwitch = true;
-                        Outtakedelay.startAction(GlobalData.currentTime);
-                        if (Outtakedelay.isDelayPassed()) {
-                            currentState = CameraEnum.DRIVEBACK;
-                            lastState = CameraEnum.DROP;
-                        }
-                        break;
-                    case DRIVEBACK:
-                        DESIRED_DISTANCE = 18;
-                        if (rangeError < 2 && headingError < 2 && yawError < 3.5 ) {
-                            currentState = CameraEnum.CLOSESYSTEMS;
-                        }
-                        lastState = CameraEnum.DRIVEBACK;
-                        break;
-                    case CLOSESYSTEMS:
-                        ElevatorStateAprilTagsSwitch = false;
-                        FourBarStateAprilTagsSwitch = false;
-                        OuttakeStateAprilTagsSwitch = false;
-                        DESIRED_DISTANCE = FINAL_DESIRED_DISTANCE;
-                        currentState = CameraEnum.BREAKAUTODRIVE;
-                        lastState = CameraEnum.CLOSESYSTEMS;
-                        break;
-                    case BREAKAUTODRIVE:
-                        motors[0].setPower(0);
-                        motors[1].setPower(0);
-                        motors[2].setPower(0);
-                        motors[3].setPower(0);
-                        lastState = CameraEnum.BREAKAUTODRIVE;
-                        currentState = null;
-                        break;
-                    case NONE:
-                    default:
-                        resetSystems = false;
-                        ElevatorStateAprilTagsSwitch = false;
-                        FourBarStateAprilTagsSwitch = false;
-                        OuttakeStateAprilTagsSwitch = false;
-                        DESIRED_DISTANCE = 16;
-                        lastState = CameraEnum.NONE;
-                        break;
-                }
-            }
             moveRobot(drive,strafe,turn);
         }else {
-            ElevatorStateAprilTagsSwitch = false;
-            FourBarStateAprilTagsSwitch = false;
-            OuttakeStateAprilTagsSwitch = false;
             motors[0].setPower(0);
             motors[1].setPower(0);
             motors[2].setPower(0);

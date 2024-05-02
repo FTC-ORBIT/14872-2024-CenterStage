@@ -68,8 +68,6 @@ public class Drivetrain {
         }
         else{
             if (gamepad1.left_bumper && SubSystemManager.wanted == RobotState.TRAVEL){
-                Camera.resetSystems = false;
-                Camera.currentState = null;
                 Camera.getAprilTagDetectionOmni();
             }else {
                 Camera.targetFound = false;
