@@ -7,13 +7,12 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.DriveByAprilTags.Camera;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.DriveByAprilTags.AutoDriveAprilTags;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Vector;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
-import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel.FixpixelState;
 
@@ -68,9 +67,9 @@ public class Drivetrain {
         }
         else{
             if (gamepad1.left_bumper && SubSystemManager.wanted == RobotState.TRAVEL){
-                Camera.getAprilTagDetectionOmni();
+                AutoDriveAprilTags.getAprilTagDetectionOmni();
             }else {
-                Camera.targetFound = false;
+                AutoDriveAprilTags.targetFound = false;
                 drive(velocity_RobotCS_W, omega);
             }
          }

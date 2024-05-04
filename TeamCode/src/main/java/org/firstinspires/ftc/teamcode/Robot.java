@@ -8,13 +8,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.DriveByAprilTags.Camera;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.DriveByAprilTags.AutoDriveAprilTags;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Vector;
-import org.firstinspires.ftc.teamcode.Sensors.OrbitColorSensor;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.positionTracker.PoseStorage;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
-import org.firstinspires.ftc.teamcode.robotSubSystems.OrbitLED;
 import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
@@ -45,7 +43,7 @@ public class Robot extends LinearOpMode {
 
         ElapsedTime robotTime = new ElapsedTime();
         robotTime.reset();
-        Camera.initAprilTag(hardwareMap, telemetry);
+        AutoDriveAprilTags.initAprilTag(hardwareMap, telemetry);
         Fixpixel.init(hardwareMap);
         Drivetrain.init(hardwareMap);
         OrbitGyro.init(hardwareMap);
@@ -82,7 +80,7 @@ public class Robot extends LinearOpMode {
           SubSystemManager.setSubsystemToState(gamepad1 , gamepad2 , telemetry);
 //          OrbitLED.operate(OrbitColorSensor.color);
            GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
-            Camera.update();
+            AutoDriveAprilTags.update();
 
             GlobalData.lastTime = GlobalData.currentTime;
 //            Drivetrain.testMotors(gamepad1, telemetry);

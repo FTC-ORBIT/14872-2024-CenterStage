@@ -1,8 +1,6 @@
-package org.firstinspires.ftc.teamcode.DriveByAprilTags;
+package org.firstinspires.ftc.teamcode.robotSubSystems.camera.DriveByAprilTags;
 
 import static org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain.motors;
-
-import android.widget.Switch;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -16,8 +14,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDir
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
-import org.firstinspires.ftc.teamcode.robotData.GlobalData;
-import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -27,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
 @Config
-public class Camera {
+public class AutoDriveAprilTags {
     public static boolean targetFound     = false;    // Set to true when an AprilTag target is detected
     static double  drive           = 0;        // Desired forward power/speed (-1 to +1)
     static double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
@@ -60,8 +56,8 @@ public class Camera {
     public static boolean OuttakeStateAprilTagsSwitch = false;
     public static boolean resetSystems = false;
     public static Delay Outtakedelay = new Delay(0.6f);
-    public static CameraEnum currentState;
-    public static CameraEnum lastState;
+    public static AutoDriveAprilTagsEnum currentState;
+    public static AutoDriveAprilTagsEnum lastState;
 
 
 
