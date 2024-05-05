@@ -60,7 +60,7 @@ public abstract class PropThreshold implements VisionProcessor {
     public double averagedRightBox;
     public boolean completedPropPos = false;
 
-    public YellowPixelPosEnum yellowPixelPos = YellowPixelPosEnum.NOPIXEL;
+    public YellowPixelPosEnum yellowPixelPos = NOPIXEL;
     public YellowPixelPosEnum sampledYellowPixelPos = yellowPixelPos;
 
     public double yellowThreshold = 0.03;
@@ -325,7 +325,7 @@ public abstract class PropThreshold implements VisionProcessor {
     }
 
     public PropPosEnum EnumGetPropPos() {
-        sampledPropPos = PropPos;
+        sampledPropPos = PropPos.LEFT;
         return sampledPropPos;
     }
 

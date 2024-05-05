@@ -588,7 +588,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                     drive.followTrajectorySequence(leftCone);
                     getYellowPixelfromAprilTag();
 
-                    while(!isStopRequested()) {
+                    while (!isStopRequested()) {
                         telemetry.addData("prop pos:", redPropThresholdFar.EnumGetPropPos());
                         telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
                         if (redPropThresholdFar.biggest != null) {
