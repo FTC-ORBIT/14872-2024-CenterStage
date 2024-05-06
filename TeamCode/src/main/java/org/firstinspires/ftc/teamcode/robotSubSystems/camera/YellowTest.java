@@ -11,7 +11,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 @Autonomous (name = "Yellow pixel detect")
-public class yellowTest extends LinearOpMode {
+public class YellowTest extends LinearOpMode {
     private VisionPortal portal;
     private RedPropThresholdFar redPropThresholdFar = new RedPropThresholdFar();
     private AprilTagDetect aprilTag;
@@ -40,8 +40,8 @@ public class yellowTest extends LinearOpMode {
                 .addProcessor(aprilTag.atPrcsr)
                 .addProcessor(redPropThresholdFar)
                 .build();
-        AprilTagDetect.setManualExposure(4, 30, portal, this);
-        portal.setProcessorEnabled(aprilTag.atPrcsr,false);
+        AprilTagDetect.setManualExposure(8, 250, portal, this);
+//        portal.setProcessorEnabled(aprilTag.atPrcsr,false);
 
         FtcDashboard.getInstance().startCameraStream(portal, 30);
 
@@ -57,21 +57,24 @@ public class yellowTest extends LinearOpMode {
             portal.setProcessorEnabled(aprilTag.atPrcsr, true);
             portal.setProcessorEnabled(redPropThresholdFar, false);
 
-            getYellowPixelfromAprilTag();
+            getYellowPixelfromAprilTag(); // here you get sampledYellowPixelPos "at start" (which is the first yellowpixelpos)
             while (!isStopRequested()) {
+                print_tele(1000, true);
                 telemetry.addData("prop pos:", redPropThresholdFar.EnumGetPropPos());
-                telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
+                telemetry.addData("yellow pixel at start:", redPropThresholdFar.sampledYellowPixelPos);
+                telemetry.addData("yellow pixel right now:", redPropThresholdFar.yellowPixelPos);
                 if (redPropThresholdFar.biggest != null) {
-                    telemetry.addData("yellowThreshold", redPropThresholdFar.biggest.averagedBox);
+                    telemetry.addData("biggest", redPropThresholdFar.biggest.averagedBox);
                 }
                 telemetry.addData("wantedID", aprilTag.wantedID);
                 telemetry.addData("Detect attempts", aprilTag.count);
                 telemetry.update();
-//                sleep(2000);
+                sleep(2000);
 //                telemetry.addLine("yay debug");
 //                telemetry.update();
 //                sleep(500);
 //                getYellowPixelfromAprilTag();
+                redPropThresholdFar.getYellowPixelPos();
 
             }
 
@@ -101,9 +104,31 @@ public class yellowTest extends LinearOpMode {
         redPropThresholdFar.initYellowPixelAT(aprilTag.aprilTagCords);
         AprilTagDetect.setDfltExposure(portal, this);
         portal.setProcessorEnabled(redPropThresholdFar, true);
-
+// TODO check the sleep time here (might be not enough time):
         sleep(100);
         redPropThresholdFar.getYellowPixelPos();
+    }
+    public void print_tele (long millisec, boolean test){
+        telemetry.addLine("print tele");
+        telemetry.addData("prop pos", redPropThresholdFar.EnumGetPropPos());
+        telemetry.addData("yellow pixel at start", redPropThresholdFar.sampledYellowPixelPos);
+        telemetry.addData("yellow pixel right now", redPropThresholdFar.yellowPixelPos);
+        if(redPropThresholdFar.biggest != null) {
+            telemetry.addData("biggest", redPropThresholdFar.biggest.averagedBox);
+        }
+        telemetry.addData("wantedID", aprilTag.wantedID);
+        telemetry.addData("Detect attempts", aprilTag.count);
+        telemetry.update();
+
+//        if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.NOPIXEL){
+//            while(!isStopRequested()) {
+//                sleep(100);
+//            }
+//        }
+        sleep(millisec);
+        if (test) {
+            redPropThresholdFar.test(gamepad1, telemetry);
+        }
     }
 }
 

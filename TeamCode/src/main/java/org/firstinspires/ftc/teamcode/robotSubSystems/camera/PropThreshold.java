@@ -9,13 +9,15 @@ import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelP
 import android.graphics.Canvas;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-
+import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Range;
+
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -108,6 +110,8 @@ public abstract class PropThreshold implements VisionProcessor {
     public Rect rectMissL = relRectMissL.clone();
     public Rect rectMissR = relRectMissR.clone();
 
+
+
     Rect leftRectHitL,
             leftRectHitR,
             leftRectMissL,
@@ -147,6 +151,13 @@ public abstract class PropThreshold implements VisionProcessor {
         rectMissL.y = (int) aprilTagCords.y + relRectMissL.y;
         rectMissR.x = (int) aprilTagCords.x + relRectMissR.x;
         rectMissR.y = (int) aprilTagCords.y + relRectMissR.y;
+
+        rectHitL  = rectClipping(rectHitL ,639, 479);
+        rectHitR  = rectClipping(rectHitR ,639, 479);
+        rectMissL = rectClipping(rectMissL,639, 479);
+        rectMissR = rectClipping(rectMissR,639, 479);
+
+
 
 
         yellowBoxesHash = new HashSet<ElementDetectBox>() {{
@@ -332,6 +343,19 @@ public abstract class PropThreshold implements VisionProcessor {
     public YellowPixelPosEnum getYellowPixelPos() {
         sampledYellowPixelPos = yellowPixelPos;
         return sampledYellowPixelPos;
+    }
+    public Rect rectClipping(Rect rect, int maxX, int maxY){
+        Rect out = null;
+        if (rect != null) {
+            out = rect.clone();
+
+            out.x = com.qualcomm.robotcore.util.Range.clip(rect.x, 0, maxX);
+            out.y = com.qualcomm.robotcore.util.Range.clip(rect.y, 0, maxY);
+            out.width = com.qualcomm.robotcore.util.Range.clip(rect.width, 0, maxX - rect.x);
+            out.height = com.qualcomm.robotcore.util.Range.clip(rect.height, 0, maxY - rect.y);
+
+        }
+        return out;
     }
 
 
