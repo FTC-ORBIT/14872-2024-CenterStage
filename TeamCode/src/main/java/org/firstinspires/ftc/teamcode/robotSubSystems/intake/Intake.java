@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.intake;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -10,7 +11,9 @@ public class Intake {
 
     public static DcMotor motor;
     public static DcMotor motor2;
+    public static Servo servo;
     private static float power;
+    private static float pos;
 
     public static void init(HardwareMap hardwareMap) {
         motor = hardwareMap.get(DcMotor.class, "intakeMotor");
@@ -19,6 +22,8 @@ public class Intake {
         motor2 = hardwareMap.get(DcMotor.class, "intakeMotor2");
 
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        servo = hardwareMap.get(Servo.class,"rackServo");
     }
 
     public static void operate(IntakeState state) {
@@ -26,16 +31,24 @@ public class Intake {
             case STOP:
             default:
                 power = 0;
+                pos = IntakeConstants.stopPos;
                 break;
             case COLLECT:
                 power = IntakeConstants.intakePower;
+                pos = IntakeConstants.groundPos;
                 break;
             case DEPLETE:
                 power = IntakeConstants.depletePower;
+                pos = IntakeConstants.groundPos;
+                break;
+            case RACK:
+                power = IntakeConstants.intakePower;
+                pos = IntakeConstants.stackPos;
                 break;
         }
         motor.setPower(power);
         motor2.setPower(power);
+        servo.setPosition(pos);
     }
 
     public static void test(Gamepad gamepad1 , Telemetry telemetry){

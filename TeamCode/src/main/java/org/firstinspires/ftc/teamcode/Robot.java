@@ -6,9 +6,11 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.OrbitUtils.Vector;
+import org.firstinspires.ftc.teamcode.Sensors.OrbitColorSensor;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.positionTracker.PoseStorage;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
@@ -20,6 +22,9 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel.Fixpixel;
+import org.firstinspires.ftc.teamcode.Sensors.OrbitColorSensor;
+
 
 @Config
 @TeleOp(name = "main")
@@ -40,16 +45,16 @@ public class Robot extends LinearOpMode {
 
         ElapsedTime robotTime = new ElapsedTime();
         robotTime.reset();
-        //   Fixpixel.init(hardwareMap);
+//        Fixpixel.init(hardwareMap);
         Drivetrain.init(hardwareMap);
         OrbitGyro.init(hardwareMap);
         Elevator.init(hardwareMap);
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
-         Fourbar.init(hardwareMap);
+        Fourbar.init(hardwareMap);
         Plane.init(hardwareMap);
 //         OrbitLED.init(hardwareMap);
-
+//        OrbitColorSensor.init(hardwareMap);
         OrbitGyro.resetGyroStartTeleop((float) Math.toDegrees(PoseStorage.currentPose.getHeading()));
         telemetry.update();
         telemetry.addData("gyro", Math.toDegrees(PoseStorage.currentPose.getHeading()));
@@ -61,7 +66,6 @@ public class Robot extends LinearOpMode {
         GlobalData.lastTime = 0;
         GlobalData.deltaTime = 0;
         GlobalData.robotState = RobotState.TRAVEL;
-        GlobalData.hasGamePiece = false;
 
 
         waitForStart();
@@ -69,10 +73,10 @@ public class Robot extends LinearOpMode {
         GlobalData.robotState = RobotState.TRAVEL;
 
         while (!isStopRequested()) {
-           if (gamepad2.right_bumper) OrbitGyro.resetGyro();
+//           if (gamepad2.right_bumper) OrbitGyro.resetGyro();
           GlobalData.currentTime = (float) robotTime.seconds();
-          final boolean placing = SubSystemManager.wanted.equals(RobotState.MIN) || SubSystemManager.wanted.equals(RobotState.LOW) || SubSystemManager.wanted.equals(RobotState.MID);
-          Vector leftStick = new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y).scale(placing ? 0.25f : 1);
+//          final boolean placing = SubSystemManager.wanted.equals(RobotState.MIN) || SubSystemManager.wanted.equals(RobotState.LOW) || SubSystemManager.wanted.equals(RobotState.MID);
+          Vector leftStick = new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y);
           float omega = gamepad1.right_trigger - gamepad1.left_trigger;
           Drivetrain.operate(leftStick,  omega , telemetry , gamepad1);
           SubSystemManager.setSubsystemToState(gamepad1 , gamepad2 , telemetry);
@@ -84,7 +88,6 @@ public class Robot extends LinearOpMode {
 //            Drivetrain.testMotors(gamepad1, telemetry);
             telemetry.update();
             SubSystemManager.printStates(telemetry);
-            telemetry.addData("hasGamePiece", GlobalData.hasGamePiece);
         }
     }
 
