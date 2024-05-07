@@ -22,7 +22,6 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
-import org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel.Fixpixel;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitColorSensor;
 
 
