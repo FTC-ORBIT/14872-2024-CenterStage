@@ -72,7 +72,6 @@ public class RedFarFromTheBoard extends  LinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException{
-        OrbitGyro.init(hardwareMap);
         Elevator.init(hardwareMap);
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
