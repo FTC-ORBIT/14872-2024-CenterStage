@@ -120,8 +120,56 @@ public class Elevator {
         elevatorMotor2.setPower(0);
     }
 
+    public static void operateAutonomousNoMarker (ElevatorStates state, Telemetry telemetry) {
+        switch (state) {
+            case LOW:
+                pos = ElevatorConstants.lowHeight;
+                break;
+            case MID:
+                pos = ElevatorConstants.midHeight;
+                break;
+            case INTAKE:
+            default:
+                pos = ElevatorConstants.intakeHeight;
+                break;
+            case CLIMB:
+                pos = ElevatorConstants.climbHeight;
+                break;
+            case MIN:
+                pos = ElevatorConstants.autoHeight;
+                break;
+            case AUTO:
+                pos = ElevatorConstants.autoHeightFar;
+                break;
+        }
+        if (pos == ElevatorConstants.autoHeight || pos == ElevatorConstants.autoHeightFar) {
+                currentPos = elevatorMotor.getCurrentPosition();
+                currentPos2 = elevatorMotor2.getCurrentPosition();
+                elevatorPID.setWanted(pos);
+                encoderPID.setWanted(0);
+                elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
+                elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
+                telemetry.addData("pos", currentPos);
+                telemetry.addData("pos2", currentPos2);
+                telemetry.update();
+        } else {
+                currentPos = elevatorMotor.getCurrentPosition();
+                currentPos2 = elevatorMotor2.getCurrentPosition();
+                elevatorPID.setWanted(pos);
+                encoderPID.setWanted(0);
+                elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
+                elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
+
+                telemetry.addData("pos", currentPos);
+                telemetry.addData("pos2", currentPos2);
+                telemetry.update();
+        }
+    }
+    public static boolean reachedHeight (double currentHeight){
+        return currentHeight + ElevatorConstants.reachedHeightDiff > pos && currentHeight - ElevatorConstants.reachedHeightDiff < pos;
+    }
     public static double getPos(){
-        return currentPos;
+        return (currentPos + currentPos2) / 2;
     }
 
     public static void test(Gamepad gamepad, Telemetry telemetry){

@@ -109,7 +109,7 @@ public abstract class AutonomousGenaral extends LinearOpMode {
     public static Pose2d farFromTrasPosAfterProp24 = new Pose2d(farFromTrasXAfterProp, -farFromTrasYDropAndAfterProp, startPos.getHeading());
     public static Pose2d splinePropPos24 = new Pose2d(splineXProp, splineYProp, -splineEndAngle);
     public static Pose2d closeTrasPosAfterProp24 = new Pose2d(splineXProp, -splineAfterPropY, -splineEndAngle);
-
+//    public static Pose2d farFromTheTrasFarFromTheBoardBeforeGateBlue = new Pose2d(prepareToPixelDropFarFromTrasBeforeGateX,gate);
     public static Pose2d prepareToDropPixelPos1Red = new Pose2d(boardX1Red, -prepareToDropPixelY, -turnAfterProp);
     public static Pose2d prepareToDropPixelPos4Red = new Pose2d(boardX4Red, -prepareToDropPixelY, -turnAfterProp);
     public static Pose2d prepareToDropPixelPos6Red = new Pose2d(boardX6Red, -prepareToDropPixelY, -turnAfterProp);
@@ -231,6 +231,10 @@ public abstract class AutonomousGenaral extends LinearOpMode {
     // 3 = left
     public static void prepareToPixelDrop14(int position, boolean color){
         if (position == 1 && color){
+            TrajectorySequence prepareToPixelDropRight = drive.trajectorySequenceBuilder(lastTrajectoryPos)
+                    .lineToLinearHeading(farFromTrasPosAfterProp24)
+//                    .lineToLinearHeading()
+                    .build();
 
         }
     }
