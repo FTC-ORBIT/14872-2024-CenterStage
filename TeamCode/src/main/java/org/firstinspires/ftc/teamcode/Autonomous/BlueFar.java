@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.util.Size;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -15,7 +17,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.FourbarState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 import org.firstinspires.ftc.vision.VisionPortal;
-
+@Autonomous (name = "blue far")
 public class BlueFar extends AutonomousGenaral {
 
     private VisionPortal portal;
@@ -79,7 +81,7 @@ public class BlueFar extends AutonomousGenaral {
             switch (currentState){
                 case PROP:
                     if (!drive.isBusy()){
-                        currentState = AutonomousSteps.PREPARETODROPPIXEL;
+//                        currentState = AutonomousSteps.PREPARETODROPPIXEL;
                        prepareToPixelDrop14(position, color);
                     }
                     telemetry.addData("prop", null);
@@ -97,8 +99,8 @@ public class BlueFar extends AutonomousGenaral {
                     telemetry.addData("poselevator", Elevator.getPos());
                     if (forbarDelay.isDelayPassed()){
                         if (Elevator.reachedHeight(ElevatorConstants.autoHeight)){
-                            dropYellowPixel23(position, color);
-                            currentState = AutonomousSteps.GOTOBOARD;
+//                            dropYellowPixel23(position, color);
+//                            currentState = AutonomousSteps.GOTOBOARD;
                         }
                         fourbarState = FourbarState.MOVE;
                     }
@@ -146,6 +148,10 @@ public class BlueFar extends AutonomousGenaral {
             Fourbar.operateTeleop(fourbarState);
             Outtake.operate(outtakeState);
             drive.update();
+            Pose2d poseEstimate = drive.getPoseEstimate();
+            telemetry.addData("x", poseEstimate.getX());
+            telemetry.addData("y", poseEstimate.getY());
+            telemetry.addData("heading", poseEstimate.getHeading());
             telemetry.update();
         }
 

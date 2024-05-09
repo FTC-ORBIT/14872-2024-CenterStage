@@ -66,7 +66,7 @@ public abstract class AutonomousGenaral extends LinearOpMode {
     public static double splineEndTangent = Math.toRadians(120);
     public static double splineAfterPropY = 4;
     public static double turnAfterProp = Math.toRadians(90);
-    public static double prepareToPixelDropFarCenterBeforeGateY = -18;
+    public static double prepareToPixelDropFarCenterBeforeGateY = 18;
     public static double prepareToPixelDropFarCenterBeforeGateX = 55.07;
     public static double prepareToPixelDropFarCenterAfterGateY = 70.345;
     public static double prepareToPixelDropFarCloseToTrasBeforeGateY = 18;
@@ -281,9 +281,24 @@ public abstract class AutonomousGenaral extends LinearOpMode {
             lastTrajectoryPos = prepareToPixelDropCenter.end();
         } else if (position == 3 && color) {
             TrajectorySequence prepareToPixelDropLeft = drive.trajectorySequenceBuilder(lastTrajectoryPos)
+                    .lineToLinearHeading(farFromTrasPosAfterProp24)
+                    .lineToLinearHeading(farFromTheBoardRightBeforeGateBlue)
+                    .turn(turnAfterProp)
+                    .lineToLinearHeading(FarFormTheBoardAfterGateBlue)
+                    .lineToLinearHeading(MarkerBlue)
                     .build();
+            drive.followTrajectorySequenceAsync(prepareToPixelDropLeft);
+            lastTrajectoryPos = prepareToPixelDropLeft.end();
         }else if (position == 3){
-
+            TrajectorySequence prepareToPixelDropLeft = drive.trajectorySequenceBuilder(lastTrajectoryPos)
+                    .lineToLinearHeading(closeTrasPosAfterProp13)
+                    .lineToLinearHeading(farFromTheBoardRightBeforeGateRed)
+                    .turn(turnAfterProp)
+                    .lineToLinearHeading(FarFormTheBoardAfterGateRed)
+                    .lineToLinearHeading(MarkerRed)
+                    .build();
+            drive.followTrajectorySequenceAsync(prepareToPixelDropLeft);
+            lastTrajectoryPos = prepareToPixelDropLeft.end();
         }
     }
 
