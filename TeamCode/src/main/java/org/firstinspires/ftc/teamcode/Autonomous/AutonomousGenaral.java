@@ -8,14 +8,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
-import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
-import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.FourbarState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -69,7 +66,7 @@ public abstract class AutonomousGenaral extends LinearOpMode {
     public static double splineEndTangent = Math.toRadians(120);
     public static double splineAfterPropY = 4;
     public static double turnAfterProp = Math.toRadians(90);
-    public static double prepareToPixelDropFarCenterBeforeGateY = 18;
+    public static double prepareToPixelDropFarCenterBeforeGateY = -18;
     public static double prepareToPixelDropFarCenterBeforeGateX = 55.07;
     public static double prepareToPixelDropFarCenterAfterGateY = 70.345;
     public static double prepareToPixelDropFarCloseToTrasBeforeGateY = 18;
@@ -98,6 +95,7 @@ public abstract class AutonomousGenaral extends LinearOpMode {
     public static double parkingY14 = 83; // when 1 = -83
     public static double parkingX1234FarFromTheWall = 46;
     public static double parkingX1234CloseToTheWall = 3;
+    public static double FarFRomTheBoardGateX =48;
     //this is where I defined my poses
     public static Pose2d farFromTrasDropPose13 = new Pose2d(farFromTrasXDrop, farFromTrasYDropAndAfterProp, startPos.getHeading());
     public static Pose2d farFromTrasPosAfterProp13 = new Pose2d(farFromTrasXAfterProp, farFromTrasYDropAndAfterProp, startPos.getHeading());
@@ -109,7 +107,18 @@ public abstract class AutonomousGenaral extends LinearOpMode {
     public static Pose2d farFromTrasPosAfterProp24 = new Pose2d(farFromTrasXAfterProp, -farFromTrasYDropAndAfterProp, startPos.getHeading());
     public static Pose2d splinePropPos24 = new Pose2d(splineXProp, splineYProp, -splineEndAngle);
     public static Pose2d closeTrasPosAfterProp24 = new Pose2d(splineXProp, -splineAfterPropY, -splineEndAngle);
-//    public static Pose2d farFromTheTrasFarFromTheBoardBeforeGateBlue = new Pose2d(prepareToPixelDropFarFromTrasBeforeGateX,gate);
+    public static Pose2d farFromTheBoardRightBeforeGateBlue = new Pose2d(FarFRomTheBoardGateX, prepareToPixelDropFarFromTrasBeforeGateY, startPos.getHeading());
+    public static Pose2d farFromTheBoardRightBeforeGateRed= new Pose2d(FarFRomTheBoardGateX, -prepareToPixelDropFarFromTrasBeforeGateY, startPos.getHeading());
+    public static Pose2d farFromTheBoardCenterAfterPropRed= new Pose2d(centerXAfterProp,-prepareToPixelDropFarCenterBeforeGateY, startPos.getHeading());
+    public static Pose2d farFromTheBoardCenterBeforeGateRed = new Pose2d(prepareToPixelDropFarCenterBeforeGateX,-prepareToPixelDropFarCenterBeforeGateY,startPos.getHeading());
+    public static Pose2d farFromTheBoardCenterAfterGateRed = new Pose2d(prepareToPixelDropFarCenterBeforeGateX, -prepareToPixelDropFarCenterAfterGateY, turnAfterProp);
+    public static Pose2d farFromTheBoardCenterAfterPropBlue= new Pose2d(centerXAfterProp,prepareToPixelDropFarCenterBeforeGateY, startPos.getHeading());
+    public static Pose2d farFromTheBoardCenterBeforeGateBlue = new Pose2d(prepareToPixelDropFarCenterBeforeGateX,prepareToPixelDropFarCenterBeforeGateY,startPos.getHeading());
+    public static Pose2d farFromTheBoardCenterAfterGateBlue = new Pose2d(prepareToPixelDropFarCenterBeforeGateX, prepareToPixelDropFarCenterAfterGateY, turnAfterProp);
+    public static Pose2d FarFormTheBoardAfterGateBlue = new Pose2d(FarFRomTheBoardGateX,prepareToPixelDropFarCenterAfterGateY, turnAfterProp);
+    public static Pose2d FarFormTheBoardAfterGateRed = new Pose2d(FarFRomTheBoardGateX,-prepareToPixelDropFarCenterAfterGateY, turnAfterProp);
+    public static Pose2d MarkerBlue = new Pose2d(boardX4Blue,prepareToPixelDropFarCenterAfterGateY, turnAfterProp);
+    public static Pose2d MarkerRed = new Pose2d(boardX4Red,-prepareToPixelDropFarCenterAfterGateY, turnAfterProp);
     public static Pose2d prepareToDropPixelPos1Red = new Pose2d(boardX1Red, -prepareToDropPixelY, -turnAfterProp);
     public static Pose2d prepareToDropPixelPos4Red = new Pose2d(boardX4Red, -prepareToDropPixelY, -turnAfterProp);
     public static Pose2d prepareToDropPixelPos6Red = new Pose2d(boardX6Red, -prepareToDropPixelY, -turnAfterProp);
@@ -233,8 +242,47 @@ public abstract class AutonomousGenaral extends LinearOpMode {
         if (position == 1 && color){
             TrajectorySequence prepareToPixelDropRight = drive.trajectorySequenceBuilder(lastTrajectoryPos)
                     .lineToLinearHeading(farFromTrasPosAfterProp24)
-//                    .lineToLinearHeading()
+                    .lineToLinearHeading(farFromTheBoardRightBeforeGateBlue)
+                    .turn(turnAfterProp)
+                    .lineToLinearHeading(FarFormTheBoardAfterGateBlue)
+                    .lineToLinearHeading(MarkerBlue)
                     .build();
+            drive.followTrajectorySequenceAsync(prepareToPixelDropRight);
+            lastTrajectoryPos = prepareToPixelDropRight.end();
+        } else if (position == 1) {
+            TrajectorySequence prepareToPixelDropRight = drive.trajectorySequenceBuilder(lastTrajectoryPos)
+                    .lineToLinearHeading(closeTrasPosAfterProp13)
+                    .lineToLinearHeading(farFromTheBoardRightBeforeGateRed)
+                    .turn(turnAfterProp)
+                    .lineToLinearHeading(FarFormTheBoardAfterGateRed)
+                    .lineToLinearHeading(MarkerRed)
+                    .build();
+            drive.followTrajectorySequenceAsync(prepareToPixelDropRight);
+            lastTrajectoryPos = prepareToPixelDropRight.end();
+        } else if (position == 2 && color) {
+            TrajectorySequence prepareToPixelDropCenter = drive.trajectorySequenceBuilder(lastTrajectoryPos)
+                    .lineToLinearHeading(farFromTheBoardCenterAfterPropBlue)
+                    .lineToLinearHeading(farFromTheBoardCenterBeforeGateBlue)
+                    .turn(turnAfterProp)
+                    .lineToLinearHeading(farFromTheBoardCenterAfterGateBlue)
+                    .lineToLinearHeading(MarkerBlue)
+                    .build();
+            drive.followTrajectorySequenceAsync(prepareToPixelDropCenter);
+            lastTrajectoryPos = prepareToPixelDropCenter.end();
+        } else if (position == 2) {
+            TrajectorySequence prepareToPixelDropCenter = drive.trajectorySequenceBuilder(lastTrajectoryPos)
+                    .lineToLinearHeading(farFromTheBoardCenterAfterPropRed)
+                    .lineToLinearHeading(farFromTheBoardCenterBeforeGateRed)
+                    .turn(turnAfterProp)
+                    .lineToLinearHeading(farFromTheBoardCenterAfterGateRed)
+                    .lineToLinearHeading(MarkerRed)
+                    .build();
+            drive.followTrajectorySequenceAsync(prepareToPixelDropCenter);
+            lastTrajectoryPos = prepareToPixelDropCenter.end();
+        } else if (position == 3 && color) {
+            TrajectorySequence prepareToPixelDropLeft = drive.trajectorySequenceBuilder(lastTrajectoryPos)
+                    .build();
+        }else if (position == 3){
 
         }
     }
