@@ -17,14 +17,14 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.FourbarState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 import org.firstinspires.ftc.vision.VisionPortal;
-@Autonomous (name = "")
+@Autonomous (name = "red far")
 public class RedFar extends AutonomousGenaral{
     private VisionPortal portal;
     private final RedPropThresholdFar redPropThresholdFar = new RedPropThresholdFar();
     ElapsedTime time = new ElapsedTime();
     int position = 1;
 
-    boolean color = true;
+    boolean color = false;
 
     String parkingPos = "far";
     AutonomousSteps currentState;
