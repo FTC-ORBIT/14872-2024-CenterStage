@@ -58,25 +58,26 @@ public class YellowTest extends LinearOpMode {
             portal.setProcessorEnabled(redPropThresholdFar, false);
 
             getYellowPixelfromAprilTag(); // here you get sampledYellowPixelPos "at start" (which is the first yellowpixelpos)
-            while (!isStopRequested()) {
-                print_tele(1000, true);
-                telemetry.addData("prop pos:", redPropThresholdFar.EnumGetPropPos());
-                telemetry.addData("yellow pixel at start:", redPropThresholdFar.sampledYellowPixelPos);
-                telemetry.addData("yellow pixel right now:", redPropThresholdFar.yellowPixelPos);
-                if (redPropThresholdFar.biggest != null) {
-                    telemetry.addData("biggest", redPropThresholdFar.biggest.averagedBox);
-                }
-                telemetry.addData("wantedID", aprilTag.wantedID);
-                telemetry.addData("Detect attempts", aprilTag.count);
-                telemetry.update();
-                sleep(2000);
+                while (!isStopRequested()) {
+                    print_tele(1000, true);
+                    telemetry.addData("prop pos:", redPropThresholdFar.EnumGetPropPos());
+                    telemetry.addData("yellow pixel at start:", redPropThresholdFar.sampledYellowPixelPos);
+                    telemetry.addData("yellow pixel right now:", redPropThresholdFar.yellowPixelPos);
+                    if (redPropThresholdFar.biggest != null) {
+                        telemetry.addData("biggest", redPropThresholdFar.biggest.averagedBox);
+                    }
+                    telemetry.addData("wantedID", aprilTag.wantedID);
+                    telemetry.addData("Detect attempts", aprilTag.count);
+                    telemetry.update();
+                    sleep(2000);
+
 //                telemetry.addLine("yay debug");
 //                telemetry.update();
 //                sleep(500);
 //                getYellowPixelfromAprilTag();
                 redPropThresholdFar.getYellowPixelPos();
+        }
 
-            }
 
 //                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
 //                        drive.followTrajectorySequence(leftConeHitL);
@@ -118,6 +119,7 @@ public class YellowTest extends LinearOpMode {
         }
         telemetry.addData("wantedID", aprilTag.wantedID);
         telemetry.addData("Detect attempts", aprilTag.count);
+        telemetry.addData("boxs width",AprilTagDetect.rectWidth);
         telemetry.update();
 
 //        if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.NOPIXEL){

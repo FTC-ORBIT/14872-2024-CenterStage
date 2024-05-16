@@ -141,6 +141,18 @@ public abstract class PropThreshold implements VisionProcessor {
     public void initYellowPixelAT(Point argAprilTagCords) {
         PropColor = PropColorEnum.YELLOW;
 
+        rXStep = AprilTagDetect.rectWidth;
+        rSize = new Size(rXStep, 180);
+        rYOffset = -40 - (int) rSize.height;
+        relRectHitL = new Rect(new Point(-1 * rXStep, rYOffset), rSize);
+        relRectHitR = new Rect(new Point(0 * rXStep, rYOffset), rSize);
+        relRectMissL = new Rect(new Point(-2 * rXStep, rYOffset), rSize);
+        relRectMissR = new Rect(new Point(1 * rXStep, rYOffset), rSize);
+        rectHitL = relRectHitL.clone();
+        rectHitR = relRectHitR.clone();
+        rectMissL = relRectMissL.clone();
+        rectMissR = relRectMissR.clone();
+
         aprilTagCords = argAprilTagCords.clone();
 
         rectHitL.x = (int) aprilTagCords.x + relRectHitL.x;
@@ -336,7 +348,7 @@ public abstract class PropThreshold implements VisionProcessor {
     }
 
     public PropPosEnum EnumGetPropPos() {
-        sampledPropPos = PropPos.LEFT;
+        sampledPropPos = PropPos;
         return sampledPropPos;
     }
 
@@ -369,6 +381,7 @@ public abstract class PropThreshold implements VisionProcessor {
     public Gamepad lastGamepad = new Gamepad();
     boolean test_mode = false;
     boolean showFinalMat = false;
+    public int propPosSwitcher = 0;
 
     public void test(Gamepad gamepad, Telemetry telemetry) {
 
@@ -454,6 +467,27 @@ public abstract class PropThreshold implements VisionProcessor {
         } else if (gamepad.right_bumper && !lastGamepad.right_bumper) {
             rectStep += 1;
         }
+//        if(gamepad.left_stick_button && !lastGamepad.left_stick_button) {
+          if(gamepad.a && !lastGamepad.a){
+            propPosSwitcher++;
+        }
+        switch (propPosSwitcher){
+            case (0):
+                PropPos = PropPosEnum.LEFT;
+                EnumGetPropPos();
+                break;
+            case (1):
+                PropPos = PropPosEnum.CENTER;
+                EnumGetPropPos();
+                break;
+            case(2):
+                PropPos = PropPosEnum.RIGHT;
+                EnumGetPropPos();
+                break;
+            case(3):
+                propPosSwitcher = 0;
+            }
+
 
         lastGamepad.copy(gamepad);
 

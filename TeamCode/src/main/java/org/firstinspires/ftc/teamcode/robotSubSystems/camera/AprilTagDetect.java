@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
 
 import static android.os.SystemClock.sleep;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 //public class AprilTagDetect extends AprilTagProcessorImpl {
+@Config
 public class AprilTagDetect {
 
     public static AprilTagProcessor atPrcsr;
@@ -24,9 +26,13 @@ public class AprilTagDetect {
     public static int count = 0;
     public static int tries = 200;
     public static boolean idSaved = false;
-    public static double centerIds;
-    public static int idDifference;
-    public static double width;
+    public static boolean gotRectWidth = false;
+    public static double centerIds = 30;
+    public static double idDifference = -7;
+    public static double rectWidth;
+    public static double x;
+    public static double timer = 3000 ;
+
 
 
 //    public AprilTagDetect(double fx, double fy, double cx, double cy, DistanceUnit outputUnitsLength, AngleUnit outputUnitsAngle, AprilTagLibrary tagLibrary, boolean drawAxes, boolean drawCube, boolean drawOutline, boolean drawTagID, AprilTagProcessor.TagFamily tagFamily, int threads, boolean suppressCalibrationWarnings) {
@@ -61,12 +67,14 @@ public class AprilTagDetect {
         getIDfromPosAndColor(pos, allianceColor);
         count = 0;
         aprilTagCords = null;
-        idSaved = false;
 
         if (atPrcsr != null) {
+            gotRectWidth = false;
             while (count < tries && aprilTagCords == null) {
+                idSaved = false;
                 currentDetections = atPrcsr.getDetections();
-                int atDtctdListSize = currentDetections.size();
+                int atDtctdListSize;
+                    atDtctdListSize = currentDetections.size();
 
                 count++;
 //                telemetry.addData("# AprilTags Detected", currentDetections.size());
@@ -77,19 +85,22 @@ public class AprilTagDetect {
                             aprilTagCords = dtct.center;
                         }
 
-                        if (atDtctdListSize > 1 && !idSaved) {
+                        if (atDtctdListSize > 1 && !gotRectWidth) {
                             if (!idSaved){
                                 centerIds = dtct.center.x;
                                 idDifference = dtct.id;
                                 idSaved = true;
-                            } else  {
+                                sleep( (long) timer);
+                            } else {
                                 centerIds = Math.abs(centerIds - dtct.center.x);
                                 idDifference = Math.abs(idDifference - dtct.id);
-                                width = centerIds / (2 * idDifference);
+                                rectWidth = centerIds / (2 * idDifference);
+                                gotRectWidth = true;
                             }
                         }
-                    }
 
+//                    sleep( (long) timer);
+                    }
                 }
                 sleep(5);
             }
