@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.util.Size;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
@@ -61,7 +62,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
     public static double afterGateY = -70.345;
     public static double boardPos1 = 37;
     public static double boardPos2 = 34.7;
-    public static double boardPos3HitRight = 32.5;
+    public static double boardPos3HitRight = 32;
     public static double boardPos3MissLeft = 32;
     public static double boardPos4MissRight = 28.7;
     public static double boardPos4HitLeft = 28.4;
@@ -128,7 +129,10 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 .addProcessor(redPropThresholdFar)
                 .build();
 
+        FtcDashboard.getInstance().startCameraStream(portal, 30);
+
         AprilTagDetect.setManualExposure(4,30, portal, this);
+
         portal.setProcessorEnabled(aprilTag.atPrcsr,false);
 
 
@@ -579,7 +583,6 @@ public class RedFarFromTheBoard extends  LinearOpMode{
         if (!isStopRequested()) {
 //            redPropThresholdFar.initYellowPixel();
             redPropThresholdFar.EnumGetPropPos();
-            portal.stopStreaming();
             portal.setProcessorEnabled(aprilTag.atPrcsr, true);
             portal.setProcessorEnabled(redPropThresholdFar, false);
 
@@ -587,31 +590,21 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 case LEFT:
                     drive.followTrajectorySequence(leftCone);
                     getYellowPixelfromAprilTag();
+                    chooseDropTraj(leftConeHitL,leftConeHitR,leftConeNopPixel,leftConeMissR,leftConeNopPixel);
+//                    while (!isStopRequested()) {
+//                        telemetry.addData("prop pos:", redPropThresholdFar.EnumGetPropPos());
+//                        telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
+//                        if (redPropThresholdFar.biggest != null) {
+//                            telemetry.addData("yellowThreshold", redPropThresholdFar.biggest.averagedBox);
+//                        }
+//                        telemetry.addData("wantedID", aprilTag.wantedID);
+//                        telemetry.addData("Detect attempts", aprilTag.count);
+//                        telemetry.update();
+//                        sleep(2000);
+//                        getYellowPixelfromAprilTag();
 
-                    while (!isStopRequested()) {
-                        telemetry.addData("prop pos:", redPropThresholdFar.EnumGetPropPos());
-                        telemetry.addData("yellow pixel:", redPropThresholdFar.sampledYellowPixelPos);
-                        if (redPropThresholdFar.biggest != null) {
-                            telemetry.addData("yellowThreshold", redPropThresholdFar.biggest.averagedBox);
-                        }
-                        telemetry.addData("wantedID", aprilTag.wantedID);
-                        telemetry.addData("Detect attempts", aprilTag.count);
-                        telemetry.update();
-                        sleep(2000);
-                        getYellowPixelfromAprilTag();
-
-                    }
-
-//                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
-//                        drive.followTrajectorySequence(leftConeHitL);
-//                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
-//                        drive.followTrajectorySequence(leftConeHitR);
-//                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSRIGHT){
-//                        drive.followTrajectorySequence(leftConeMissR);
-//                    }else {
-//                        drive.followTrajectorySequence(leftConeNopPixel);
 //                    }
-                    telemetry.addLine("left");
+
                     break;
                 case CENTER:
                 default:

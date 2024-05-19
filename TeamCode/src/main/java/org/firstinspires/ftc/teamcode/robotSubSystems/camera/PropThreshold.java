@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelP
 
 import android.graphics.Canvas;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -24,7 +25,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.HashSet;
-
+@Config
 
 public abstract class PropThreshold implements VisionProcessor {
     Mat testMat = new Mat();
@@ -45,8 +46,8 @@ public abstract class PropThreshold implements VisionProcessor {
     Scalar HSVYellowLower = new Scalar(10, 49, 0);
     Scalar HSVYellowUpper = new Scalar(40, 255, 255);
 
-    public PropPosEnum PropPos = PropPosEnum.NONE;
-    public PropPosEnum sampledPropPos = PropPos;
+    public static PropPosEnum PropPos = PropPosEnum.NONE;
+    public static PropPosEnum sampledPropPos = PropPos;
     public PropColorEnum PropColor = PropColorEnum.RED;
     public PropColorEnum AllianceColor = PropColorEnum.RED;
     public Rect activeLeftRect;
@@ -62,8 +63,8 @@ public abstract class PropThreshold implements VisionProcessor {
     public double averagedRightBox;
     public boolean completedPropPos = false;
 
-    public YellowPixelPosEnum yellowPixelPos = NOPIXEL;
-    public YellowPixelPosEnum sampledYellowPixelPos = yellowPixelPos;
+    public static  YellowPixelPosEnum yellowPixelPos = NOPIXEL;
+    public static YellowPixelPosEnum sampledYellowPixelPos = yellowPixelPos;
 
     public double yellowThreshold = 0.03;
     HashSet<ElementDetectBox> yellowBoxesHash;
