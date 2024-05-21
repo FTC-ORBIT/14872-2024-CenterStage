@@ -626,29 +626,25 @@ public class RedFarFromTheBoard extends  LinearOpMode{
 
                     break;
                 case RIGHT:
-                    if (AprilTagDetect.aprilTagCords!=null) {
-                        telemetry.addData("aprilTagCords:  ", AprilTagDetect.aprilTagCords);
-                    } else{
-                        telemetry.addLine("aprilTagCords:  Null");
-                    }
-                    telemetry.update();
                     drive.followTrajectorySequence(rightCone);
                     getYellowPixelfromAprilTag();
-                    print_tele(100, false);
-                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
-                        drive.followTrajectorySequence(rightConeHitL);
-                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
-                        drive.followTrajectorySequence(rightConeHitR);
-                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
-                        drive.followTrajectorySequence(rightConeMissL);
-                    }else {
-                        drive.followTrajectorySequence(rightConeNopPixel);
-                    }
+                    chooseDropTraj(rightConeHitL,rightConeHitR,rightConeMissL,rightConeNopPixel,rightConeNopPixel);
+//                    print_tele(100, false);
+//                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
+//                        drive.followTrajectorySequence(rightConeHitL);
+//                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
+//                        drive.followTrajectorySequence(rightConeHitR);
+//                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
+//                        drive.followTrajectorySequence(rightConeMissL);
+//                    }else {
+//                        drive.followTrajectorySequence(rightConeNopPixel);
+//                    }
                     telemetry.addLine("right");
                     break;
                 case NONE:
                     drive.followTrajectorySequence(centerCone);
                     getYellowPixelfromAprilTag();
+                    chooseDropTraj(centerConeHitL,centerConeHitR,centerConeMissL,centerConeMissR,centerConeNopPixel);
 //                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT) {
 //                        drive.followTrajectorySequence(centerConeHitL);
 //                    } else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
