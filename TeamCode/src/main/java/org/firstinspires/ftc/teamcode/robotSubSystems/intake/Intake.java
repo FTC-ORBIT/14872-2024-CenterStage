@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeConstants;
 
 public class Intake {
 
@@ -14,6 +15,11 @@ public class Intake {
     public static Servo servo;
     private static float power;
     private static float pos;
+    public static boolean lastLeft = false;
+    public static boolean lastRight = false;
+    public static boolean lastRT = false;
+    public static boolean lastlT = false;
+
 
     public static void init(HardwareMap hardwareMap) {
         motor = hardwareMap.get(DcMotor.class, "intakeMotor");
@@ -23,7 +29,7 @@ public class Intake {
 
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        servo = hardwareMap.get(Servo.class,"rackServo");
+        servo = hardwareMap.get(Servo.class,"rakeServo");
     }
 
     public static void operate(IntakeState state) {
@@ -51,19 +57,37 @@ public class Intake {
         servo.setPosition(pos);
     }
 
-    public static void test(Gamepad gamepad1 , Telemetry telemetry){
-        if (gamepad1.a){
-            motor.setPower(-1);
-            motor2.setPower(-1);
-        }else if (gamepad1.b){
-            motor.setPower(1);
-            motor2.setPower(1);
-        }else {
-            motor.setPower(0);
-            motor2.setPower(0);
+    public static void test(Gamepad gamepad, Telemetry telemetry) {
+
+        if (gamepad.dpad_left &&  !lastLeft){
+            pos += 0.05;
+            if (pos > 1){
+                pos = 1;
+            }
+        }else if (gamepad.dpad_right && !lastRight){
+            pos -= 0.05;
+            if (pos < 0){
+                pos = 0;
+            }
         }
-        telemetry.addData("intakeMotor", motor.getCurrentPosition());
-        telemetry.addData("intakeMotor2", motor2.getCurrentPosition());
+        if (gamepad.left_bumper && !lastlT){
+            pos += 0.001;
+            if (pos > 1){
+                pos = 1;
+            }
+        }else if (gamepad.right_bumper && !lastRT){
+            pos -= 0.001;
+            if (pos < 0){
+                pos = 0;
+            }
+        }
+        servo.setPosition(pos);
+        lastLeft = gamepad.left_bumper;
+        lastRight = gamepad.right_bumper;
+        lastlT = gamepad.dpad_left;
+        lastRT = gamepad.dpad_right;
+        telemetry.addData("rake pos" , servo.getPosition());
+        telemetry.update();
     }
 }
 //dani yalechan!

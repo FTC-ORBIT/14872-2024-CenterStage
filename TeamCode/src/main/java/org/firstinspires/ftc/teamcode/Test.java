@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
+import org.firstinspires.ftc.teamcode.robotSubSystems.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
@@ -26,7 +27,8 @@ import org.opencv.android.FpsMeter;
 @TeleOp(name = "test")
 public class Test extends LinearOpMode {
 
-
+public static IntakeState state = IntakeState.STOP;
+public static IntakeState lastState = IntakeState.STOP;
     @Override
     public void runOpMode() throws InterruptedException {
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -63,9 +65,16 @@ public class Test extends LinearOpMode {
         waitForStart();
 
         while (!isStopRequested()) {
-                Outtake.test(gamepad1 , telemetry);
-                telemetry.addData("pos" , Outtake.servo.getPosition());
-                telemetry.update();
+            state = gamepad1.a ? IntakeState.COLLECT : gamepad1.b ? IntakeState.STOP : gamepad1.x ? IntakeState.DEPLETE : gamepad1.y ? IntakeState.RACK : lastState;
+
+            Intake.operate(state);
+
+               lastState = state;
+
+               telemetry.addData("power",Intake.motor.getPower());
+               telemetry.addData("pos",Intake.servo.getPosition());
+               telemetry.addData("state",state);
+               telemetry.update();
             }
 
         }
