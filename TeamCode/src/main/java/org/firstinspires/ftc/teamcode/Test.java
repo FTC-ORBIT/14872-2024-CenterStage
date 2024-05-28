@@ -65,15 +65,14 @@ public static IntakeState lastState = IntakeState.STOP;
         waitForStart();
 
         while (!isStopRequested()) {
-            state = gamepad1.a ? IntakeState.COLLECT : gamepad1.b ? IntakeState.STOP : gamepad1.x ? IntakeState.DEPLETE : gamepad1.y ? IntakeState.RACK : lastState;
+//            state = gamepad1.a ? IntakeState.COLLECT : gamepad1.b ? IntakeState.STOP : gamepad1.x ? IntakeState.DEPLETE : gamepad1.y ? IntakeState.RACK : lastState;
 
-            Intake.operate(state);
+//            Intake.operate(state);
 
-               lastState = state;
-
-               telemetry.addData("power",Intake.motor.getPower());
-               telemetry.addData("pos",Intake.servo.getPosition());
-               telemetry.addData("state",state);
+//               lastState = state;
+        Intake.test(gamepad1,telemetry);
+//               telemetry.addData("power",Intake.motor.getPower());
+//               telemetry.addData("state",state);
                telemetry.update();
             }
 

@@ -34,6 +34,7 @@ public class SubSystemManager {
     private static PlaneState planeState = PlaneState.STOP;
     private static Delay delayElevator = new Delay(0.75f);
     private static Delay intakeDelay = new Delay(1f);
+    public static Delay rakeDelay = new Delay(0.25f);
     private static boolean toggleButton = true;
     private static ElapsedTime elapsedTime = new ElapsedTime();
     private static boolean ElevatorToggleButton = false;
@@ -89,6 +90,9 @@ public class SubSystemManager {
         }
         if (!wanted.equals(RobotState.TRAVEL)) {
             elapsedTime.reset();
+        }
+        if (gamepad1.a || gamepad1.start || gamepad1.dpad_up){
+            rakeDelay.startAction(GlobalData.currentTime);
         }
         switch (wanted) {
             case TRAVEL:

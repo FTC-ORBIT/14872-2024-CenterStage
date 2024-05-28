@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeConstants;
 
 public class Intake {
@@ -19,6 +20,7 @@ public class Intake {
     public static boolean lastRight = false;
     public static boolean lastRT = false;
     public static boolean lastlT = false;
+    public static boolean firstTime = true;
 
 
     public static void init(HardwareMap hardwareMap) {
@@ -30,6 +32,7 @@ public class Intake {
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         servo = hardwareMap.get(Servo.class,"rakeServo");
+
     }
 
     public static void operate(IntakeState state) {
@@ -40,15 +43,21 @@ public class Intake {
                 pos = IntakeConstants.stopPos;
                 break;
             case COLLECT:
-                power = IntakeConstants.intakePower;
+                if (SubSystemManager.rakeDelay.isDelayPassed()) {
+                    power = IntakeConstants.intakePower;
+                }
                 pos = IntakeConstants.groundPos;
                 break;
             case DEPLETE:
-                power = IntakeConstants.depletePower;
-                pos = IntakeConstants.groundPos;
+                if (SubSystemManager.rakeDelay.isDelayPassed()) {
+                    power = IntakeConstants.depletePower;
+                }
+                pos = IntakeConstants.stackPos;
                 break;
             case RACK:
-                power = IntakeConstants.intakePower;
+                if (SubSystemManager.rakeDelay.isDelayPassed()) {
+                    power = IntakeConstants.intakePower;
+                }
                 pos = IntakeConstants.stackPos;
                 break;
         }
@@ -81,11 +90,15 @@ public class Intake {
                 pos = 0;
             }
         }
+        if (firstTime){
+            pos = 1;
+            firstTime = false;
+        }
         servo.setPosition(pos);
-        lastLeft = gamepad.left_bumper;
-        lastRight = gamepad.right_bumper;
-        lastlT = gamepad.dpad_left;
-        lastRT = gamepad.dpad_right;
+        lastLeft = gamepad.dpad_left;
+        lastRight = gamepad.dpad_right;
+        lastlT = gamepad.left_bumper;
+        lastRT = gamepad.right_bumper;
         telemetry.addData("rake pos" , servo.getPosition());
         telemetry.update();
     }
