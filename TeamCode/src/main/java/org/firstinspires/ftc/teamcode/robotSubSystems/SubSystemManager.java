@@ -36,6 +36,7 @@ public class SubSystemManager {
     private static PlaneState planeState = PlaneState.STOP;
     private static Delay delayElevator = new Delay(0.75f);
     private static Delay intakeDelay = new Delay(1f);
+    public static Delay rakeDelay = new Delay(0.1f);
     private static boolean toggleButton = true;
     private static boolean FixPixelToggleButton = false;
     private static ElapsedTime elapsedTime = new ElapsedTime();
@@ -55,7 +56,7 @@ public class SubSystemManager {
         }
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
-                : gamepad.x ? RobotState.MIN : gamepad.y ? RobotState.LOW :gamepad.start ? RobotState.DEPLETE: gamepad.right_bumper ? RobotState.MID: lastState;
+                : gamepad.x ? RobotState.MIN : gamepad.y ? RobotState.LOW :gamepad.start ? RobotState.DEPLETE: gamepad.right_bumper ? RobotState.MID: gamepad.dpad_up ? RobotState.RAKE: lastState;
     }
 
     private static RobotState getStateFromWantedAndCurrent(RobotState stateFromDriver) {
@@ -88,7 +89,7 @@ public class SubSystemManager {
 
 
 
-        if (wanted.equals(RobotState.TRAVEL) || wanted.equals(RobotState.INTAKE) || wanted.equals(RobotState.DEPLETE)){
+        if (wanted.equals(RobotState.TRAVEL) || wanted.equals(RobotState.INTAKE) || wanted.equals(RobotState.RAKE) || wanted.equals(RobotState.DEPLETE)){
             if (!wanted.equals(lastState)) {
                 if (Elevator.getPos() < 1700) {
                     delayElevator.startAction(GlobalData.currentTime);
@@ -102,6 +103,9 @@ public class SubSystemManager {
         }
         if (!wanted.equals(RobotState.TRAVEL)) {
             elapsedTime.reset();
+        }
+        if (gamepad1.a || gamepad1.start || gamepad1.dpad_up){
+            rakeDelay.startAction(GlobalData.currentTime);
         }
         switch (wanted) {
             case TRAVEL:
@@ -198,6 +202,15 @@ public class SubSystemManager {
                 fixpixelState = FixpixelState.CLOSE;
                 lastLeftBumper = gamepad1.left_bumper;
                 break;
+            case RAKE:
+                intakeState = IntakeState.RAKE;
+                if (delayElevator.isDelayPassed() && !ElevatorToggleButton) {
+                    elevatorState = ElevatorStates.INTAKE;
+                }
+                outtakeState = OuttakeState.OPEN;
+                fourbarState = FourbarState.COLLECT;
+                fixpixelState = FixpixelState.CLOSE;
+
         }
         if (gamepad1.back) {
             fourbarState = FourbarState.REVERSE;

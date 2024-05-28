@@ -9,8 +9,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Outtake {
     public static Servo servo;
      public static Servo servo2;
-    public static float pos;
-    public static float pos2;
+    public static float pos = OuttakeConstants.closedPos;
+    public static float pos2 = OuttakeConstants.closedPos2;
     public static boolean lastLeft = false;
     public static boolean lastRight = false;
     public static boolean lastRT = false;
@@ -21,7 +21,7 @@ public class Outtake {
         servo.setPosition(OuttakeConstants.closedPos);
 
         servo2 = hardwareMap.get(Servo.class, "outtakeServo2");
-        servo2.setPosition(OuttakeConstants.closedPos);
+        servo2.setPosition(OuttakeConstants.closedPos2);
     }
 
     public static void operate(OuttakeState state) {
