@@ -43,7 +43,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
     public static double boardY = -85;
     public static double rightConeX = 33;
 
-    public static double rightConeY = -3;
+    public static double rightConeY = -5;
 
 
     double prepareToPropY = -1;
@@ -80,7 +80,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
     public static double rightAfterPropY = 3;
     public static double rightBeforeGateX = 52.8;
     public static double markerY = -77;
-    public static double markerX = 30.0;
+    public static double markerX = 27.0;
 
     public static double rightEndTangent = -30;
     public static ElevatorStates state = ElevatorStates.AUTO;
@@ -96,7 +96,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
 //        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive = new SampleMecanumDrive(hardwareMap);
 
-        Pose2d startPose = new Pose2d(0, 0, 0);
+        Pose2d startPose = new Pose2d(1, 0, 0);
 
         drive.setPoseEstimate(startPose);
 
@@ -319,7 +319,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(rightBeforeGateX, rightAfterPropY , rightConeAngle))
                 .waitSeconds(4)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(boardPos6-5, markerY,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(markerX, markerY,Math.toRadians(-90)))
 //                .splineToLinearHeading(new Pose2d(boardPos5, markerY, Math.toRadians(-90)), Math.toRadians(rightEndTangent))
 //                .addTemporalMarker(() -> {
 //                    redPropThresholdFar.initYellowPixel();
@@ -626,25 +626,9 @@ public class RedFarFromTheBoard extends  LinearOpMode{
 
                     break;
                 case RIGHT:
-                    if (AprilTagDetect.aprilTagCords!=null) {
-                        telemetry.addData("aprilTagCords:  ", AprilTagDetect.aprilTagCords);
-                    } else{
-                        telemetry.addLine("aprilTagCords:  Null");
-                    }
-                    telemetry.update();
                     drive.followTrajectorySequence(rightCone);
                     getYellowPixelfromAprilTag();
-                    print_tele(100, false);
-                    if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITLEFT){
-                        drive.followTrajectorySequence(rightConeHitL);
-                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.HITRIGHT){
-                        drive.followTrajectorySequence(rightConeHitR);
-                    }else if (redPropThresholdFar.sampledYellowPixelPos == YellowPixelPosEnum.MISSLEFT){
-                        drive.followTrajectorySequence(rightConeMissL);
-                    }else {
-                        drive.followTrajectorySequence(rightConeNopPixel);
-                    }
-                    telemetry.addLine("right");
+                    chooseDropTraj(rightConeHitL, rightConeHitR, rightConeMissL, rightConeNopPixel, rightConeNopPixel);
                     break;
                 case NONE:
                     drive.followTrajectorySequence(centerCone);

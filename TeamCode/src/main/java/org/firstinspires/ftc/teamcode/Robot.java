@@ -54,7 +54,7 @@ public class Robot extends LinearOpMode {
         Fourbar.init(hardwareMap);
         Plane.init(hardwareMap);
 //         OrbitLED.init(hardwareMap);
-        OrbitColorSensor.init(hardwareMap);
+//        OrbitColorSensor.init(hardwareMap);
         OrbitGyro.resetGyroStartTeleop((float) Math.toDegrees(PoseStorage.currentPose.getHeading()));
         telemetry.update();
         telemetry.addData("gyro", Math.toDegrees(PoseStorage.currentPose.getHeading()));
