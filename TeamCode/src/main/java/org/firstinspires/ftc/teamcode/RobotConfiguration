@@ -1,0 +1,37 @@
+1. Control Hub
+
+A. Motors
+0 -  elevatorMotor2
+1 -  intakeMotor
+2 -  rb
+3 -  rf
+
+B. Servos
+0 -
+1 -
+2 - outtakeServo2
+3 - fourbarServo
+4 - outtakeServo
+5 - rakeServo
+
+C. Other
+I2C Bus 0 - imu (Gyro)
+
+
+2. Expansion Hub
+
+A. Motors
+0 - elevatorMotor
+1 - lb
+2 - lf
+3 - intakeMotor2
+
+B. Servos
+0 - Servo
+1 - Servo
+2 - Servo
+3 - Servo
+4 - Servo
+5 - Servo
+
+ C. Other
