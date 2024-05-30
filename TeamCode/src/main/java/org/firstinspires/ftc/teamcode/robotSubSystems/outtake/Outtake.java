@@ -79,11 +79,11 @@ public class Outtake {
                 pos2 = 0;
             }
         }
-        servo2.setPosition(pos2);
-        lastLeft = gamepad.left_bumper;
-        lastRight = gamepad.right_bumper;
-        lastlT = gamepad.dpad_left;
-        lastRT = gamepad.dpad_right;
+        servo.setPosition(pos2);
+        lastLeft = gamepad.dpad_left;
+        lastRight = gamepad.dpad_right;
+        lastlT = gamepad.left_bumper;
+        lastRT = gamepad.right_bumper;
         telemetry.addData("Outtake pos" , pos2);
         telemetry.update();
         }
