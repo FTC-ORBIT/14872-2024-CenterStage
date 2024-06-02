@@ -69,12 +69,12 @@ public class Outtake {
             }
         }
         if (gamepad.left_bumper && !lastlT){
-            pos2 += 0.001;
+            pos2 += 0.01;
             if (pos2 > 1){
                 pos2 = 1;
             }
         }else if (gamepad.right_bumper && !lastRT){
-            pos2 -= 0.001;
+            pos2 -= 0.01;
             if (pos2 < 0){
                 pos2 = 0;
             }
