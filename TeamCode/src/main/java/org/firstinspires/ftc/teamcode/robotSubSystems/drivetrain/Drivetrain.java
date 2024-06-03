@@ -66,12 +66,7 @@ public class Drivetrain {
             stop();
         }
         else{
-            if (gamepad1.left_bumper && SubSystemManager.wanted == RobotState.TRAVEL){
-                AutoDriveAprilTags.getAprilTagDetectionOmni();
-            }else {
-                AutoDriveAprilTags.targetFound = false;
                 drive(velocity_RobotCS_W, omega);
-            }
          }
 drive(velocity_RobotCS_W, omega);
 

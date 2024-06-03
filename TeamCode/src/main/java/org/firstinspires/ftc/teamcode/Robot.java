@@ -69,24 +69,25 @@ public class Robot extends LinearOpMode {
 
         waitForStart();
 
-        GlobalData.robotState = RobotState.TRAVEL;
 
         while (!isStopRequested()) {
           GlobalData.currentTime = (float) robotTime.seconds();
-//          final boolean placing = SubSystemManager.wanted.equals(RobotState.MIN) || SubSystemManager.wanted.equals(RobotState.LOW) || SubSystemManager.wanted.equals(RobotState.MID);
           Vector leftStick = new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y);
           float omega = gamepad1.right_trigger - gamepad1.left_trigger;
-          Drivetrain.operate(leftStick,  omega , telemetry , gamepad1);
-          SubSystemManager.setSubsystemToState(gamepad1 , gamepad2 , telemetry);
+            if (gamepad1.left_bumper && SubSystemManager.wanted == RobotState.TRAVEL){
+                AutoDriveAprilTags.getAprilTagDetectionOmni();
+            }else {
+                SubSystemManager.setSubsystemToState(gamepad1, gamepad2, telemetry);
+                Drivetrain.operate(leftStick,  omega , telemetry , gamepad1);
+            }
 //          OrbitLED.operate(OrbitColorSensor.color);
            GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
             AutoDriveAprilTags.update();
 
             GlobalData.lastTime = GlobalData.currentTime;
-//            Drivetrain.testMotors(gamepad1, telemetry);
-            telemetry.update();
 //            OrbitColorSensor.hasGamePiece();
             SubSystemManager.printStates(telemetry);
+            telemetry.update();
         }
     }
 
