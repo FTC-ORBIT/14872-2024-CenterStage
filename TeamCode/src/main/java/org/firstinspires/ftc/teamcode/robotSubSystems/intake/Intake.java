@@ -68,6 +68,10 @@ public class Intake {
 
     public static void test(Gamepad gamepad, Telemetry telemetry) {
 
+        if (firstTime){
+            pos = 1;
+            firstTime = false;
+        }
         if (gamepad.dpad_left &&  !lastLeft){
             pos += 0.05;
             if (pos > 1){
@@ -80,20 +84,17 @@ public class Intake {
             }
         }
         if (gamepad.left_bumper && !lastlT){
-            pos += 0.001;
+            pos += 0.01;
             if (pos > 1){
                 pos = 1;
             }
         }else if (gamepad.right_bumper && !lastRT){
-            pos -= 0.001;
+            pos -= 0.01;
             if (pos < 0){
                 pos = 0;
             }
         }
-        if (firstTime){
-            pos = 1;
-            firstTime = false;
-        }
+
         servo.setPosition(pos);
         lastLeft = gamepad.dpad_left;
         lastRight = gamepad.dpad_right;

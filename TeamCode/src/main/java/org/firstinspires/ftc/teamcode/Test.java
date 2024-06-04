@@ -65,7 +65,7 @@ public class Test extends LinearOpMode {
         waitForStart();
 
         while (!isStopRequested()) {
-            Outtake.test(gamepad1, telemetry);
+            Intake.test(gamepad1, telemetry);
             }
 
         }

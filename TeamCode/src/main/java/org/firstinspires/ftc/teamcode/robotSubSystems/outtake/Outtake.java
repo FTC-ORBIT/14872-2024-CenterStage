@@ -49,7 +49,7 @@ public class Outtake {
     }
 
     public static void test(Gamepad gamepad, Telemetry telemetry) {
-
+        pos = 0;
 //        if (gamepad.left_bumper) {
 //            pos = OuttakeConstants.closedPos;
 //            pos2 = OuttakeConstants.closedPos2;
