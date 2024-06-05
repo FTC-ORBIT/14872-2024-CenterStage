@@ -66,10 +66,10 @@ public class RedFarFromTheBoard extends  LinearOpMode{
     public static double boardPos3MissLeft = 32;
     public static double boardPos4MissRight = 28.7;
     public static double boardPos4HitLeft = 28.4;
-    public static double boardPos5 = 27;
-    public static double boardPos6 = 22.5;
-    // TODO X6 = 22.5
-    // TODO X5 = 27
+    public static double boardPos5 = 28.2;
+    public static double boardPos6 = 24;
+    // TODO X6 = 24
+    // TODO X5 = 28.2
     // TODO X4 = 29.2
     // TODO X3 = 32
     // TODO X2 = 34.7
@@ -319,7 +319,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(rightBeforeGateX, rightAfterPropY , rightConeAngle))
                 .waitSeconds(4)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(boardPos6-5, markerY,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(markerX, markerY,Math.toRadians(-90)))
 //                .splineToLinearHeading(new Pose2d(boardPos5, markerY, Math.toRadians(-90)), Math.toRadians(rightEndTangent))
 //                .addTemporalMarker(() -> {
 //                    redPropThresholdFar.initYellowPixel();
@@ -429,6 +429,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .resetConstraints()
+                .waitSeconds(1)
                 .lineToLinearHeading(new Pose2d(boardPos6, markerY , Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
