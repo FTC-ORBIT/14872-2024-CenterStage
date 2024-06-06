@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
+package org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold;
 
 
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.PropColorEnum;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.PropThreshold;
 import org.opencv.core.Rect;
 
 public class BluePropThresholdFar extends PropThreshold {

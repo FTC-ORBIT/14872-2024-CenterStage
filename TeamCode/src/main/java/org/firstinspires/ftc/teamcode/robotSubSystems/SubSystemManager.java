@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.positionTracker.PoseStorage;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.DriveByAprilTags.AutoDriveAprilTags;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
@@ -249,20 +250,14 @@ public class SubSystemManager {
     public static void printStates(Telemetry telemetry) {
         telemetry.addData("GlobalData.robotState", wanted);
         telemetry.addData("last state", lastState);
+        telemetry.addData("gyro", PoseStorage.currentPose.getHeading());
+        telemetry.addData("x",PoseStorage.currentPose.getX());
+        telemetry.addData("y",PoseStorage.currentPose.getY());
         telemetry.addData("targetFound?", AutoDriveAprilTags.targetFound);
-        telemetry.addData("currect Camera state", AutoDriveAprilTags.currentState);
-        telemetry.addData("last Camera state", AutoDriveAprilTags.lastState);
-        telemetry.addData("intakeState", intakeState);
-        telemetry.addData("delayElevator", delayElevator.isDelayPassed());
-        telemetry.addData("intakeDelay", intakeDelay.isDelayPassed());
         telemetry.addData("elevator", Elevator.elevatorMotor.getCurrentPosition());
         telemetry.addData("elevator2", Elevator.elevatorMotor2.getCurrentPosition());
         telemetry.addData("elevator power", Elevator.elevatorMotor.getPower());
         telemetry.addData("elevator power2", Elevator.elevatorMotor2.getPower());
-        telemetry.addData("fourBar", Fourbar.servo.getPosition());
-        telemetry.addData("outtake", Outtake.servo.getPosition());
-        telemetry.addData("plane", Plane.planeServo.getPosition());
-        telemetry.addData("time for deplete in travel", elapsedTime);
         telemetry.addData("lf power" , motors[0].getPower());
         telemetry.addData("rf power" , motors[1].getPower());
         telemetry.addData("lb power" , motors[2].getPower());

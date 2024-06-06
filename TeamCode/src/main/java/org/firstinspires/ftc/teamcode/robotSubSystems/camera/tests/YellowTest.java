@@ -1,16 +1,20 @@
-package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
+package org.firstinspires.ftc.teamcode.robotSubSystems.camera.tests;
 
 import android.util.Size;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.AprilTagDetect;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.RedPropThresholdFar;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-@Autonomous (name = "Yellow pixel detect")
+@Autonomous (name = "Yellow pixel detect",group = "Tests")
+@Disabled
 public class YellowTest extends LinearOpMode {
     private VisionPortal portal;
     private RedPropThresholdFar redPropThresholdFar = new RedPropThresholdFar();

@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.BluePropThresholdClose;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.BluePropThresholdClose;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorConstants;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Config
-@Autonomous (name = "blue close")
+@Autonomous (name = "Blue Close", group = "Blue")
 public class BlueClose extends AutonomousGenaral{
 
     private VisionPortal portal;

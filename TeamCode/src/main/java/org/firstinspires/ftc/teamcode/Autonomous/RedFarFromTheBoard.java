@@ -15,8 +15,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.AprilTagDetect;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.RedPropThresholdFar;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.RedPropThresholdFar;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
@@ -30,7 +30,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-@Autonomous(name = "Red Far Far Wall")
+@Autonomous(name = "Red Far Far Wall",group = "Red")
 @Config
 public class RedFarFromTheBoard extends  LinearOpMode{
     public static double maxVeloDrop = 6.5;

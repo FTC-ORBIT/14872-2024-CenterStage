@@ -1,23 +1,27 @@
-package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
+package org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold;
 
-import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.HITLEFT;
-import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.HITRIGHT;
-import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.MISSLEFT;
-import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.MISSRIGHT;
-import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.YellowPixelPosEnum.NOPIXEL;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum.HITLEFT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum.HITRIGHT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum.MISSLEFT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum.MISSRIGHT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum.NOPIXEL;
 
 import android.graphics.Canvas;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Gamepad;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.AprilTagDetect;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.ElementDetectBox;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.PropColorEnum;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.PropPosEnum;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
-import org.opencv.core.Range;
 
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -63,7 +67,7 @@ public abstract class PropThreshold implements VisionProcessor {
     public double averagedRightBox;
     public boolean completedPropPos = false;
 
-    public static  YellowPixelPosEnum yellowPixelPos = NOPIXEL;
+    public static YellowPixelPosEnum yellowPixelPos = NOPIXEL;
     public static YellowPixelPosEnum sampledYellowPixelPos = yellowPixelPos;
 
     public double yellowThreshold = 0.03;

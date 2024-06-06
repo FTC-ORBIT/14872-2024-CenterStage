@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
  * encoder localizer heading may be significantly off if the track width has not been tuned).
  */
 
-@TeleOp(group = "drive")
+@TeleOp(group = "Tests")
 public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

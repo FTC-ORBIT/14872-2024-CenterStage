@@ -18,7 +18,6 @@ public class Elevator {
     public static float zeroPos = 0;
     public static float zeroPos2 = 0;
     public static final PID elevatorPID = new PID(ElevatorConstants.elevatorKp, ElevatorConstants.elevatorKi, ElevatorConstants.elevatorKd, ElevatorConstants.elevatorKf, ElevatorConstants.elevatorIzone);
-    public static final PID encoderPID = new PID(ElevatorConstants.encoderKp, ElevatorConstants.encoderKi, ElevatorConstants.encoderKd, ElevatorConstants.encoderKf, ElevatorConstants.encoderIzone);
 
     public static void init(HardwareMap hardwareMap) {
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevatorMotor");
@@ -57,9 +56,8 @@ public class Elevator {
         currentPos = elevatorMotor.getCurrentPosition() - zeroPos;
         currentPos2 = elevatorMotor2.getCurrentPosition() - zeroPos2;
         elevatorPID.setWanted(pos);
-        encoderPID.setWanted(0);
-        elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2 , telemetry));
-        elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos , telemetry));
+        elevatorMotor.setPower(elevatorPID.update(currentPos));
+        elevatorMotor2.setPower(elevatorPID.update(currentPos2));
 
 
         if (gamepad2.left_bumper){
@@ -95,9 +93,8 @@ public class Elevator {
                 currentPos = elevatorMotor.getCurrentPosition();
                 currentPos2 = elevatorMotor2.getCurrentPosition();
                 elevatorPID.setWanted(pos);
-                encoderPID.setWanted(0);
-                elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
-                elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
+                elevatorMotor.setPower(elevatorPID.update(currentPos));
+                elevatorMotor2.setPower(elevatorPID.update(currentPos2));
                 telemetry.addData("pos", currentPos);
                 telemetry.addData("pos2", currentPos2);
                 telemetry.update();
@@ -107,9 +104,8 @@ public class Elevator {
                 currentPos = elevatorMotor.getCurrentPosition();
                 currentPos2 = elevatorMotor2.getCurrentPosition();
                 elevatorPID.setWanted(pos);
-                encoderPID.setWanted(0);
-                elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
-                elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
+                elevatorMotor.setPower(elevatorPID.update(currentPos));
+                elevatorMotor2.setPower(elevatorPID.update(currentPos2));
 
                 telemetry.addData("pos", currentPos);
                 telemetry.addData("pos2", currentPos2);
@@ -146,9 +142,8 @@ public class Elevator {
                 currentPos = elevatorMotor.getCurrentPosition();
                 currentPos2 = elevatorMotor2.getCurrentPosition();
                 elevatorPID.setWanted(pos);
-                encoderPID.setWanted(0);
-                elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
-                elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
+                elevatorMotor.setPower(elevatorPID.update(currentPos));
+                elevatorMotor2.setPower(elevatorPID.update(currentPos2));
                 telemetry.addData("pos", currentPos);
                 telemetry.addData("pos2", currentPos2);
                 telemetry.update();
@@ -156,9 +151,8 @@ public class Elevator {
                 currentPos = elevatorMotor.getCurrentPosition();
                 currentPos2 = elevatorMotor2.getCurrentPosition();
                 elevatorPID.setWanted(pos);
-                encoderPID.setWanted(0);
-                elevatorMotor.setPower(elevatorPID.update(currentPos, telemetry) + encoderPID.update(currentPos - currentPos2, telemetry));
-                elevatorMotor2.setPower(elevatorPID.update(currentPos2, telemetry) + encoderPID.update(currentPos2 - currentPos, telemetry));
+                elevatorMotor.setPower(elevatorPID.update(currentPos));
+                elevatorMotor2.setPower(elevatorPID.update(currentPos2));
 
                 telemetry.addData("pos", currentPos);
                 telemetry.addData("pos2", currentPos2);

@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.plane.Plane;
 import org.opencv.android.FpsMeter;
 
 @Config
-@TeleOp(name = "test")
+@TeleOp(name = "test",group = "Tests")
 public class Test extends LinearOpMode {
 
 

@@ -22,11 +22,11 @@ public class ElevatorConstants {
     public static final float elevatorKf = 0f;
     public static final float elevatorIzone = 50f;
 
-    public static final float encoderKp = 0f;
-    public static final float encoderKi = 0f;
-    public static final float encoderKd = 0f;
-    public static final float encoderKf = 0f;
-    public static final float encoderIzone = 0f;
+//    public static final float encoderKp = 0f;
+//    public static final float encoderKi = 0f;
+//    public static final float encoderKd = 0f;
+//    public static final float encoderKf = 0f;
+//    public static final float encoderIzone = 0f;
 
 
 

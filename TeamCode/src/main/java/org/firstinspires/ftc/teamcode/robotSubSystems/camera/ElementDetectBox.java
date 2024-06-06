@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
 
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.PropColorEnum;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;

@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.RedPropThresholdClose;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.RedPropThresholdClose;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorConstants;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Config
-@Autonomous (name = "RedClose")
+@Autonomous (name = "Red Close",group = "Red")
 public class RedClose extends AutonomousGenaral{
     private VisionPortal portal;
     private final RedPropThresholdClose redPropThresholdClose = new RedPropThresholdClose();

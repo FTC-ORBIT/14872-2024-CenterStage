@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.robotSubSystems.camera.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -17,7 +17,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import java.util.ArrayList;
 
 @Disabled
-@Autonomous (name = "AprilTag")
+@Autonomous (name = "AprilTag",group = "Tests")
 public class AprilTagAutonomousTest extends LinearOpMode
 {
     OpenCvCamera camera;
