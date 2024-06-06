@@ -250,9 +250,6 @@ public class SubSystemManager {
     public static void printStates(Telemetry telemetry) {
         telemetry.addData("GlobalData.robotState", wanted);
         telemetry.addData("last state", lastState);
-        telemetry.addData("gyro", PoseStorage.currentPose.getHeading());
-        telemetry.addData("x",PoseStorage.currentPose.getX());
-        telemetry.addData("y",PoseStorage.currentPose.getY());
         telemetry.addData("targetFound?", AutoDriveAprilTags.targetFound);
         telemetry.addData("elevator", Elevator.elevatorMotor.getCurrentPosition());
         telemetry.addData("elevator2", Elevator.elevatorMotor2.getCurrentPosition());

@@ -68,10 +68,10 @@ public class Intake {
 
     public static void test(Gamepad gamepad, Telemetry telemetry) {
 
-        if (firstTime){
-            pos = 1;
-            firstTime = false;
-        }
+//        if (firstTime){
+//            pos = 1;
+//            firstTime = false;
+//        }
         if (gamepad.dpad_left &&  !lastLeft){
             pos += 0.05;
             if (pos > 1){
