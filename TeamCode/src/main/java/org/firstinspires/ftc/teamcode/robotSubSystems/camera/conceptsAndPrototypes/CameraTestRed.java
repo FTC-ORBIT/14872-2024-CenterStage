@@ -11,12 +11,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Delay;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.PropPosEnum;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.PropPosEnum;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.RedPropThresholdFar;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Disabled
-@Autonomous  (name ="Vision Test Red")
+@Autonomous  (name ="Vision Test Red", group = "Concept")
 @Config
 
     public class CameraTestRed extends LinearOpMode {

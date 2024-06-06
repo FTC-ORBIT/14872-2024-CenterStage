@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.AprilTagDetect;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.AprilTagDetect;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.RedPropThresholdFar;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;

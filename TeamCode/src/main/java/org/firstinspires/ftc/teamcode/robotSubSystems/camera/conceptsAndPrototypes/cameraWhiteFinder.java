@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robotSubSystems.Conveyor;
+package org.firstinspires.ftc.teamcode.robotSubSystems.camera.conceptsAndPrototypes;
 /*
  * Copyright (c) 2019 OpenFTC Team
  *
@@ -36,7 +36,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@TeleOp
+@TeleOp (name = "WhiteFinder",group = "Concept")
 @Disabled
 public class cameraWhiteFinder extends LinearOpMode
 {

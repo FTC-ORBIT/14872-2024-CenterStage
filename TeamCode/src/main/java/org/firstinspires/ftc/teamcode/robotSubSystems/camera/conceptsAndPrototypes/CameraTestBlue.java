@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.BluePropT
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Disabled
-@Autonomous(name="Vision Test Blue")
+@Autonomous(name="Vision Test Blue", group = "Concept")
 public class CameraTestBlue extends LinearOpMode {
     private VisionPortal portal;
     private BluePropThresholdFar bluePropThreshold = new BluePropThresholdFar();

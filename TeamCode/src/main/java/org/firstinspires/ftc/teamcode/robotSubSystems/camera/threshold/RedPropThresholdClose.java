@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold;
 
 
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.PropColorEnum;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.PropThreshold;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.PropColorEnum;
 
 public class RedPropThresholdClose extends PropThreshold {
 

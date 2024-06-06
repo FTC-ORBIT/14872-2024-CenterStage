@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robotSubSystems.camera;
+package org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold;
 
 import static android.os.SystemClock.sleep;
 
@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.PropColorEnum;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.PropPosEnum;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.PropColorEnum;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.PropPosEnum;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;

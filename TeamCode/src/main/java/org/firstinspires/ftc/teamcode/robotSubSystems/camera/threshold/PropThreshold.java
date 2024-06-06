@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold;
 
-import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum.HITLEFT;
-import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum.HITRIGHT;
-import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum.MISSLEFT;
-import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum.MISSRIGHT;
-import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum.NOPIXEL;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.YellowPixelPosEnum.HITLEFT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.YellowPixelPosEnum.HITRIGHT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.YellowPixelPosEnum.MISSLEFT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.YellowPixelPosEnum.MISSRIGHT;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.YellowPixelPosEnum.NOPIXEL;
 
 import android.graphics.Canvas;
 
@@ -13,11 +13,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.AprilTagDetect;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.ElementDetectBox;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.PropColorEnum;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.PropPosEnum;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.enums.YellowPixelPosEnum;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.PropColorEnum;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.PropPosEnum;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.YellowPixelPosEnum;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
