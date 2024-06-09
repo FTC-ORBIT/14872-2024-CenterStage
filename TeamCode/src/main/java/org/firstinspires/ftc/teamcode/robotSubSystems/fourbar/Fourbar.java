@@ -10,10 +10,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Fourbar {
     public static Servo servo;
     public static float pos;
-    public static boolean lastLB = false;
-    public static boolean lastRB = false;
-    public static boolean lastRdpad = false;
-    public static boolean lastLdpad = false;
+    public static boolean lastLT = false;
+    public static boolean lastRT = false;
+    public static boolean lastRight = false;
+    public static boolean lastLeft = false;
 
     public static ElapsedTime time = new ElapsedTime();
     public static void init(HardwareMap hardwareMap){
@@ -58,34 +58,34 @@ public class Fourbar {
 
 //        if (gamepad.right_bumper) pos = FourbarConstants.midMove;
 //        if (gamepad.left_bumper) pos = FourbarConstants.reverse;
-        if (gamepad.left_bumper &&  !lastLB){
+        if (gamepad.left_bumper &&  !lastLT){
             pos += 0.05;
             if (pos > 1){
                 pos = 1;
 
             }
-        }else if (gamepad.right_bumper && !lastRB){
+        }else if (gamepad.right_bumper && !lastRT){
             pos -= 0.05;
             if (pos < 0){
                 pos = 0;
             }
         }
-        if (gamepad.dpad_left && !lastLdpad){
-            pos += 0.001;
+        if (gamepad.dpad_left && !lastLeft){
+            pos += 0.01;
             if (pos > 1){
                 pos = 1;
             }
-        }else if (gamepad.dpad_right && !lastRdpad){
-            pos -= 0.001;
+        }else if (gamepad.dpad_right && !lastRight){
+            pos -= 0.01;
             if (pos < 0){
                 pos = 0;
             }
         }
         servo.setPosition(pos);
-        lastLB = gamepad.left_bumper;
-        lastRB = gamepad.right_bumper;
-        lastLdpad = gamepad.dpad_left;
-        lastRdpad = gamepad.dpad_right;
+        lastLT = gamepad.left_bumper;
+        lastRT = gamepad.right_bumper;
+        lastLeft = gamepad.dpad_left;
+        lastRight = gamepad.dpad_right;
         telemetry.addData("pos" , servo.getPosition());
         telemetry.update();
     }

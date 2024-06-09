@@ -14,7 +14,7 @@ public class Outtake {
     public static boolean lastLeft = false;
     public static boolean lastRight = false;
     public static boolean lastRT = false;
-    public static boolean lastlT = false;
+    public static boolean lastLT = false;
 
     public static void init(HardwareMap hardwareMap) {
         servo = hardwareMap.get(Servo.class, "outtakeServo");
@@ -49,7 +49,6 @@ public class Outtake {
     }
 
     public static void test(Gamepad gamepad, Telemetry telemetry) {
-        pos = 0;
 //        if (gamepad.left_bumper) {
 //            pos = OuttakeConstants.closedPos;
 //            pos2 = OuttakeConstants.closedPos2;
@@ -57,32 +56,32 @@ public class Outtake {
 //            pos = OuttakeConstants.openPos;
 //            pos2 = OuttakeConstants.openPos2;
 //        }
-        if (gamepad.dpad_left &&  !lastLeft){
+        if (gamepad.left_bumper &&  !lastLT){
             pos2 += 0.05;
             if (pos2 > 1){
                 pos2 = 1;
             }
-        }else if (gamepad.dpad_right && !lastRight){
+        }else if (gamepad.right_bumper && !lastRT){
             pos2 -= 0.05;
             if (pos2 < 0){
                 pos2 = 0;
             }
         }
-        if (gamepad.left_bumper && !lastlT){
+        if (gamepad.dpad_left && !lastLeft){
             pos2 += 0.01;
             if (pos2 > 1){
                 pos2 = 1;
             }
-        }else if (gamepad.right_bumper && !lastRT){
+        }else if (gamepad.dpad_right && !lastRight){
             pos2 -= 0.01;
             if (pos2 < 0){
                 pos2 = 0;
             }
         }
-        servo.setPosition(pos2);
+        servo2.setPosition(pos2);
         lastLeft = gamepad.dpad_left;
         lastRight = gamepad.dpad_right;
-        lastlT = gamepad.left_bumper;
+        lastLT = gamepad.left_bumper;
         lastRT = gamepad.right_bumper;
         telemetry.addData("Outtake pos" , pos2);
         telemetry.update();

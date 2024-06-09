@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
-import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeConstants;
 
 public class Intake {
 
@@ -19,7 +18,7 @@ public class Intake {
     public static boolean lastLeft = false;
     public static boolean lastRight = false;
     public static boolean lastRT = false;
-    public static boolean lastlT = false;
+    public static boolean lastLT = false;
     public static boolean firstTime = true;
 
 
@@ -72,33 +71,34 @@ public class Intake {
 //            pos = 1;
 //            firstTime = false;
 //        }
-        if (gamepad.dpad_left &&  !lastLeft){
+        if (gamepad.left_bumper && !lastLT){
             pos += 0.05;
             if (pos > 1){
                 pos = 1;
             }
-        }else if (gamepad.dpad_right && !lastRight){
+        }else if (gamepad.right_bumper && !lastRT){
             pos -= 0.05;
             if (pos < 0){
                 pos = 0;
             }
         }
-        if (gamepad.left_bumper && !lastlT){
+        if (gamepad.dpad_left &&  !lastLeft){
             pos += 0.01;
             if (pos > 1){
                 pos = 1;
             }
-        }else if (gamepad.right_bumper && !lastRT){
+        }else if (gamepad.dpad_right && !lastRight){
             pos -= 0.01;
             if (pos < 0){
                 pos = 0;
             }
         }
 
+
         servo.setPosition(pos);
         lastLeft = gamepad.dpad_left;
         lastRight = gamepad.dpad_right;
-        lastlT = gamepad.left_bumper;
+        lastLT = gamepad.left_bumper;
         lastRT = gamepad.right_bumper;
         telemetry.addData("rake pos" , servo.getPosition());
         telemetry.update();

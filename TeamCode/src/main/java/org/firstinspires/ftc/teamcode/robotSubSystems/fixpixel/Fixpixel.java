@@ -12,7 +12,7 @@ public class Fixpixel {
     public static boolean lastLeft = false;
     public static boolean lastRight = false;
     public static boolean lastRT = false;
-    public static boolean lastlT = false;
+    public static boolean lastLT = false;
     public static void init(HardwareMap hardwareMap){
         servo = hardwareMap.get(Servo.class, "fixPixelServo");
         pos = FixpixelConstants.close;
@@ -40,33 +40,33 @@ public class Fixpixel {
     }
     public static void test(Gamepad gamepad , Telemetry telemetry){
 
-        if (gamepad.left_bumper &&  !lastLeft){
+        if (gamepad.left_bumper &&  !lastLT){
             pos += 0.05;
             if (pos > 1){
                 pos = 1;
             }
-        }else if (gamepad.right_bumper && !lastRight){
+        }else if (gamepad.right_bumper && !lastRT){
             pos -= 0.05;
             if (pos < 0){
                 pos = 0;
             }
         }
-        if (gamepad.dpad_left && !lastlT){
+        if (gamepad.dpad_left && !lastLeft){
             pos += 0.001;
             if (pos > 1){
                 pos = 1;
             }
-        }else if (gamepad.dpad_right && !lastRT){
+        }else if (gamepad.dpad_right && !lastRight){
             pos -= 0.001;
             if (pos < 0){
                 pos = 0;
             }
         }
         servo.setPosition(pos);
-        lastLeft = gamepad.left_bumper;
-        lastRight = gamepad.right_bumper;
-        lastlT = gamepad.dpad_left;
-        lastRT = gamepad.dpad_right;
+        lastLeft = gamepad.dpad_left;
+        lastRight = gamepad.dpad_right;
+        lastLT = gamepad.left_bumper;
+        lastRT = gamepad.right_bumper;
         telemetry.addData("pos" , servo.getPosition());
         telemetry.update();
     }
