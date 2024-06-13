@@ -53,6 +53,9 @@ public class Intake {
                 }
                 pos = IntakeConstants.depletePos;
                 break;
+            case COLLECTWITHOUTRAKE:
+                power = IntakeConstants.intakePower;
+                pos = IntakeConstants.depletePos;
         }
         motor.setPower(power);
         motor2.setPower(power);
