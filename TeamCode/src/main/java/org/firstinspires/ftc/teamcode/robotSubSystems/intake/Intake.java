@@ -51,13 +51,7 @@ public class Intake {
                 if (SubSystemManager.rakeDelay.isDelayPassed()) {
                     power = IntakeConstants.depletePower;
                 }
-                pos = IntakeConstants.stackPos;
-                break;
-            case RAKE:
-                if (SubSystemManager.rakeDelay.isDelayPassed()) {
-                    power = IntakeConstants.intakePower;
-                }
-                pos = IntakeConstants.stackPos;
+                pos = IntakeConstants.depletePos;
                 break;
         }
         motor.setPower(power);

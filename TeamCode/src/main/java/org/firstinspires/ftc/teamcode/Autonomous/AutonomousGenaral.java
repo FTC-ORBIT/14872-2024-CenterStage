@@ -64,7 +64,7 @@ public abstract class AutonomousGenaral extends LinearOpMode {
     public static double splineYProp = 3;
     public static double splineEndAngle = Math.toRadians(-90);
     public static double splineEndTangent = Math.toRadians(120);
-    public static double splineAfterPropY = 4;
+    public static double splineAfterPropY = 3;
     public static double turnAfterProp = Math.toRadians(90);
     public static double prepareToPixelDropFarCenterBeforeGateY = 18;
     public static double prepareToPixelDropFarCenterBeforeGateX = 55.07;
@@ -89,7 +89,7 @@ public abstract class AutonomousGenaral extends LinearOpMode {
     public static double boardX2Blue = 27;
     public static double boardX1Blue = 20;
     public static double prepareToDropPixelY = 24;
-    public static double boardPosY = 34;
+    public static double boardPosY = 32;
     public static double afterYellowPixelY4Blue = 10;
     public static double parkingY23 = 36; // when 2 = -39
     public static double parkingY14 = 83; // when 1 = -83

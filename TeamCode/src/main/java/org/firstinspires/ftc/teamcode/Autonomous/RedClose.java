@@ -30,7 +30,6 @@ public class RedClose extends AutonomousGenaral{
 
 
     boolean color = true;
-    public static int t = 0;
 
     String parkingPos = "close";
     AutonomousSteps currentState;
@@ -136,10 +135,6 @@ public class RedClose extends AutonomousGenaral{
                         currentState = AutonomousSteps.CLOSESYSTEMS;
                         elevatorClosingDelay.startAction(GlobalData.currentTime);
                         encoderDelay.startAction(GlobalData.currentTime);
-                    }else {
-                        sleep(1 );
-                        telemetry.addLine("busy");
-                        telemetry.addData("t",t++);
                     }
                     break;
                 case CLOSESYSTEMS:
@@ -167,14 +162,6 @@ public class RedClose extends AutonomousGenaral{
             drive.update();
             telemetry.update();
         }
-        telemetry.addLine("busy");
-        telemetry.addData("t",t++);
-        telemetry.update();
-
-        while (!isStopRequested()) {
-            sleep(100);
-        }
-
-    }
+     }
     }
 

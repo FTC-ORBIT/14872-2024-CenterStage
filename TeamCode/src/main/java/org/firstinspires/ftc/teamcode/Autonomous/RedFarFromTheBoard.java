@@ -33,6 +33,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 @Autonomous(name = "Red Far Far Wall",group = "Red")
 @Config
 public class RedFarFromTheBoard extends  LinearOpMode{
+    public static double timerCount;
     public static double maxVeloDrop = 6.5;
     public static TrajectoryVelocityConstraint velConstraintDrop = SampleMecanumDrive.getVelocityConstraint(maxVeloDrop, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     public static TrajectoryAccelerationConstraint accConstraintDrop = SampleMecanumDrive.getAccelerationConstraint(maxVeloDrop);
@@ -64,8 +65,8 @@ public class RedFarFromTheBoard extends  LinearOpMode{
     public static double boardPos2 = 34.7;
     public static double boardPos3HitRight = 32;
     public static double boardPos3MissLeft = 32;
-    public static double boardPos4MissRight = 28.7;
-    public static double boardPos4HitLeft = 28.4;
+    public static double boardPos4MissRight = 31.4;
+    public static double boardPos4HitLeft = 31.98;
     public static double boardPos5 = 28.2;
     public static double boardPos6 = 24;
     // TODO X6 = 24
@@ -143,7 +144,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(centerGateX , centerGateY ,startPose.getHeading()))
                 .turn(Math.toRadians(-90))
                 .lineToLinearHeading(new Pose2d(centerGateSecondx, centerGateY , Math.toRadians(-90)))
-                .waitSeconds(2.5)
+                .waitSeconds(4)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(markerX, markerY,Math.toRadians(-90)))
 //                .addTemporalMarker(() ->{
@@ -452,7 +453,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(leftBeforeGateX, leftAfterPropY , startPose.getHeading()))
                 .turn(Math.toRadians(-90))
                 .lineToLinearHeading(new Pose2d(leftBeforeGateX + 5, leftAfterPropY , Math.toRadians(-90)))
-                .waitSeconds(5)
+                .waitSeconds(4)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(markerX, markerY,Math.toRadians(-90)))
 //                .addTemporalMarker(() ->{
@@ -679,6 +680,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
         portal.resumeStreaming();
         while (portal.getCameraState() != VisionPortal.CameraState.STREAMING){
             sleep(5);
+            timerCount++;
         }
         aprilTag.getAprilTagCords(redPropThresholdFar.sampledPropPos,
                                   redPropThresholdFar.AllianceColor);

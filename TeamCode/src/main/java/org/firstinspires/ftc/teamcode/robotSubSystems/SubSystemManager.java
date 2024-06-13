@@ -57,7 +57,7 @@ public class SubSystemManager {
         }
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
-                : gamepad.x ? RobotState.MIN : gamepad.y ? RobotState.LOW :gamepad.start ? RobotState.DEPLETE: gamepad.right_bumper ? RobotState.MID: gamepad.dpad_up ? RobotState.RAKE: lastState;
+                : gamepad.x ? RobotState.MIN : gamepad.y ? RobotState.LOW :gamepad.start ? RobotState.DEPLETE: gamepad.right_bumper ? RobotState.MID : lastState;
     }
 
     private static RobotState getStateFromWantedAndCurrent(RobotState stateFromDriver) {
@@ -90,7 +90,7 @@ public class SubSystemManager {
 
 
 
-        if (wanted.equals(RobotState.TRAVEL) || wanted.equals(RobotState.INTAKE) || wanted.equals(RobotState.RAKE) || wanted.equals(RobotState.DEPLETE)){
+        if (wanted.equals(RobotState.TRAVEL) || wanted.equals(RobotState.INTAKE) || wanted.equals(RobotState.DEPLETE)){
             if (!wanted.equals(lastState)) {
                 if (Elevator.getPos() < 1700) {
                     delayElevator.startAction(GlobalData.currentTime);
@@ -203,15 +203,6 @@ public class SubSystemManager {
                 fixpixelState = FixpixelState.CLOSE;
                 lastLeftBumper = gamepad1.left_bumper;
                 break;
-            case RAKE:
-                intakeState = IntakeState.RAKE;
-                if (delayElevator.isDelayPassed() && !ElevatorToggleButton) {
-                    elevatorState = ElevatorStates.INTAKE;
-                }
-                outtakeState = OuttakeState.OPEN;
-                fourbarState = FourbarState.COLLECT;
-                fixpixelState = FixpixelState.CLOSE;
-
         }
         if (gamepad1.back) {
             fourbarState = FourbarState.REVERSE;
@@ -235,7 +226,6 @@ public class SubSystemManager {
             elevatorState = ElevatorStates.OVERRIDE;
             ElevatorToggleButton = true;
         }
-        if (gamepad1.dpad_up) fourbarState = FourbarState.REVERSE;
         Intake.operate(intakeState);
         Outtake.operate(outtakeState);
         Elevator.operateTeleop(elevatorState, gamepad1, telemetry, gamepad2);

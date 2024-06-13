@@ -33,6 +33,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 @Autonomous(name = "Blue Far Far Wall",group = "Blue")
 @Config
 public class BlueFarFromTheBoard extends  LinearOpMode{
+    public static double timerCount;
     public static double maxVeloDrop = 6.5;
     public static TrajectoryVelocityConstraint velConstraintDrop = SampleMecanumDrive.getVelocityConstraint(maxVeloDrop, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     public static TrajectoryAccelerationConstraint accConstraintDrop = SampleMecanumDrive.getAccelerationConstraint(maxVeloDrop);
@@ -641,6 +642,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
         portal.resumeStreaming();
         while (portal.getCameraState() != VisionPortal.CameraState.STREAMING){
             sleep(5);
+            timerCount++;
         }
         aprilTag.getAprilTagCords(bluePropThresholdFar.sampledPropPos,
                 bluePropThresholdFar.AllianceColor);
