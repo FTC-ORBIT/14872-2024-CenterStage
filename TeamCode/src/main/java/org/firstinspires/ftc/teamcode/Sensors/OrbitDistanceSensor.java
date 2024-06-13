@@ -15,7 +15,7 @@ public class OrbitDistanceSensor {
   }
 
   public float getDistance() {
-    return (float) distanceSensor.getDistance(DistanceUnit.CM);
+    return (float) distanceSensor.getDistance(DistanceUnit.INCH);
   }
 
 }
