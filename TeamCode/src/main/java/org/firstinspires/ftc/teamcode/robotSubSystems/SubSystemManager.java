@@ -45,8 +45,7 @@ public class SubSystemManager {
     public static RobotState wanted = RobotState.TRAVEL;
     private static boolean lastLeftBumper = false;
     private static int outtakeCounter = 0;
-    public static boolean FourbarMoved = false;
-    public static boolean ElevatorMoved = false;
+    public static boolean resetRobotStateToTravel;
 
     private static RobotState getState(Gamepad gamepad) {
         if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back || gamepad.dpad_up) {
@@ -89,7 +88,10 @@ public class SubSystemManager {
     public static void setSubsystemToState(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
 //        final RobotState wanted = getStateFromWantedAndCurrent(getState(gamepad1));
         wanted = getState(gamepad1);
-
+    if (resetRobotStateToTravel){
+        resetRobotStateToTravel = false;
+        wanted = RobotState.TRAVEL;
+    }
 
 
         if (wanted.equals(RobotState.TRAVEL) || wanted.equals(RobotState.INTAKE) || wanted.equals(RobotState.DEPLETE)){

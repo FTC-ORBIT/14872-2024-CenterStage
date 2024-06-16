@@ -9,7 +9,7 @@ public class ElevatorConstants {
 
     public static double canOpenFourbar = 200;
     public static  final  float autoHeight = 900;
-    public static  final float autoHeightFar = 980;
+    public static  final float autoHeightFar = 1020;
     public static final float minHeight = 1300;
     public static final float lowHeight = 2017;
     public static final float midHeight =  3100;

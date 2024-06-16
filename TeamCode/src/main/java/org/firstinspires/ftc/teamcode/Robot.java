@@ -69,6 +69,7 @@ public class Robot extends LinearOpMode {
 
         waitForStart();
 
+        SubSystemManager.resetRobotStateToTravel = true;
 
         while (!isStopRequested()) {
           GlobalData.currentTime = (float) robotTime.seconds();

@@ -34,7 +34,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 @Config
 public class RedFarFromTheBoard extends  LinearOpMode{
     public static double timerCount;
-    public static double maxVeloDrop = 6.5;
+    public static double maxVeloDrop = 8;
     public static TrajectoryVelocityConstraint velConstraintDrop = SampleMecanumDrive.getVelocityConstraint(maxVeloDrop, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     public static TrajectoryAccelerationConstraint accConstraintDrop = SampleMecanumDrive.getAccelerationConstraint(maxVeloDrop);
     public static double centerConeX = 29.7;
@@ -62,21 +62,21 @@ public class RedFarFromTheBoard extends  LinearOpMode{
     public static double afterGateX = 55;
     public static double afterGateY = -70.345;
     public static double boardPos1 = 37;
-    public static double boardPos2 = 34.7;
-    public static double boardPos3HitRight = 32;
+    public static double boardPos2 = 34.3;
+    public static double boardPos3HitRight = 31.4;
     public static double boardPos3MissLeft = 32;
-    public static double boardPos4MissRight = 31.4;
-    public static double boardPos4HitLeft = 31.98;
+    public static double boardPos4MissRight = 30.7;
+    public static double boardPos4HitLeft = 30.3;
     public static double boardPos5 = 28.2;
     public static double boardPos6 = 24;
     // TODO X6 = 24
     // TODO X5 = 28.2
     // TODO X4 = 29.2
     // TODO X3 = 32
-    // TODO X2 = 34.7
+    // TODO X2 = 34.3
     // TODO X1 = 37
     public static double leftAfterPropX = 16;
-    public static double leftAfterPropY = -3.5;
+    public static double leftAfterPropY = -3;
     public static double leftBeforeGateX =48;
     public static double rightAfterPropY = 3;
     public static double rightBeforeGateX = 52.8;
@@ -474,9 +474,8 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
-                .waitSeconds(2)
                 .resetConstraints()
-                .lineToLinearHeading(new Pose2d(boardPos1,markerY,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(boardPos2,markerY,Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
@@ -531,7 +530,6 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
-                .waitSeconds(2)
                 .resetConstraints()
                 .lineToLinearHeading(new Pose2d(boardPos2,markerY,Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
@@ -560,7 +558,6 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
-                .waitSeconds(2)
                 .resetConstraints()
                 .lineToLinearHeading(new Pose2d(boardPos1,markerY,Math.toRadians(-90)))
                 .addTemporalMarker(() -> {
@@ -630,7 +627,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
                 case RIGHT:
                     drive.followTrajectorySequence(rightCone);
                     getYellowPixelfromAprilTag();
-                    chooseDropTraj(rightConeHitL, rightConeHitR, rightConeMissL, rightConeNopPixel, rightConeNopPixel);
+                    chooseDropTraj(rightConeHitL, rightConeHitR, rightConeMissL, rightConeHitR, rightConeNopPixel);
                     break;
                 case NONE:
                     drive.followTrajectorySequence(centerCone);

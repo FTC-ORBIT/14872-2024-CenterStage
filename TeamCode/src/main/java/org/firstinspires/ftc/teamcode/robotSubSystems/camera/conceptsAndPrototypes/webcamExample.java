@@ -21,6 +21,7 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.camera.conceptsAndPrototy
  */
 
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -36,9 +37,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@TeleOp (name = "WhiteFinder",group = "Concept")
-@Disabled
-public class cameraWhiteFinder extends LinearOpMode
+@TeleOp (name = "webcamExample",group = "Concept")
+public class webcamExample extends LinearOpMode
 {
       OpenCvWebcam webcam;
 
@@ -99,9 +99,9 @@ public class cameraWhiteFinder extends LinearOpMode
                          * For a rear facing camera or a webcam, rotation is defined assuming the camera is facing
                          * away from the user.
                          */
-                     //   webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                     //   webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);//                        webcam.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
                         webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
-//                        webcam.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
+                        FtcDashboard.getInstance().startCameraStream(webcam, 30);
                   }
 
                   @Override

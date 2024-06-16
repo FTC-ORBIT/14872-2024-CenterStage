@@ -104,7 +104,7 @@ public class AprilTagDetect {
 //                    sleep( (long) timer);
                     }
                 }
-                sleep(5);
+                sleep(1);
             }
             return aprilTagCords;
         } else {
