@@ -32,9 +32,6 @@ public class AprilTagDetect {
     public static double centerIds = 30;
     public static double idDifference = -7;
     public static double rectWidth;
-    public static double x;
-    public static double timer = 3000 ;
-
 
 
 //    public AprilTagDetect(double fx, double fy, double cx, double cy, DistanceUnit outputUnitsLength, AngleUnit outputUnitsAngle, AprilTagLibrary tagLibrary, boolean drawAxes, boolean drawCube, boolean drawOutline, boolean drawTagID, AprilTagProcessor.TagFamily tagFamily, int threads, boolean suppressCalibrationWarnings) {
@@ -166,7 +163,7 @@ public class AprilTagDetect {
             opMd.telemetry.addData("Camera", "Waiting");
             opMd.telemetry.update();
             while (!opMd.isStopRequested() && (camera.getCameraState() != VisionPortal.CameraState.STREAMING)) {
-                sleep(20);
+                sleep(1);
             }
             opMd.telemetry.addData("Camera", "Ready");
             opMd.telemetry.update();
@@ -178,7 +175,7 @@ public class AprilTagDetect {
             ExposureControl exposureControl = camera.getCameraControl(ExposureControl.class);
             if (exposureControl.getMode() != ExposureControl.Mode.AperturePriority) {
                 exposureControl.setMode(ExposureControl.Mode.AperturePriority);
-                sleep(50);
+                sleep(1);
             }
             return (true);
         } else {

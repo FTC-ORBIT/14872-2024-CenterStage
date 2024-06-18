@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.camera.conceptsAndPrototy
 
 import android.util.Size;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -66,7 +67,7 @@ import java.util.concurrent.TimeUnit;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
 
-@TeleOp(name="Optimize AprilTag Exposure", group = "Concept")
+@TeleOp(name = "Optimize AprilTag Exposure", group = "Concept")
 @Disabled
 public class ConceptAprilTagOptimizeExposure extends LinearOpMode
 {
@@ -171,6 +172,8 @@ public class ConceptAprilTagOptimizeExposure extends LinearOpMode
                 .setCameraResolution(new Size(640, 480))
                 .addProcessor(aprilTag)
                 .build();
+        FtcDashboard.getInstance().startCameraStream(visionPortal, 30);
+
     }
 
     /*
