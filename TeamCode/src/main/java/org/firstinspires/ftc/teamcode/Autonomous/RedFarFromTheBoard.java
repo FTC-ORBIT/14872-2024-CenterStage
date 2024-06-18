@@ -684,7 +684,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
         redPropThresholdFar.initYellowPixelAT(aprilTag.aprilTagCords);
         AprilTagDetect.setDfltExposure(portal,this);
         portal.setProcessorEnabled(redPropThresholdFar, true);
-        sleep(100);
+//        sleep(100);
         redPropThresholdFar.getYellowPixelPos();
     }
 

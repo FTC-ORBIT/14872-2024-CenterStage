@@ -92,7 +92,6 @@ public class AprilTagDetect {
                                 centerIds = dtct.center.x;
                                 idDifference = dtct.id;
                                 idSaved = true;
-                                sleep( (long) timer);
                             } else {
                                 centerIds = Math.abs(centerIds - dtct.center.x);
                                 idDifference = Math.abs(idDifference - dtct.id);

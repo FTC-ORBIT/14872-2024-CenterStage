@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.AprilTagDetect;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.BluePropThresholdFar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.ElevatorStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
@@ -19,6 +20,8 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.FourbarState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.OuttakeState;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -32,8 +35,27 @@ import org.firstinspires.ftc.vision.VisionPortal;
 public class LocalizationTest extends LinearOpMode {
     private VisionPortal portal;
     private AprilTagDetect aprilTag;
+
+    private BluePropThresholdFar bluePropThresholdFar = new BluePropThresholdFar();
+    private boolean systemsOut = false;
     @Override
     public void runOpMode() throws InterruptedException {
+
+        aprilTag = new AprilTagDetect();
+        aprilTag.atPrcsr = new AprilTagProcessor.Builder()
+                //.setDrawTagOutline(true)
+                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
+                //.setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+
+                // == CAMERA CALIBRATION ==
+                // If you do not manually specify calibration parameters, the SDK will attempt
+                // to load a predefined calibration for your camera.
+                .setLensIntrinsics(458.066, 457.626, 337.176, 251.805)
+                // ... these parameters are fx, fy, cx, cy.
+
+                .build();
+
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         Elevator.init(hardwareMap);
         Fourbar.init(hardwareMap);
@@ -44,11 +66,17 @@ public class LocalizationTest extends LinearOpMode {
                 .setCamera(hardwareMap.get(WebcamName.class, "webcam 1"))
                 .setCameraResolution(new Size(640, 480))
                 .addProcessor(aprilTag.atPrcsr)
+                .addProcessor(bluePropThresholdFar)
                 .build();
 
         FtcDashboard.getInstance().startCameraStream(portal, 30);
+        portal.setProcessorEnabled(aprilTag.atPrcsr,false);
+        portal.setProcessorEnabled(bluePropThresholdFar,false);
+
+
 
         waitForStart();
+        systemsOut = false;
 
         while (!isStopRequested()) {
             drive.setWeightedDrivePower(
@@ -60,12 +88,24 @@ public class LocalizationTest extends LinearOpMode {
             );
 
             drive.update();
-            if (gamepad1.a){
-                Elevator.operateAutonomous(ElevatorStates.AUTO , telemetry);
+            if (gamepad1.a || systemsOut) {
+                systemsOut = true;
+                Elevator.operateAutonomous(ElevatorStates.AUTO, telemetry);
                 Fourbar.operateAutonomous(FourbarState.MOVE);
-                if (gamepad1.left_bumper)Outtake.operate(OuttakeState.TOWOUT);
-                if (gamepad1.right_bumper)Outtake.operate(OuttakeState.CLOSED);
-                }
+                if (gamepad1.left_bumper) Outtake.operate(OuttakeState.TOWOUT);
+              if (gamepad1.right_bumper) Outtake.operate(OuttakeState.CLOSED);
+            }
+             if (gamepad1.b) {
+                systemsOut = false;
+              Fourbar.operateAutonomous(FourbarState.REVERSE);
+              sleep(1000);
+              Elevator.operateAutonomous(ElevatorStates.INTAKE,telemetry);
+              Outtake.operate(OuttakeState.CLOSED);
+            }
+if (gamepad1.dpad_up){
+    portal.setProcessorEnabled(aprilTag.atPrcsr,true);
+
+}
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
