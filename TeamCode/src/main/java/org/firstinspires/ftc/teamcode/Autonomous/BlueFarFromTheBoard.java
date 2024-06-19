@@ -67,7 +67,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
     public static double boardPos3MissRight = 31;
     public static double boardPos4MissLeft = 31;
     public static double boardPos4HitRight = 29;
-    public static double boardPos5 = 26;
+    public static double boardPos5 = 23.7;
     public static double boardPos6 = 22.1;
     // TODO X6 = 22.1
     // TODO X5 = 26
@@ -82,6 +82,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
     public static double rightBeforeGateX = 52.8;
     public static double markerY = 77;
     public static double markerX = 35.4;
+    public static double leftMarkerX = 28;
 
     public static double rightEndTangent = -30;
     public static ElevatorStates state = ElevatorStates.AUTO;
@@ -320,7 +321,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .lineToLinearHeading(new Pose2d(rightBeforeGateX, rightAfterPropY , Math.toRadians(90)))
                 .waitSeconds(4)
                 .lineToLinearHeading(new Pose2d(afterGateX, afterGateY , Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(markerX, markerY,Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(leftMarkerX, markerY,Math.toRadians(90)))
 //                .splineToLinearHeading(new Pose2d(boardPos5, markerY, Math.toRadians(-90)), Math.toRadians(rightEndTangent))
 //                .addTemporalMarker(() -> {
 //                    redPropThresholdFar.initYellowPixel();
@@ -338,12 +339,12 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 })
                 .waitSeconds(1)
                 .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(boardPos6, boardY , Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos5, boardY , Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .resetConstraints()
-                .lineToLinearHeading(new Pose2d(boardPos6, markerY , Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos5, markerY , Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
@@ -367,12 +368,12 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 })
                 .waitSeconds(1)
                 .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(boardPos5-0.7, boardY , Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos6, boardY , Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .resetConstraints()
-                .lineToLinearHeading(new Pose2d(boardPos5, markerY , Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos6, markerY , Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
@@ -470,12 +471,12 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
                 .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(boardPos5, boardY , Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos2, boardY , Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .resetConstraints()
-                .lineToLinearHeading(new Pose2d(boardPos5,markerY,Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos2,markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
@@ -497,13 +498,13 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
                 .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(boardPos6, boardY , Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos1, boardY , Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .waitSeconds(2)
                 .resetConstraints()
-                .lineToLinearHeading(new Pose2d(boardPos6,markerY,Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos1,markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
@@ -526,12 +527,12 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
                 .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(boardPos5, boardY , Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos2, boardY , Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .resetConstraints()
-                .lineToLinearHeading(new Pose2d(boardPos5,markerY,Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos2,markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
@@ -554,12 +555,12 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
                 .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(boardPos6, boardY , Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos1, boardY , Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .resetConstraints()
-                .lineToLinearHeading(new Pose2d(boardPos6,markerY,Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos1,markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
@@ -586,9 +587,16 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
             portal.setProcessorEnabled(bluePropThresholdFar, false);
 
             switch (bluePropThresholdFar.sampledPropPos) {
-                case LEFT:
+                case LEFT: // this is the same code as Red - right cone
                     drive.followTrajectorySequence(rightCone);
                     getYellowPixelfromAprilTag();
+//                    while (!gamepad1.b){
+//                        sleep(5);
+//                        telemetry.addData("pixel in",bluePropThresholdFar.sampledYellowPixelPos);
+//                        telemetry.addData("prop in", bluePropThresholdFar.sampledPropPos);
+//                        telemetry.addData("yellow Pixels", bluePropThresholdFar.biggest.averagedBox);
+//                        telemetry.update();
+//                    }
                     chooseDropTraj(rightConeHitL, rightConeHitR, rightConeMissL, rightConeHitR, rightConeNopPixel);
                     telemetry.addData("pixel in",bluePropThresholdFar.sampledYellowPixelPos);
                     telemetry.addData("prop in", bluePropThresholdFar.sampledPropPos);
@@ -616,7 +624,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                     telemetry.update();
                     sleep(10000);
                     break;
-                case RIGHT:
+                case RIGHT: // this is the same code as Red - left cone
                     drive.followTrajectorySequence(leftCone);
                     getYellowPixelfromAprilTag();
                     chooseDropTraj(leftConeHitL,leftConeHitR,leftConeNopPixel,leftConeMissR,leftConeNopPixel);
@@ -669,7 +677,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
             sleep(1);
         }
         aprilTag.getAprilTagCords(bluePropThresholdFar.sampledPropPos,
-                bluePropThresholdFar.AllianceColor);
+                                  bluePropThresholdFar.AllianceColor);
         bluePropThresholdFar.initYellowPixelAT(aprilTag.aprilTagCords);
         AprilTagDetect.setDfltExposure(portal,this);
 //        AprilTagDetect.setManualExposure(15, 30, portal, this);

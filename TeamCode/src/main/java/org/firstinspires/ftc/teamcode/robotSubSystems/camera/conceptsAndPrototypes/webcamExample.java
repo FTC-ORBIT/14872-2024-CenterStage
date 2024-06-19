@@ -38,6 +38,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 @TeleOp (name = "webcamExample",group = "Concept")
+@Disabled
 public class webcamExample extends LinearOpMode
 {
       OpenCvWebcam webcam;

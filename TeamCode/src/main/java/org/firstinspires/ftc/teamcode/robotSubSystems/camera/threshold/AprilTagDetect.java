@@ -102,9 +102,14 @@ public class AprilTagDetect {
                 }
                 sleep(1);
             }
+            // set a default value for aprilTagCords if the April Tag detection failed,
+            // to make sure it is not null for the next step of the algorithm
+            if (aprilTagCords == null){
+                aprilTagCords = new Point (415, 300);
+            }
             return aprilTagCords;
         } else {
-            return new Point(415, 300);
+            return aprilTagCords = new Point (415, 300);
         }
     }
 

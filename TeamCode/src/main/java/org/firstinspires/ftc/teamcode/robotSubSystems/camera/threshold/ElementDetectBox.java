@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold;
 
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.PropColorEnum;
+import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.PropPosEnum;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.YellowPixelPosEnum;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -10,6 +11,8 @@ import org.opencv.core.Rect;
 import java.util.HashSet;
 
 public class ElementDetectBox {
+    public static PropPosEnum propPos = PropPosEnum.NONE;
+
     public YellowPixelPosEnum place;
     public PropColorEnum elementColor = PropColorEnum.YELLOW;
     public Rect elementBox;
@@ -24,6 +27,11 @@ public class ElementDetectBox {
         try {
             this.box = Core.sumElems(mat.submat(this.elementBox)).val[0];
         } catch (Exception e) {
+            this.box = 0;
+        }
+
+        if ( (propPos == PropPosEnum.LEFT && this.place == YellowPixelPosEnum.MISSLEFT)  ||
+             (propPos == PropPosEnum.RIGHT && this.place == YellowPixelPosEnum.MISSRIGHT)   ) {
             this.box = 0;
         }
 
@@ -47,5 +55,4 @@ public class ElementDetectBox {
 
         return highestScoreBox;
     }
-
 }

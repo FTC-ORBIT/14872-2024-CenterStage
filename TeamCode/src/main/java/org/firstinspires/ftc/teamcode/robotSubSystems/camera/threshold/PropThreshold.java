@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold;
 
+import static android.os.SystemClock.sleep;
+import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.YellowPixelPosEnum.DEFAULTPOS;
 import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.YellowPixelPosEnum.HITLEFT;
 import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.YellowPixelPosEnum.HITRIGHT;
 import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.YellowPixelPosEnum.MISSLEFT;
@@ -7,6 +9,7 @@ import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.en
 import static org.firstinspires.ftc.teamcode.robotSubSystems.camera.threshold.enums.YellowPixelPosEnum.NOPIXEL;
 
 import android.graphics.Canvas;
+import android.icu.util.ValueIterator;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -65,7 +68,7 @@ public abstract class PropThreshold implements VisionProcessor {
     public double averagedRightBox;
     public boolean completedPropPos = false;
 
-    public static YellowPixelPosEnum yellowPixelPos = NOPIXEL;
+    public static YellowPixelPosEnum yellowPixelPos = DEFAULTPOS;
     public static YellowPixelPosEnum sampledYellowPixelPos = yellowPixelPos;
 
     public double yellowThreshold = 0.03;
@@ -73,6 +76,8 @@ public abstract class PropThreshold implements VisionProcessor {
     //HashMap<Double, YellowPixelPosEnum> yellowBoxesHash = new HashMap();
     public ElementDetectBox biggest;
     public Point aprilTagCords;
+
+    public int count = 0;
 
 
     static final Rect LEFT_RECTANGLE_CLOSE = new Rect(
@@ -254,6 +259,7 @@ public abstract class PropThreshold implements VisionProcessor {
             //}
 //            if (false){     // TODO: Remove this line and uncomment next line to re-enable finding biggest
             if (yellowBoxesHash != null) {
+                ElementDetectBox.propPos = sampledPropPos;
                 for (ElementDetectBox eBox : yellowBoxesHash) {
                     eBox.boxAverageUpdate(finalMat);
                 }
@@ -320,7 +326,7 @@ public abstract class PropThreshold implements VisionProcessor {
                     frame,
                     rectMissL.tl(),
                     rectMissL.br(),
-                    new Scalar(0, 200, 0), 10);
+                    new Scalar(255, 0, 255), 10);
 
             Imgproc.rectangle(
                     frame,
@@ -356,6 +362,11 @@ public abstract class PropThreshold implements VisionProcessor {
     }
 
     public YellowPixelPosEnum getYellowPixelPos() {
+        count = 0;
+        while(biggest == null && count < 300){
+            sleep(1);
+            count++;
+        }
         sampledYellowPixelPos = yellowPixelPos;
         return sampledYellowPixelPos;
     }
