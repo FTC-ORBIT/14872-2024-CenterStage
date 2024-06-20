@@ -47,7 +47,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
     public static double rightConeY = 4.3;
 
 
-    double prepareToPropY = 1;
+    public static double prepareToPropY = 1;
 
     public static double rightConeAngle =5.05;
     public static double leftConeX = 22.5;
@@ -61,14 +61,14 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
     public static double centerGateY = -16.41;
     public static double afterGateX = 55;
     public static double afterGateY = 70.345;
-    public static double boardPos1 = 37;
+    public static double boardPos1 = 37 ;
     public static double boardPos2 = 35;
     public static double boardPos3HitLeft = 32.2;
     public static double boardPos3MissRight = 31;
     public static double boardPos4MissLeft = 31;
     public static double boardPos4HitRight = 29;
-    public static double boardPos5 = 23.7;
-    public static double boardPos6 = 22.1;
+    public static double boardPos5 = 23.6;
+    public static double boardPos6 = 21.9;
     // TODO X6 = 22.1
     // TODO X5 = 26
     // TODO X4 = 29.2
@@ -471,12 +471,12 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
                 .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(boardPos2, boardY , Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos1, boardY , Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .resetConstraints()
-                .lineToLinearHeading(new Pose2d(boardPos2,markerY,Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos1,markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
@@ -490,6 +490,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 .turn(startPose.getHeading())
                 .lineToLinearHeading(new Pose2d(parkingX, parkingY , startPose.getHeading()))
                 .build();
+
         TrajectorySequence leftConeHitR = drive.trajectorySequenceBuilder(leftCone.end())
                 .addTemporalMarker(() -> {
                     Elevator.operateAutonomous(ElevatorStates.AUTO, telemetry);
@@ -498,13 +499,13 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                     Fourbar.operateAutonomous(FourbarState.MOVE);
                 })
                 .setConstraints(velConstraintDrop, accConstraintDrop)
-                .lineToLinearHeading(new Pose2d(boardPos1, boardY , Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos2, boardY , Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.TOWOUT);
                 })
                 .waitSeconds(2)
                 .resetConstraints()
-                .lineToLinearHeading(new Pose2d(boardPos1,markerY,Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(boardPos2,markerY,Math.toRadians(90)))
                 .addTemporalMarker(() -> {
                     Outtake.operate(OuttakeState.CLOSED);
                 })
@@ -597,7 +598,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
 //                        telemetry.addData("yellow Pixels", bluePropThresholdFar.biggest.averagedBox);
 //                        telemetry.update();
 //                    }
-                    chooseDropTraj(rightConeHitL, rightConeHitR, rightConeMissL, rightConeHitR, rightConeNopPixel);
+                    chooseDropTraj(rightConeHitL, rightConeHitR, rightConeNopPixel, rightConeMissL, rightConeNopPixel);
                     telemetry.addData("pixel in",bluePropThresholdFar.sampledYellowPixelPos);
                     telemetry.addData("prop in", bluePropThresholdFar.sampledPropPos);
                     telemetry.update();
@@ -627,7 +628,7 @@ public class BlueFarFromTheBoard extends  LinearOpMode{
                 case RIGHT: // this is the same code as Red - left cone
                     drive.followTrajectorySequence(leftCone);
                     getYellowPixelfromAprilTag();
-                    chooseDropTraj(leftConeHitL,leftConeHitR,leftConeNopPixel,leftConeMissR,leftConeNopPixel);
+                    chooseDropTraj(leftConeHitL,leftConeHitR,leftConeMissR,leftConeNopPixel,leftConeNopPixel);
                     telemetry.addData("pixel in",bluePropThresholdFar.sampledYellowPixelPos);
                     telemetry.addData("prop in", bluePropThresholdFar.sampledPropPos);
                     telemetry.update();

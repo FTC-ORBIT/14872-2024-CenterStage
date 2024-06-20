@@ -65,7 +65,7 @@ public class RedFarFromTheBoard extends  LinearOpMode{
     public static double boardPos2 = 34.3;
     public static double boardPos3HitRight = 31.4;
     public static double boardPos3MissLeft = 32;
-    public static double boardPos4MissRight = 30.7;
+    public static double boardPos4MissRight = 31;
     public static double boardPos4HitLeft = 30.3;
     public static double boardPos5 = 28.2;
     public static double boardPos6 = 24;

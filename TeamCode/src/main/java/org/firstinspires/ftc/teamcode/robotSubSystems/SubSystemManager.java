@@ -56,7 +56,7 @@ public class SubSystemManager {
         }
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
-                : gamepad.x ? RobotState.MIN : gamepad.y ? RobotState.LOW :gamepad.start ? RobotState.DEPLETE: gamepad.dpad_up ? RobotState.COLLECT:gamepad.right_bumper ? RobotState.MID : lastState;
+                : gamepad.x ? RobotState.MIN : gamepad.y ? RobotState.LOW :gamepad.start ? RobotState.DEPLETE: gamepad.dpad_up ? RobotState.COLLECT:gamepad.right_bumper ? RobotState.MID :gamepad.back ? RobotState.CLIMB: lastState;
     }
 
     private static RobotState getStateFromWantedAndCurrent(RobotState stateFromDriver) {
@@ -216,10 +216,16 @@ public class SubSystemManager {
                 fixpixelState = FixpixelState.CLOSE;
                 lastLeftBumper = gamepad1.left_bumper;
                 break;
-        }
-        if (gamepad1.back) {
-            fourbarState = FourbarState.REVERSE;
-            elevatorState = ElevatorStates.CLIMB;
+            case CLIMB:
+                if (intakeDelay.isDelayPassed()) {
+                    intakeState = IntakeState.STOP;
+                }
+                fourbarState = FourbarState.REVERSE;
+                if (delayElevator.isDelayPassed() && !ElevatorToggleButton) {
+                    elevatorState = ElevatorStates.CLIMB;
+                }
+                outtakeState = OuttakeState.CLOSED;
+                break;
         }
         if (gamepad2.x || gamepad2.y || gamepad2.dpad_down) FixPixelToggleButton =false;
         if (gamepad2.x && !FixPixelToggleButton){
