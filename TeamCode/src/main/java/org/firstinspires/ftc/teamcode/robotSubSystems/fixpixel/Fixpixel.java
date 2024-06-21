@@ -35,41 +35,46 @@ public class Fixpixel {
             case OVERRIDE:
                 pos = -gamepad2.left_stick_y * FixpixelConstants.overrideFactor;
                 break;
+            case PLANE:
+                pos = FixpixelConstants.planePos;
+                break;
         }
         servo.setPosition(pos);
     }
     public static void test(Gamepad gamepad , Telemetry telemetry){
 
         if (gamepad.left_bumper &&  !lastLT){
-            pos += 0.05;
-            if (pos > 1){
-                pos = 1;
-            }
-        }else if (gamepad.right_bumper && !lastRT){
-            pos -= 0.05;
-            if (pos < 0){
-                pos = 0;
-            }
-        }
-        if (gamepad.dpad_left && !lastLeft){
-            pos += 0.001;
-            if (pos > 1){
-                pos = 1;
-            }
-        }else if (gamepad.dpad_right && !lastRight){
-            pos -= 0.001;
-            if (pos < 0){
-                pos = 0;
-            }
-        }
-        servo.setPosition(pos);
-        lastLeft = gamepad.dpad_left;
-        lastRight = gamepad.dpad_right;
-        lastLT = gamepad.left_bumper;
-        lastRT = gamepad.right_bumper;
+//            pos += 0.05;
+//            if (pos > 1){
+//                pos = 1;
+//            }
+//        }else if (gamepad.right_bumper && !lastRT){
+//            pos -= 0.05;
+//            if (pos < 0){
+//                pos = 0;
+//            }
+//        }
+//        if (gamepad.dpad_left && !lastLeft){
+//            pos += 0.001;
+//            if (pos > 1){
+//                pos = 1;
+//            }
+//        }else if (gamepad.dpad_right && !lastRight){
+//            pos -= 0.001;
+//            if (pos < 0){
+//                pos = 0;
+//            }
+//        }
+//        servo.setPosition(pos);
+//        lastLeft = gamepad.dpad_left;
+//        lastRight = gamepad.dpad_right;
+//        lastLT = gamepad.left_bumper;
+//        lastRT = gamepad.right_bumper;
+
+
         telemetry.addData("pos" , servo.getPosition());
         telemetry.update();
     }
 
-}
+}}
 

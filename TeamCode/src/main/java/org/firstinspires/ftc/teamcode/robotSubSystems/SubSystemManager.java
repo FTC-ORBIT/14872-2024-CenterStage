@@ -46,6 +46,7 @@ public class SubSystemManager {
     private static boolean lastLeftBumper = false;
     private static int outtakeCounter = 0;
     public static boolean resetRobotStateToTravel;
+    public static Delay planeDelay = new Delay(0.1f  );
 
     private static RobotState getState(Gamepad gamepad) {
         if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back || gamepad.dpad_up) {
@@ -227,7 +228,7 @@ public class SubSystemManager {
                 outtakeState = OuttakeState.CLOSED;
                 break;
         }
-        if (gamepad2.x || gamepad2.y || gamepad2.dpad_down) FixPixelToggleButton =false;
+        if (gamepad2.x || gamepad2.y || gamepad2.dpad_down || gamepad2.right_bumper) FixPixelToggleButton =false;
         if (gamepad2.x && !FixPixelToggleButton){
             fixpixelState =FixpixelState.MIN;
         }else if (gamepad2.y && !FixPixelToggleButton){
@@ -253,7 +254,13 @@ public class SubSystemManager {
 
         lastState = wanted;
         if (gamepad1.dpad_down) OrbitGyro.resetGyro();
-        if (gamepad2.back) Plane.operate(PlaneState.THROW);
+        if (gamepad2.back){
+            Fixpixel.operate(FixpixelState.PLANE, gamepad2, telemetry);
+            planeDelay.startAction(GlobalData.currentTime);
+            if (planeDelay.isDelayPassed()){
+                Plane.operate(PlaneState.THROW);
+            }
+        }
     }
 
     public static void printStates(Telemetry telemetry) {
@@ -268,6 +275,7 @@ public class SubSystemManager {
         telemetry.addData("rf power" , motors[1].getPower());
         telemetry.addData("lb power" , motors[2].getPower());
         telemetry.addData("rb power" , motors[3].getPower());
+        telemetry.update();
 //        telemetry.addData("color" , OrbitColorSensor.color);
     }
 }

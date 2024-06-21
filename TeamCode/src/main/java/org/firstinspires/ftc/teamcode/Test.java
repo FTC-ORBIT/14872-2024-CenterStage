@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
+import org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel.Fixpixel;
 import org.firstinspires.ftc.teamcode.robotSubSystems.fourbar.Fourbar;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.outtake.Outtake;
@@ -36,7 +37,7 @@ public class Test extends LinearOpMode {
 
         ElapsedTime robotTime = new ElapsedTime();
         robotTime.reset();
-//           Fixpixel.init(hardwareMap);
+           Fixpixel.init(hardwareMap);
         Drivetrain.init(hardwareMap);
         OrbitGyro.init(hardwareMap);
         Elevator.init(hardwareMap);
@@ -65,7 +66,7 @@ public class Test extends LinearOpMode {
         waitForStart();
 
         while (!isStopRequested()) {
-            Intake.test(gamepad1, telemetry);
+            Fixpixel.test(gamepad1, telemetry);
             }
 
         }
