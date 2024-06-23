@@ -46,7 +46,7 @@ public class SubSystemManager {
     private static boolean lastLeftBumper = false;
     private static int outtakeCounter = 0;
     public static boolean resetRobotStateToTravel;
-    public static Delay planeDelay = new Delay(0.1f  );
+    public static Delay planeDelay = new Delay(0.5f  );
 
     private static RobotState getState(Gamepad gamepad) {
         if (gamepad.b || gamepad.a || gamepad.x || gamepad.y || gamepad.right_bumper || gamepad.back || gamepad.dpad_up) {
@@ -228,16 +228,18 @@ public class SubSystemManager {
                 outtakeState = OuttakeState.CLOSED;
                 break;
         }
-        if (gamepad2.x || gamepad2.y || gamepad2.dpad_down || gamepad2.right_bumper) FixPixelToggleButton =false;
-        if (gamepad2.x && !FixPixelToggleButton){
+        if (gamepad2.a ||gamepad2.x || gamepad2.y || gamepad2.dpad_down || gamepad2.right_bumper) FixPixelToggleButton =false;
+        if (gamepad2.a && !FixPixelToggleButton){
             fixpixelState =FixpixelState.MIN;
-        }else if (gamepad2.y && !FixPixelToggleButton){
+        } else if (gamepad2.x && !FixPixelToggleButton){
             fixpixelState = FixpixelState.LOW;
         } else if (gamepad2.dpad_down && !FixPixelToggleButton) {
             fixpixelState = FixpixelState.CLOSE;
-        } else  if (gamepad2.right_bumper){
+        } else  if (gamepad2.y){
             fixpixelState = FixpixelState.THIRD;
-        }else if (gamepad2.left_stick_y != 0) {
+        } else if (gamepad2.right_bumper){
+                fixpixelState = FixpixelState.FOURTH;
+        } else if (gamepad2.left_stick_y != 0) {
             FixPixelToggleButton = true;
             fixpixelState = FixpixelState.OVERRIDE;
         }

@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.fixpixel;
 
 public enum FixpixelState {
-    CLOSE, LOW, MIN, OVERRIDE,THIRD,PLANE
+    CLOSE, LOW, MIN, OVERRIDE,THIRD, FOURTH, PLANE
 }
